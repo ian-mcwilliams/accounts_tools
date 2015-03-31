@@ -13,7 +13,7 @@ class JournalTransaction
         issue_invoice: {
             ar:                       :dr,
             vat_payable:              :cr,
-            revenue:                  :cr,
+            net_sales:                :cr,
             retained_vat:             :cr
         },
         receive_remittance: {
@@ -47,10 +47,19 @@ class JournalTransaction
             paye_payable:             :dr,
             cash:                     :cr
         },
-        accrue_office_expenses: {
+        accrue_comms_office_expenses: {
             comms_office_expenses:    :dr,
+            office_expenses_payable:  :cr
+        },
+        accrue_rent_office_expenses: {
             rent_office_expenses:     :dr,
+            office_expenses_payable:  :cr
+        },
+        accrue_power_office_expenses: {
             power_office_expenses:    :dr,
+            office_expenses_payable:  :cr
+        },
+        accrue_sundry_office_expenses: {
             sundry_office_expenses:   :dr,
             office_expenses_payable:  :cr
         },

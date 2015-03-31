@@ -3,6 +3,7 @@ require_relative 'account'
 require_relative 'journal_entry'
 require_relative 'journal_transaction'
 require_relative 'file_tools'
+require_relative 'debug_tools'
 
 def await_return
 	print('=============== press return to continue ===============')
@@ -16,22 +17,28 @@ def revise_pattern_value(current_value, entry)
 	}[entry.balance]
 end
 
-def pattern_match?(pattern, entry, remaining_entries, pattern_value=0.0)
+def pattern_match?(pattern, entry, entry_matches, pattern_value=0.0)
+	entry_matches.each { |entry| puts entry.inspect }
 	revised_pattern_value = revise_pattern_value(pattern_value, entry)
 	pattern.delete(entry.account)
 	if pattern.empty?
 		revised_pattern_value == 0.0 ? return_val = true : return_val = false
 		return return_val
 	else
-		remaining_entries.each do |current_entry|
+		entry_matches.each do |current_entry|
 			if potential_entry_match?(pattern, current_entry)
-				if pattern_match?(pattern, current_entry, remaining_entries.delete(current_entry), revised_pattern_value)
-					@all_ledger_entries.delete!(current_entry)
+				remaining_entries = []
+				entry_matches.each { |entry| remaining_entries << entry unless entry == current_entry }
+				if pattern_match?(pattern, current_entry, remaining_entries, revised_pattern_value)
+					@all_ledger_entries.delete(current_entry)
+					puts 'HIT TRUE'
 					return true
 				else
+					puts 'HIT FALSE'
 					return false
 				end
 			else
+				puts 'HIT NO POTENTIAL MATCHES'
 				return false
 			end
 		end
@@ -40,7 +47,7 @@ def pattern_match?(pattern, entry, remaining_entries, pattern_value=0.0)
 end
 
 def potential_entry_match?(pattern, entry)
-	pattern.values.each { |key, value| return true if entry.account == key && entry.balance == value }
+	return true if pattern.has_key?(entry.account) && pattern[entry.account] == entry.balance
 	false
 end
 
@@ -102,7 +109,7 @@ until @all_ledger_entries.empty?
 	puts ''
 	puts ''
 	puts '****************************************************************************************************'
-	puts '****************************************************************************************************'
+	puts inset_str("     ENTRY COUNT: #{@all_ledger_entries.count}     ", '*', 100)
 	puts '****************************************************************************************************'
 	puts ''
 	puts "current_entry: #{current_entry.inspect}"
@@ -121,16 +128,25 @@ until @all_ledger_entries.empty?
 	if pattern_matches_found
 		puts "\nEntry Matches:"
 		entry_matches = @all_ledger_entries.select { |entry| current_entry.date == entry.date }
-		entry_matches.each { |entry| puts entry.inspect }
 		puts ''
 		# await_return
+		match_found = false
 		pattern_matches.each do |pattern|
 			puts "\ncurrent_pattern = #{pattern}"
-			errors[:no_successful_pattern_matches] << current_entry unless pattern_match?(pattern, current_entry, entry_matches)
+	 		match_found = pattern_match?(pattern, current_entry, entry_matches)
+			break if match_found
+	 	end
+		unless match_found
+			@all_ledger_entries.delete(current_entry)
+			errors[:no_successful_pattern_matches] << current_entry
 		end
 	else
+		@all_ledger_entries.delete(current_entry)
 		errors[:no_pattern_matches] << current_entry
 	end
+
+	puts ''
+	errors.each { |key, value| puts "#{key}.count: #{value.count}" }
 
 	# await_return
 

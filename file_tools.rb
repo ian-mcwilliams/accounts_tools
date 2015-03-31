@@ -11,15 +11,17 @@ class FileTools
 
   def get_machine_name
     {
-        ian: 	'F3M3s-MacBook-Air.local',
-        dad: 	'John'
+        ian:  	'F3M3s-MacBook-Air.local',
+        ian_w:  'OE2021.local',
+        dad: 	  'John'
     }
   end
 
   def get_rel_path
     {
-        ian: 	'../../../../Applications/MAMP/bin/mamp/Dropbox/',
-        dad: 	''
+        ian: 	  '../../../../Applications/MAMP/bin/mamp/Dropbox/',
+        ian_w:  '../../../ian/accounts/',
+        dad: 	  ''
     }[get_machine_name.key(Socket.gethostname)]
   end
 

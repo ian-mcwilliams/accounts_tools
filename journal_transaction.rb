@@ -1,11 +1,19 @@
 class JournalTransaction
 
-  attr_accessor(:journal_entries)
+  attr_accessor(:journal_entries, :date, :description, :pattern_name)
 
-  def initialize(args)
-    @journal_entries = args[:journal_entries] if args.has_key?(:journal_entries)
+  def initialize(args={})
+    @journal_entries = []
+    if args.has_key?(:journal_entries)
+        if args[:journal_entries].is_a?(Array)
+            @journal_entries.concat(args[:journal_entries])
+        else
+            @journal_entries << args[:journal_entries]
+        end
+    end
     @date = args[:date] if args.has_key?(:date)
-    @description = args[:description] if args.has_key?[:description]
+    @description = args[:description] if args.has_key?(:description)
+    @pattern_name = args[:pattern_name] if args.has_key?(:pattern_name)
   end
 
   def self.transaction_patterns
@@ -72,7 +80,7 @@ class JournalTransaction
             cash:                     :cr
         },
         bank_payments: {
-            bank_expanses:            :dr,
+            bank_expenses:            :dr,
             cash:                     :cr
         },
         travel_payments: {
@@ -86,6 +94,10 @@ class JournalTransaction
         sundry_payments: {
             sundry_expenses:          :dr,
             cash:                     :cr
+        },
+        sundry_refunds: {
+            cash:                     :dr,
+            sundry_expenses:          :cr
         },
         fines_payments: {
             fines_expenses:           :dr,

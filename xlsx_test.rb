@@ -18,36 +18,35 @@ def revise_pattern_value(current_value, entry)
 end
 
 def pattern_match?(pattern, entry, entry_matches, pattern_value=0.0)
-	entry_matches.each { |entry| puts entry.inspect }
+	entry_matches.each { |current_entry| puts current_entry.inspect }
 	revised_pattern_value = revise_pattern_value(pattern_value, entry)
 	pattern.delete(entry.account)
 	if pattern.empty?
 		revised_pattern_value == 0.0 ? return_val = true : return_val = false
 		return return_val
-	else
-		entry_matches.each do |current_entry|
-			if potential_entry_match?(pattern, current_entry)
-				remaining_entries = []
-				entry_matches.each { |entry| remaining_entries << entry unless entry == current_entry }
-				if pattern_match?(pattern, current_entry, remaining_entries, revised_pattern_value)
-					@all_ledger_entries.delete(current_entry)
-					puts 'HIT TRUE'
-					return true
-				else
-					puts 'HIT FALSE'
-					return false
-				end
-			else
-				puts 'HIT NO POTENTIAL MATCHES'
-				return false
-			end
-		end
 	end
-	raise('deffo shouldn\'t get to this line of code, lol! maybe return false?')
+	entry_matches.each do |current_entry|
+		result = entry_match?(pattern, current_entry, entry_matches, revised_pattern_value)
+		return true if result
+	end
+	false
 end
 
-def potential_entry_match?(pattern, entry)
-	return true if pattern.has_key?(entry.account) && pattern[entry.account] == entry.balance
+def entry_match?(pattern, entry, entries, revised_pattern_val)
+	if pattern.has_key?(entry.account) && pattern[entry.account] == entry.balance
+		remaining_entries = []
+		entries.each { |current_entry| remaining_entries << current_entry unless current_entry == entry }
+		if pattern_match?(pattern, entry, remaining_entries, revised_pattern_val)
+			matching_entry = @all_ledger_entries.delete(entry)
+			@current_transaction.journal_entries << matching_entry
+			puts 'HIT TRUE'
+			return true
+		else
+			puts 'HIT FALSE'
+			return false
+		end
+	end
+	puts 'HIT NO POTENTIAL MATCHES'
 	false
 end
 
@@ -85,14 +84,14 @@ print "dr - cr: #{dr - cr}\n"
 
 # return patterns that include the required account with the right balance (dr/cr)
 def get_pattern_matches(current_entry)
-	pattern_matches = []
+	pattern_matches = {}
 	all_patterns = JournalTransaction.transaction_patterns
 	all_patterns.each do |key, value|
 		puts ">>>>>>>>>>>>>>> #{key}.keys"
 		value.keys.each { |t_key| puts t_key }
 		if value.keys.include?(current_entry.account) && value[current_entry.account] == current_entry.balance
 			puts 'MATCHING ACCOUNT VALUE PAIR!!!!! <<<<<<<<<<<<<<<'
-			pattern_matches << all_patterns[key]
+			pattern_matches[key] = all_patterns[key]
 			@matching_patterns << key
 		end
 	end
@@ -104,8 +103,12 @@ errors = {
 		no_successful_pattern_matches:	[]
 }
 
+transactions = []
+
 until @all_ledger_entries.empty?
+	@current_transaction = JournalTransaction.new
 	current_entry = @all_ledger_entries[0]
+	@current_transaction.journal_entries << current_entry
 	puts ''
 	puts ''
 	puts '****************************************************************************************************'
@@ -131,10 +134,14 @@ until @all_ledger_entries.empty?
 		puts ''
 		# await_return
 		match_found = false
-		pattern_matches.each do |pattern|
-			puts "\ncurrent_pattern = #{pattern}"
-	 		match_found = pattern_match?(pattern, current_entry, entry_matches)
-			break if match_found
+		pattern_matches.each do |key, value|
+			puts "\ncurrent_pattern = #{value}"
+	 		match_found = pattern_match?(value, current_entry, entry_matches)
+			if match_found
+				@current_transaction.pattern_name = key
+				transactions << @current_transaction
+				break
+			end
 	 	end
 		unless match_found
 			@all_ledger_entries.delete(current_entry)
@@ -152,13 +159,26 @@ until @all_ledger_entries.empty?
 
 end
 
-puts 'errors, if any --------- :'
+puts "\n\n\n"
+oph('     TRANSACTIONS IDENTIFIED     ')
+puts ''
+transactions.each do |transaction|
+	puts transaction.pattern_name
+	transaction.journal_entries.each { |entry| puts entry.inspect }
+	puts ''
+end
+puts "\n\n\n"
 
+oph('     UNMATCHED ENTRIES     ')
+puts ''
+errors.each { |key, value| puts "#{key}: #{value.count}" }
+puts ''
 errors.each do |key, value|
 	unless value.empty?
+		puts ''
 		puts "error: #{key}"
-		puts value
+		value.each { |entry| puts entry.inspect }
 	end
 end
-
+puts ''
 puts 'all done now!!!!!!!'

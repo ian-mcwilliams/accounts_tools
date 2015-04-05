@@ -5,16 +5,21 @@ class FileTools
   attr_accessor(:contents)
 
   def initialize(filepath, key=nil)
+    puts "hostname = #{Socket.gethostname}"
     filepath = "#{get_filepath(key)}#{filepath}" if key
     @contents = get_file_contents(filepath)
   end
 
-  def get_machine_name
+  def machine_keys
     {
-        ian:  	'F3M3s-MacBook-Air.local',
-        ian_w:  'OE2021.local',
-        dad: 	  'John'
+        ian:  	['F3M3s-MacBook-Air.local', 'f3m3s-air.home'],
+        ian_w:  ['OE2021.local'],
+        dad: 	  ['John']
     }
+  end
+
+  def get_machine_key
+    machine_keys.each { |key, value| return key if value.include?(Socket.gethostname) }
   end
 
   def get_rel_path
@@ -22,7 +27,7 @@ class FileTools
         ian: 	  '../../../../Applications/MAMP/bin/mamp/Dropbox/',
         ian_w:  '../../../ian/accounts/',
         dad: 	  ''
-    }[get_machine_name.key(Socket.gethostname)]
+    }[get_machine_key]
   end
 
   def get_file_contents(filepath)

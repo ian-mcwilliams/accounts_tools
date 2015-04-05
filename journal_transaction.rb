@@ -22,6 +22,11 @@ class JournalTransaction
             ar:                       :dr,
             vat_payable:              :cr,
             net_sales:                :cr,
+        },
+        issue_invoice_flat_rate: {
+            ar:                       :dr,
+            vat_payable:              :cr,
+            net_sales:                :cr,
             retained_vat:             :cr
         },
         receive_remittance: {

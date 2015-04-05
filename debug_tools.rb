@@ -13,3 +13,8 @@ def inset_str(str, wrapper, length)
   end
   return_str
 end
+
+def await_return
+  print('=============== press return to continue ===============')
+  gets
+end

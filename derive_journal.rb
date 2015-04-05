@@ -7,8 +7,8 @@ require_relative 'debug_tools'
 
 class DeriveJournal
 
-	def initialize
-		results = start_process
+	def initialize(accounting_period)
+		results = start_process(accounting_period)
 		gen_results_output(results)
 	end
 
@@ -70,7 +70,7 @@ class DeriveJournal
 	end
 
 
-	def start_process
+	def start_process(accounting_period)
 		accounting_periods = [
 				'1. 1009-1108/AccountsAnalysis1011.xlsx',
 				'2. 1109-1110/AccountsAnalysisSep-Oct11.xlsx',
@@ -79,7 +79,7 @@ class DeriveJournal
 				'5. 1311-1410/AccountsAnalysis1314.xlsx'
 		]
 
-		file = FileTools.new(accounting_periods[0], :accounts)
+		file = FileTools.new(accounting_periods[accounting_period - 1], :accounts)
 		doc = file.contents
 
 		accounts = {}

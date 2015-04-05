@@ -1,3 +1,5 @@
 require_relative 'derive_journal'
 
-DeriveJournal.new
+accounting_period = 1
+
+DeriveJournal.new(accounting_period)

@@ -85,17 +85,20 @@ class DeriveJournal
 		accounts = {}
 
 		doc.sheets.each do |sheet|
-			accounts[sheet.name] = Account.new(sheet.rows) unless ['Accounts Summary', 'Closing to Capital'].include?(sheet.name)
+			accounts[sheet.name] = Account.new(sheet.rows) unless ['Accounts Summary', 'Closing to Capital', 'L2. CT'].include?(sheet.name)
 		end
 
 		@all_ledger_entries = []
 
 		accounts.each do |key, value|
 			value.entries.each do |entry|
+				puts entry.inspect
 				args = { date: entry.date, account: key, dr: entry.dr, cr: entry.cr, balance: entry.balance }
-				@all_ledger_entries << JournalEntry.new(args) #if args[:date] == Time.new(2011, 01, 20)
+				@all_ledger_entries << JournalEntry.new(args) unless ['brought forward', 'b/fwd'].include?(entry.description.downcase)
 			end
 		end
+
+		puts "\n\n\n\n\n\n\n##################################################\n\n\n\n\n\n\n\n\n\n"
 
 		@all_ledger_entries.each { |entry| print "#{entry.inspect}\n" }
 

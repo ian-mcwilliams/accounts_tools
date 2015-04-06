@@ -37,6 +37,10 @@ class JournalTransaction
             cash:                     :dr,
             capital:                  :cr
         },
+        withdrawal: {
+            withdrawal:               :dr,
+            cash:                     :cr
+        },
         pay_vat: {
             vat_payable:              :dr,
             cash:                     :cr
@@ -78,6 +82,10 @@ class JournalTransaction
         },
         pay_office_expenses: {
             office_expenses_payable:  :dr,
+            cash:                     :cr
+        },
+        pay_co_house: {
+            co_house_expenses:        :dr,
             cash:                     :cr
         },
         pay_misc_payable: {

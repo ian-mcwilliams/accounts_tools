@@ -26,7 +26,7 @@ class FileTools
     {
         ian: 	  '../../../../Applications/MAMP/bin/mamp/Dropbox/',
         ian_w:  '../../../ian/accounts/',
-        dad: 	  ''
+        dad: 	  '../../Users/John/Dropbox/'
     }[get_machine_key]
   end
 

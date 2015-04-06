@@ -8,42 +8,56 @@ require_relative 'debug_tools'
 class DeriveJournal
 
 	def initialize(accounting_period)
+		@level = 0
 		results = start_process(accounting_period)
 		gen_results_output(results)
 	end
 
 	def revise_pattern_value(current_value, entry)
-		{
-				dr:	current_value.round(2) - entry.dr.round(2),
-				cr:	current_value.round(2) + entry.cr.round(2)
-		}[entry.balance]
+		puts "pattern_value: #{current_value}"
+		puts "entry_value: #{{ dr: entry.dr, cr: entry.cr }[entry.balance]}"
+		revised_value = 0 + current_value
+		revised_value.round(2) + entry.value.round(2)
 	end
 
-	def pattern_match?(pattern, entry, entry_matches, pattern_value=0.0)
-		revised_pattern_value = revise_pattern_value(pattern_value, entry)
-		pattern.delete(entry.account)
+	def pattern_match?(pattern, entry, entry_matches, pattern_value)
+		puts "level: #{@level}, pattern = #{pattern}, value: #{pattern_value}"
 		if pattern.empty?
-			revised_pattern_value == 0.0 ? return_val = true : return_val = false
+			pattern_value == 0.0 ? return_val = true : return_val = false
 			return return_val
 		end
 		entry_matches.each do |current_entry|
-			result = entry_match?(pattern, current_entry, entry_matches, revised_pattern_value)
+			puts current_entry.inspect
+			puts "pattern: #{pattern.inspect}"
+			result = entry_match?(pattern, current_entry, entry_matches, pattern_value)
 			return true if result
 		end
 		false
 	end
 
-	def entry_match?(pattern, entry, entries, revised_pattern_val)
+	def entry_match?(pattern, entry, entries, pattern_value)
+		# if entry.dr == 30.7
+		# 	puts "pattern: #{pattern.inspect}"
+		# 	puts "account: #{entry.account}"
+		# 	puts "balance: #{entry.balance}"
+		# 	puts "1st: #{pattern.has_key?(entry.account)}, 2nd: #{pattern[entry.account] == entry.balance}"
+		# end
 		if pattern.has_key?(entry.account) && pattern[entry.account] == entry.balance
 			remaining_entries = []
 			entries.each { |current_entry| remaining_entries << current_entry unless current_entry == entry }
-			if pattern_match?(pattern, entry, remaining_entries, revised_pattern_val)
+			@level += 1
+			sub_pattern = {}.merge(pattern)
+			sub_pattern.delete(entry.account)
+			if pattern_match?(sub_pattern, entry, remaining_entries, pattern_value.round(2) + entry.value.round(2))
 				matching_entry = @all_ledger_entries.delete(entry)
 				@current_transaction.journal_entries << matching_entry
+				pattern.delete(entry.account)
 				puts 'HIT TRUE'
+				@level -= 1
 				return true
 			else
 				puts 'HIT FALSE'
+				@level -= 1
 				return false
 			end
 		end
@@ -58,10 +72,7 @@ class DeriveJournal
 		pattern_matches = {}
 		all_patterns = JournalTransaction.transaction_patterns
 		all_patterns.each do |key, value|
-			puts ">>>>>>>>>>>>>>> #{key}.keys"
-			value.keys.each { |t_key| puts t_key }
 			if value.keys.include?(current_entry.account) && value[current_entry.account] == current_entry.balance
-				puts 'MATCHING ACCOUNT VALUE PAIR!!!!! <<<<<<<<<<<<<<<'
 				pattern_matches[key] = all_patterns[key]
 				@matching_patterns << key
 			end
@@ -94,7 +105,11 @@ class DeriveJournal
 			value.entries.each do |entry|
 				puts entry.inspect
 				args = { date: entry.date, account: key, dr: entry.dr, cr: entry.cr, balance: entry.balance }
-				@all_ledger_entries << JournalEntry.new(args) unless ['brought forward', 'b/fwd'].include?(entry.description.downcase)
+				['brought forward', 'b/fwd'].include?(entry.description.downcase) ? b_fwd = true : b_fwd = false
+				entry.date == Time.new(2011, 11, 15) ? date_match = true : date_match = false
+				entry.cr == 30.7 || entry.dr == 30.7 ? value_match = true : value_match = false
+				filter = date_match && value_match
+				@all_ledger_entries << JournalEntry.new(args) unless b_fwd #|| !date_match
 			end
 		end
 
@@ -147,13 +162,14 @@ class DeriveJournal
 			if pattern_matches_found
 				puts 'Entry Matches:'
 				entry_matches = @all_ledger_entries.select { |entry| current_entry.date == entry.date }
+				entry_matches.each { |entry| puts entry.inspect }
 				puts ''
 				# await_return
 				match_found = false
 				pattern_matches.each do |key, value|
-					puts "current_pattern = #{value}"
-					entry_matches.each { |entry| puts entry.inspect }
-					match_found = pattern_match?(value, current_entry, entry_matches)
+					puts "\ncurrent_pattern = #{value}"
+					value.delete(current_entry.account)
+					match_found = pattern_match?(value, current_entry, entry_matches, current_entry.value)
 					if match_found
 						@current_transaction.pattern_name = key
 						transactions << @current_transaction

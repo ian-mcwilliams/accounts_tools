@@ -56,9 +56,22 @@ class JournalTransaction
             salary_payable:           :cr,
             paye_payable:             :cr
         },
+        accrue_salary: {
+            salary_expenses:          :dr,
+            salar_payable:            :cr
+        },
         pay_salary: {
             salary_payable:           :dr,
             cash:                     :cr
+        },
+        accrue_and_pay_salary: {
+            salary_expenses:          :dr,
+            cash:                     :cr
+        },
+        accrue_paye: {
+            empee_tax_ni_expenses:    :dr,
+            emper_ni_expenses:        :dr,
+            paye_payable:             :cr
         },
         pay_paye: {
             paye_payable:             :dr,

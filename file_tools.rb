@@ -41,10 +41,13 @@ class FileTools
     }[key]
   end
 
-  def self.write_output_to_excel(file_name, sheet_name, output)
+  def self.write_output_to_excel(file_name, output_sheets)
     Axlsx::Package.new do |p|
-      p.workbook.add_worksheet(name: sheet_name) do |sheet|
-        output.each { |row| sheet.add_row(row) }
+      output_sheets.each do |output_sheet|
+        p.workbook.add_worksheet(name: output_sheet[:sheet_name]) do |sheet|
+          forced_float_format = sheet.styles.add_style :format_code => '0.00'
+          output_sheet[:output].each { |row| sheet.add_row(row, :style => [nil, nil, nil, forced_float_format, forced_float_format, forced_float_format]) }
+        end
       end
       p.serialize(file_name)
     end

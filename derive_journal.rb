@@ -4,13 +4,15 @@ require_relative 'journal_entry'
 require_relative 'journal_transaction'
 require_relative 'file_tools'
 require_relative 'debug_tools'
+require 'awesome_print'
 
 class DeriveJournal
 
-	def initialize(accounting_period)
+	def initialize(accounting_period, output_excel=false)
 		@level = 0
 		results = start_process(accounting_period)
 		gen_results_output(results)
+		gen_results_output_excel(results) if output_excel
 	end
 
 	def revise_pattern_value(current_value, entry)
@@ -227,6 +229,74 @@ class DeriveJournal
 		end
 		puts ''
 		puts 'all done now!!!!!!!'
+	end
+
+	def gen_results_output_excel(results)
+		output_sheets = results_to_sheets(results)
+		FileUtils.mkdir('run_results') unless Dir.exists?('run_results')
+		files = []
+		Dir.glob('run_results/*').each { |file| files << file[file.index('/')+1..file.index('.xlsx')-1] if file.index('run_result_') && !file.index('~') }
+		puts files.inspect
+		index = 0
+		files.each { |file| index = file[11..file.length].to_i if file[11..file.length].to_i >= index } unless files.empty?
+		puts index
+		FileTools.write_output_to_excel("run_results/run_result_#{index+1}.xlsx", output_sheets)
+	end
+
+	def results_to_sheets(results)
+		# puts results.keys
+		# puts results[:errors].keys
+		# results[:errors].each { |entry| puts "#{entry.inspect}\n" }
+		# raise
+		transactions_output = get_header_output.concat(get_transactions_output(results[:transactions]))
+		no_matches_output = get_header_output.concat(get_entries_output(results[:errors][:no_pattern_matches])[0])
+		no_successful_matches_output = get_header_output.concat(get_entries_output(results[:errors][:no_successful_pattern_matches])[0])
+		sheets = []
+		sheets << { sheet_name: 'transactions', output: transactions_output }
+		sheets << { sheet_name: 'no_pattern_matches', output: no_matches_output }
+		sheets << { sheet_name: 'no_successful_pattern_matches', output: no_successful_matches_output }
+		ap sheets
+		sheets
+	end
+
+	def get_header_output
+		[
+				%w[Date Account Balance Value Adjusted Subtotal],
+				[]
+		]
+	end
+
+	def get_transactions_output(transactions)
+		subtotal = 0
+		output = []
+		transactions.each do |transaction|
+			entries_output, subtotal = get_entries_output(transaction.journal_entries, subtotal)
+			output.concat(entries_output)
+			output << [] unless transaction == transactions.last
+		end
+		output
+	end
+
+	def get_entries_output(entries, subtotal=0)
+		output = []
+		entries.each do |entry|
+			subtotal = subtotal.to_s.to_f.round(2) + entry.value.to_s.to_f.round(2)
+			output << get_entry_output_array(entry, subtotal)
+		end
+		[output, subtotal.to_s.to_f.round(2)]
+	end
+
+	def get_entry_output_array(entry, subtotal)
+		value_str = { dr: entry.dr, cr: entry.cr }[entry.balance]
+		adjusted_str = entry.value
+		subtotal_str = subtotal.to_s.to_f.round(2)
+		[entry.date, entry.account, entry.balance.upcase, value_str, adjusted_str, subtotal_str]
+	end
+
+	def get_float_str(value)
+		val_str = value.to_s
+		val_str << '.00' unless val_str.index('.')
+		val_str << '0' unless val_str.split('.')[1].length == 2
 	end
 
 end

@@ -102,6 +102,7 @@ class DeriveJournal
 		@all_ledger_entries = []
 
 		accounts.each do |key, value|
+			puts "key: #{key}"
 			value.entries.each do |entry|
 				puts entry.inspect
 				args = { date: entry.date, account: key, dr: entry.dr, cr: entry.cr, balance: entry.balance }
@@ -109,7 +110,8 @@ class DeriveJournal
 				entry.date == Time.new(2011, 11, 15) ? date_match = true : date_match = false
 				entry.cr == 30.7 || entry.dr == 30.7 ? value_match = true : value_match = false
 				filter = date_match && value_match
-				@all_ledger_entries << JournalEntry.new(args) unless b_fwd #|| !date_match
+				key == Account.accounts[:capital] && entry.description.downcase.index('clos') ? closing = true : closing = false
+				@all_ledger_entries << JournalEntry.new(args) unless closing || b_fwd #|| !date_match
 			end
 		end
 
@@ -213,16 +215,24 @@ class DeriveJournal
 			unless value.empty?
 				puts ''
 				puts "error: #{key}"
+				balance = 0
 				entries = value.sort_by { |error| error.date }
 				entries.each do |entry|
+					balance = (balance + entry.value).to_s.to_f.round(2) unless entry.value.nil?
 					output_str = entry.date.strftime('%Y-%m-%d')
 					output_str << ' ' until output_str.length > 10
 					output_str << entry.account.to_s
 					output_str << ' ' until output_str.length > 40
 					output_str << "#{entry.balance.to_s.upcase} "
 					output_str << { dr: entry.dr, cr: entry.cr }[entry.balance].to_s
+					output_str << ' ' until output_str.length > 52
+					output_str << "value: #{entry.value}"
+					output_str << ' ' until output_str.length > 70
+					output_str << "subtotal: #{balance}"
 					puts output_str
 				end
+				puts ''
+				puts "outstanding entries balance to: #{balance}"
 			end
 		end
 		puts ''

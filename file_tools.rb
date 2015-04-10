@@ -1,4 +1,5 @@
 require 'simple_xlsx_reader'
+require 'axlsx'
 
 class FileTools
 
@@ -38,6 +39,15 @@ class FileTools
     {
         accounts: "F3Mmedia/Internal/ACcounts/___YEAR_END_FINAL_ACCOUNTS/"
     }[key]
+  end
+
+  def self.write_output_to_excel(file_name, sheet_name, output)
+    Axlsx::Package.new do |p|
+      p.workbook.add_worksheet(name: sheet_name) do |sheet|
+        output.each { |row| sheet.add_row(row) }
+      end
+      p.serialize(file_name)
+    end
   end
 
 end

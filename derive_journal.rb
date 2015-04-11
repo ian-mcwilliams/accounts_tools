@@ -113,7 +113,8 @@ class DeriveJournal
 				entry.cr == 30.7 || entry.dr == 30.7 ? value_match = true : value_match = false
 				filter = date_match && value_match
 				key == Account.accounts[:capital] && entry.description.downcase.index('clos') ? closing = true : closing = false
-				@all_ledger_entries << JournalEntry.new(args) unless closing || b_fwd #|| !date_match
+				entry.description.downcase.index('closing to capital') ? closing_to_capital = true : closing_to_capital = false
+				@all_ledger_entries << JournalEntry.new(args) unless closing || closing_to_capital || b_fwd #|| !date_match
 			end
 		end
 

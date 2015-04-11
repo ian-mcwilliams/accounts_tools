@@ -10,7 +10,7 @@ class Account
 
   def populate_account(raw_data)
     @raw_data = raw_data
-    content = raw_data.drop(2)[0..-6]
+    content = raw_data.drop(2)[0..-5]
     @entries = []
     content.each do |row|
       @entries << LedgerEntry.new(row) if row[0]

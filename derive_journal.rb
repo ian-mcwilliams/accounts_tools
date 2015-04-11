@@ -246,10 +246,10 @@ class DeriveJournal
 		FileUtils.mkdir('run_results') unless Dir.exists?('run_results')
 		files = []
 		Dir.glob('run_results/*').each { |file| files << file[file.index('/')+1..file.index('.xlsx')-1] if file.index('run_result_') && !file.index('~') }
-		puts files.inspect
+		# puts files.inspect
 		index = 0
 		files.each { |file| index = file[11..file.length].to_i if file[11..file.length].to_i >= index } unless files.empty?
-		puts index
+		# puts index
 		FileTools.write_output_to_excel("run_results/run_result_#{index+1}.xlsx", output_sheets)
 	end
 
@@ -265,7 +265,7 @@ class DeriveJournal
 		sheets << { sheet_name: 'transactions', output: transactions_output }
 		sheets << { sheet_name: 'no_pattern_matches', output: no_matches_output }
 		sheets << { sheet_name: 'no_successful_pattern_matches', output: no_successful_matches_output }
-		ap sheets
+		# ap sheets
 		sheets
 	end
 

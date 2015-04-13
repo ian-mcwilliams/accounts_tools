@@ -19,115 +19,123 @@ class JournalTransaction
   def self.transaction_patterns
     {
         issue_invoice: {
-            ar:                       :dr,
-            vat_payable:              :cr,
-            net_sales:                :cr,
+            ar:                             :dr,
+            vat_payable:                    :cr,
+            net_sales:                      :cr,
         },
         issue_invoice_flat_rate: {
-            ar:                       :dr,
-            vat_payable:              :cr,
-            net_sales:                :cr,
-            retained_vat:             :cr
+            ar:                             :dr,
+            vat_payable:                    :cr,
+            net_sales:                      :cr,
+            retained_vat:                   :cr
         },
         receive_remittance: {
-            cash:                     :dr,
-            ar:                       :cr
+            cash:                           :dr,
+            ar:                             :cr
         },
         owner_investment: {
-            cash:                     :dr,
-            capital:                  :cr
+            cash:                           :dr,
+            capital:                        :cr
         },
         withdrawal: {
-            withdrawal:               :dr,
-            cash:                     :cr
+            withdrawal:                     :dr,
+            cash:                           :cr
         },
         pay_vat: {
-            vat_payable:              :dr,
-            cash:                     :cr
+            vat_payable:                    :dr,
+            cash:                           :cr
         },
         pay_corporation_tax: {
-            ct_payable:               :dr,
-            cash:                     :cr
+            ct_payable:                     :dr,
+            cash:                           :cr
         },
         employee_works: {
-            salary_expenses:          :dr,
-            empee_tax_ni_expenses:    :dr,
-            emper_ni_expenses:        :dr,
-            salary_payable:           :cr,
-            paye_payable:             :cr
+            salary_expenses:                :dr,
+            empee_tax_ni_expenses:          :dr,
+            emper_ni_expenses:              :dr,
+            salary_payable:                 :cr,
+            paye_payable:                   :cr
         },
         accrue_salary: {
-            salary_expenses:          :dr,
-            salar_payable:            :cr
+            salary_expenses:                :dr,
+            salary_payable:                 :cr
         },
         pay_salary: {
-            salary_payable:           :dr,
-            cash:                     :cr
+            salary_payable:                 :dr,
+            cash:                           :cr
         },
         accrue_and_pay_salary: {
-            salary_expenses:          :dr,
-            cash:                     :cr
+            salary_expenses:                :dr,
+            cash:                           :cr
         },
         accrue_paye: {
-            empee_tax_ni_expenses:    :dr,
-            emper_ni_expenses:        :dr,
-            paye_payable:             :cr
+            empee_tax_ni_expenses:          :dr,
+            emper_ni_expenses:              :dr,
+            paye_payable:                   :cr
+        },
+        accrue_paye_empee: {
+            empee_tax_ni_expenses:          :dr,
+            paye_payable:                   :cr
+        },
+        accrue_paye_emper: {
+            emper_ni_expenses:              :dr,
+            paye_payable:                   :cr
         },
         pay_paye: {
-            paye_payable:             :dr,
-            cash:                     :cr
+            paye_payable:                   :dr,
+            cash:                           :cr
         },
         accrue_comms_office_expenses: {
-            comms_office_expenses:    :dr,
-            office_expenses_payable:  :cr
+            comms_office_expenses:          :dr,
+            office_expenses_payable:        :cr
         },
         accrue_rent_office_expenses: {
-            rent_office_expenses:     :dr,
-            office_expenses_payable:  :cr
+            rent_office_expenses:           :dr,
+            office_expenses_payable:        :cr
         },
         accrue_power_office_expenses: {
-            power_office_expenses:    :dr,
-            office_expenses_payable:  :cr
+            power_office_expenses:          :dr,
+            office_expenses_payable:        :cr
         },
         accrue_sundry_office_expenses: {
-            sundry_office_expenses:   :dr,
-            office_expenses_payable:  :cr
+            sundry_office_expenses:         :dr,
+            office_expenses_payable:        :cr
         },
         pay_office_expenses: {
-            office_expenses_payable:  :dr,
-            cash:                     :cr
+            office_expenses_payable:        :dr,
+            cash:                           :cr
         },
         pay_co_house: {
-            co_house_expenses:        :dr,
-            cash:                     :cr
+            co_house_expenses:              :dr,
+            cash:                           :cr
         },
         pay_misc_payable: {
-            misc_payable:             :dr,
-            cash:                     :cr
+            misc_payable:                   :dr,
+            cash:                           :cr
         },
         bank_payments: {
-            bank_expenses:            :dr,
-            cash:                     :cr
+            bank_expenses:                  :dr,
+            cash:                           :cr
         },
         travel_payments: {
-            travel_expenses:          :dr,
-            cash:                     :cr
+            travel_expenses:                :dr,
+            cash:                           :cr
         },
         comms_payments: {
-            comms_expenses:           :dr,
-            cash:                     :cr
+            comms_expenses:                 :dr,
+            cash:                           :cr
         },
         sundry_payments: {
-            sundry_expenses:          :dr,
-            cash:                     :cr
+            sundry_expenses:                :dr,
+            cash:                           :cr
         },
         sundry_refunds: {
-            cash:                     :dr,
-            sundry_expenses:          :cr
+            cash:                           :dr,
+            sundry_expenses:                :cr
         },
         fines_payments: {
-            fines_expenses:           :dr,
-            cash:                     :cr
+            fines_expenses:                 :dr,
+            cash:                           :cr
         }
     }
   end

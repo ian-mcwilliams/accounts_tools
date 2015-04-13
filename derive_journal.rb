@@ -108,13 +108,19 @@ class DeriveJournal
 			value.entries.each do |entry|
 				puts entry.inspect
 				args = { date: entry.date, account: key, dr: entry.dr, cr: entry.cr, balance: entry.balance }
-				['brought forward', 'b/fwd'].include?(entry.description.downcase) ? b_fwd = true : b_fwd = false
+				b_fwd = false
+				['brought forward', 'b/fwd'].each do |term|
+					if entry.description.downcase.index(term)
+						b_fwd = true; break
+					end
+				end
 				entry.date == Time.new(2011, 11, 15) ? date_match = true : date_match = false
 				entry.cr == 30.7 || entry.dr == 30.7 ? value_match = true : value_match = false
 				filter = date_match && value_match
 				key == Account.accounts[:capital] && entry.description.downcase.index('clos') ? closing = true : closing = false
 				entry.description.downcase.index('closing to capital') ? closing_to_capital = true : closing_to_capital = false
-				@all_ledger_entries << JournalEntry.new(args) unless closing || closing_to_capital || b_fwd #|| !date_match
+				entry.cr == 0 && entry.dr == 0 ? null_entry = true : null_entry = false
+				@all_ledger_entries << JournalEntry.new(args) unless null_entry || closing || closing_to_capital || b_fwd #|| !date_match
 			end
 		end
 
@@ -214,6 +220,7 @@ class DeriveJournal
 		puts ''
 		errors.each { |key, value| puts "#{key}: #{value.count}" }
 		puts ''
+		final_balance = 0
 		errors.each do |key, value|
 			unless value.empty?
 				puts ''
@@ -236,8 +243,11 @@ class DeriveJournal
 				end
 				puts ''
 				puts "outstanding entries balance to: #{balance}"
+				final_balance = final_balance + balance
 			end
 		end
+		puts ''
+		puts "final balance: #{final_balance.to_s.to_f.round(2)}"
 		puts ''
 		puts 'all done now!!!!!!!'
 	end
@@ -259,6 +269,7 @@ class DeriveJournal
 		# puts results[:errors].keys
 		# results[:errors].each { |entry| puts "#{entry.inspect}\n" }
 		# raise
+		results[:errors].each { |_, value| value.sort_by! { |entry| entry.date } }
 		transactions_output = get_header_output.concat(get_transactions_output(results[:transactions]))
 		no_matches_output = get_header_output.concat(get_entries_output(results[:errors][:no_pattern_matches])[0])
 		no_successful_matches_output = get_header_output.concat(get_entries_output(results[:errors][:no_successful_pattern_matches])[0])

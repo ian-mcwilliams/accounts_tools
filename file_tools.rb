@@ -13,7 +13,7 @@ class FileTools
 
   def machine_keys
     {
-        ian:  	['F3M3s-MacBook-Air.local', 'f3m3s-air.home'],
+        ian:  	['F3M3s-MacBook-Air.local', 'f3m3s-air.home', 'f3m3s-air'],
         ian_w:  ['OE2021.local'],
         dad: 	  ['John']
     }

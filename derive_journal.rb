@@ -150,6 +150,7 @@ class DeriveJournal
 		until @all_ledger_entries.empty?
 			@current_transaction = JournalTransaction.new
 			current_entry = @all_ledger_entries[0]
+			@current_transaction.date = current_entry.date
 			@current_transaction.journal_entries << current_entry
 			puts ''
 			puts ''
@@ -291,6 +292,7 @@ class DeriveJournal
 	def get_transactions_output(transactions)
 		subtotal = 0
 		output = []
+		transactions.sort_by! { |transaction| transaction.date }
 		transactions.each do |transaction|
 			entries_output, subtotal = get_entries_output(transaction.journal_entries, subtotal)
 			output.concat(entries_output)

@@ -4,16 +4,14 @@ class Account
 
   attr_accessor(:entries)
 
-  def initialize(raw_data=nil)
-    populate_account(raw_data) if raw_data
+  def initialize(args={})
+    populate_account(args[:entries]) if args.has_key?(:entries)
   end
 
-  def populate_account(raw_data)
-    @raw_data = raw_data
-    content = raw_data.drop(2)[0..-5]
+  def populate_account(entries)
     @entries = []
-    content.each do |row|
-      @entries << LedgerEntry.new(row) if row[0]
+    entries.each do |entry|
+      @entries << LedgerEntry.new(entry)
     end
   end
 

@@ -1,10 +1,11 @@
 require 'socket'
+require 'time'
+require 'awesome_print'
 require_relative 'account'
 require_relative 'journal_entry'
 require_relative 'journal_transaction'
 require_relative 'file_tools'
 require_relative 'debug_tools'
-require 'awesome_print'
 
 class DeriveJournal
 
@@ -82,6 +83,29 @@ class DeriveJournal
 		pattern_matches
 	end
 
+	def get_entries_from_rows(rows)
+		entries = []
+		rows.each do |row|
+			if row[0]
+				entry = {}
+				entry[:date] = date_cell_to_time(row[0])
+				entry[:description] = row[1] || ''
+				entry[:dr] = row[2].to_s.to_f.round(2)
+				entry[:cr] = row[3].to_s.to_f.round(2) || 0.to_s.to_f.round(2)
+				entry[:balance] = :dr if entry[:dr] > 0
+				entry[:balance] = :cr if entry[:cr] > 0
+				entries << entry
+			end
+		end
+		entries
+	end
+
+	def date_cell_to_time(cell)
+		return cell.to_time if cell.is_a?(Date)
+		cell_split = cell.split('/')
+		Time.new(cell_split[2], cell_split[1], cell_split[0])
+	end
+
 
 	def start_process(accounting_period)
 		accounting_periods = [
@@ -98,7 +122,11 @@ class DeriveJournal
 		accounts = {}
 
 		doc.sheets.each do |sheet|
-			accounts[sheet.name] = Account.new(sheet.rows) unless ['Accounts Summary', 'Closing to Capital', 'L2. CT'].include?(sheet.name)
+			unless ['Accounts Summary', 'Closing to Capital', 'L2. CT'].include?(sheet.name)
+				rows = sheet.rows.drop(2)[0..-5]
+				entries = get_entries_from_rows(rows)
+				accounts[sheet.name] = Account.new(entries: entries)
+			end
 		end
 
 		@all_ledger_entries = []

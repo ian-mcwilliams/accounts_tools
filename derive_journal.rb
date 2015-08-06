@@ -13,7 +13,8 @@ class DeriveJournal
 		@level = 0
 		results = start_process(accounting_period)
 		gen_results_output(results)
-		gen_results_output_excel(results) if output_excel
+		output_excel ? results_msg = gen_results_output_excel(results) : results_msg = 'NO EXCEL RESULT FILE SAVED'
+		puts "\n#{results_msg}"
 	end
 
 	def revise_pattern_value(current_value, entry)
@@ -39,12 +40,6 @@ class DeriveJournal
 	end
 
 	def entry_match?(pattern, entry, entries, pattern_value)
-		# if entry.dr == 30.7
-		# 	puts "pattern: #{pattern.inspect}"
-		# 	puts "account: #{entry.account}"
-		# 	puts "balance: #{entry.balance}"
-		# 	puts "1st: #{pattern.has_key?(entry.account)}, 2nd: #{pattern[entry.account] == entry.balance}"
-		# end
 		if pattern.has_key?(entry.account) && pattern[entry.account] == entry.balance
 			remaining_entries = []
 			entries.each { |current_entry| remaining_entries << current_entry unless current_entry == entry }
@@ -113,7 +108,11 @@ class DeriveJournal
 				'2. 1109-1110/AccountsAnalysisSep-Oct11.xlsx',
 				'3. 1111-1210/AccountsAnalysis1112.xlsx',
 				'4. 1211-1310/AccountsAnalysis1213.xlsx',
-				'5. 1311-1410/AccountsAnalysis1314.xlsx'
+				'5. 1311-1410/AccountsAnalysis1314.xlsx',
+				'DummyCorp/1. 1201-1212/AccountsAnalysis12.xlsx',
+				'DummyCorp/1. 1301-1312/AccountsAnalysis13.xlsx',
+				'LiveCorp/1. 1009-1108/Accounts1.xlsx',
+				'LiveCorp/2. 1109-1110/Accounts2.xlsx'
 		]
 
 		file = FileTools.new(accounting_periods[accounting_period - 1], :accounts)
@@ -122,7 +121,7 @@ class DeriveJournal
 		accounts = {}
 
 		doc.sheets.each do |sheet|
-			unless ['Accounts Summary', 'Closing to Capital', 'L2. CT'].include?(sheet.name)
+			unless ['Accounts Summary', 'Closing to Capital'].include?(sheet.name)
 				rows = sheet.rows.drop(2)[0..-5]
 				entries = get_entries_from_rows(rows)
 				accounts[sheet.name] = Account.new(entries: entries)
@@ -270,15 +269,12 @@ class DeriveJournal
 					output_str << "subtotal: #{balance}"
 					puts output_str
 				end
-				puts ''
-				puts "outstanding entries balance to: #{balance}"
+				puts "\noutstanding entries balance to: #{balance}"
 				final_balance = final_balance + balance
 			end
 		end
 		puts ''
 		puts "final balance: #{final_balance.to_s.to_f.round(2)}"
-		puts ''
-		puts 'all done now!!!!!!!'
 	end
 
 	def gen_results_output_excel(results)
@@ -286,11 +282,11 @@ class DeriveJournal
 		FileUtils.mkdir('run_results') unless Dir.exists?('run_results')
 		files = []
 		Dir.glob('run_results/*').each { |file| files << file[file.index('/')+1..file.index('.xlsx')-1] if file.index('run_result_') && !file.index('~') }
-		# puts files.inspect
 		index = 0
 		files.each { |file| index = file[11..file.length].to_i if file[11..file.length].to_i >= index } unless files.empty?
-		# puts index
-		FileTools.write_output_to_excel("run_results/run_result_#{index+1}.xlsx", output_sheets)
+		filepath = "run_results/run_result_#{index+1}.xlsx"
+		FileTools.write_output_to_excel(filepath, output_sheets)
+		"RESULTS SAVED TO: dev/accounts_tools/#{filepath}"
 	end
 
 	def results_to_sheets(results)

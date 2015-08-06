@@ -112,7 +112,8 @@ class DeriveJournal
 				'DummyCorp/1. 1201-1212/AccountsAnalysis12.xlsx',
 				'DummyCorp/1. 1301-1312/AccountsAnalysis13.xlsx',
 				'LiveCorp/1. 1009-1108/Accounts1.xlsx',
-				'LiveCorp/2. 1109-1110/Accounts2.xlsx'
+				'LiveCorp/2. 1109-1110/Accounts2.xlsx',
+				'LiveCorp/3. 1111-1210/Accounts3.xlsx'
 		]
 
 		file = FileTools.new(accounting_periods[accounting_period - 1], :accounts)
@@ -136,7 +137,7 @@ class DeriveJournal
 				puts entry.inspect
 				args = { date: entry.date, account: key, dr: entry.dr, cr: entry.cr, balance: entry.balance }
 				b_fwd = false
-				['brought forward', 'b/fwd'].each do |term|
+				['brought forward', 'b/fwd', 'b/f balance'].each do |term|
 					if entry.description.downcase.index(term)
 						b_fwd = true; break
 					end

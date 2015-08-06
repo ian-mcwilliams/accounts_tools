@@ -11,9 +11,10 @@ class FileTools
     @contents = get_file_contents(filepath)
   end
 
+  # on mac, type hostname in terminal
   def machine_keys
     {
-        ian:  	['F3M3s-MacBook-Air.local', 'f3m3s-air.home', 'f3m3s-air'],
+        ian:  	['F3M3s-MacBook-Air.local', 'f3m3s-air.home', 'f3m3s-air', 'F3M3sMA.local'],
         ian_w:  ['OE2021.local'],
         dad: 	  ['John']
     }

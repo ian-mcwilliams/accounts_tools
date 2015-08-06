@@ -136,6 +136,14 @@ class JournalTransaction
         fines_payments: {
             fines_expenses:                 :dr,
             cash:                           :cr
+        },
+        incoming_loan: {
+            cash:                           :dr,
+            misc_payable:                   :cr
+        },
+        misc_expense: {
+            comms_expenses:                 :dr,
+            misc_payable:                   :cr
         }
     }
   end

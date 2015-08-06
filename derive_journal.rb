@@ -9,12 +9,63 @@ require_relative 'debug_tools'
 
 class DeriveJournal
 
-	def initialize(accounting_period, output_excel=false)
+	def initialize(accounting_period, output_excel, exclusions)
 		@level = 0
 		results = start_process(accounting_period)
+		puts "\n========================= EXCLUSIONS =========================\n"
+		exclusions ? results = add_exclusions_to_results(accounting_period, results) : results[:errors][:exclusions] = []
 		gen_results_output(results)
 		output_excel ? results_msg = gen_results_output_excel(results) : results_msg = 'NO EXCEL RESULT FILE SAVED'
 		puts "\n#{results_msg}"
+	end
+
+	def add_exclusions_to_results(accounting_period, results)
+		exclusions = get_exclusions(accounting_period)
+		processed_exclusions = []
+		processed_entries = []
+		processed_entries.concat(results[:errors][:no_successful_pattern_matches])
+		exclusions.each do |exclusion|
+			ap exclusion
+			results[:errors][:no_successful_pattern_matches].each do |entry|
+				puts entry.inspect
+				if entry.date == exclusion[:date] &&
+						entry.account == exclusion[:account] &&
+						entry.balance == exclusion[:balance] &&
+						entry.value == exclusion[:value]
+					processed_exclusions << entry
+					processed_entries.delete_at processed_entries.index(entry)
+					break
+				end
+			end
+		end
+		results[:errors][:no_successful_pattern_matches] = processed_entries
+		results[:errors][:exclusions] = processed_exclusions
+		results
+	end
+
+	def get_exclusions(accounting_period)
+		puts accounting_period
+		file = FileTools.new(get_filepaths(:results)[accounting_period - 1], :accounts)
+		doc = file.contents
+
+		doc.sheets.each do |sheet|
+			if sheet.name == 'no_successful_pattern_matches'
+				rows = sheet.rows.drop(2)
+				puts "rows count: #{rows.count}"
+				entries = []
+				rows.each do |row|
+					if row[6].to_s.length > 0
+						entry = {}
+						entry[:date] = date_cell_to_time(row[0])
+						entry[:account] = row[1].downcase.to_sym
+						entry[:balance] = row[2].downcase.to_sym
+						entry[:value] = row[4].to_s.to_f.round(2)
+						entries << entry
+					end
+				end
+				return entries
+			end
+		end
 	end
 
 	def revise_pattern_value(current_value, entry)
@@ -101,21 +152,44 @@ class DeriveJournal
 		Time.new(cell_split[2], cell_split[1], cell_split[0])
 	end
 
+	def get_filepaths(file)
+		filepaths = []
+		[
+				'1. 1009-1108',
+				'2. 1109-1110',
+				'3. 1111-1210',
+				'4. 1211-1310',
+				'5. 1311-1410',
+				'DummyCorp/1. 1201-1212',
+				'DummyCorp/1. 1301-1312',
+				'LiveCorp/1. 1009-1108',
+				'LiveCorp/2. 1109-1110',
+				'LiveCorp/3. 1111-1210'
+		].each_with_index do |filepath, index|
+			filepaths << "#{filepath}/#{accounts_filenames[index]}" if file == :accounts
+			filepaths << "#{filepath}/Exclusions.xlsx" if file == :results
+		end
+		filepaths
+	end
+
+	def accounts_filenames
+		%w[
+				AccountsAnalysis1011.xlsx,
+				AccountsAnalysisSep-Oct11.xlsx,
+				AccountsAnalysis1112.xlsx,
+				AccountsAnalysis1213.xlsx,
+				AccountsAnalysis1314.xlsx,
+				AccountsAnalysis12.xlsx,
+				AccountsAnalysis13.xlsx,
+				Accounts1.xlsx,
+				Accounts2.xlsx,
+				Accounts3.xlsx
+		]
+	end
+
 
 	def start_process(accounting_period)
-		accounting_periods = [
-				'1. 1009-1108/AccountsAnalysis1011.xlsx',
-				'2. 1109-1110/AccountsAnalysisSep-Oct11.xlsx',
-				'3. 1111-1210/AccountsAnalysis1112.xlsx',
-				'4. 1211-1310/AccountsAnalysis1213.xlsx',
-				'5. 1311-1410/AccountsAnalysis1314.xlsx',
-				'DummyCorp/1. 1201-1212/AccountsAnalysis12.xlsx',
-				'DummyCorp/1. 1301-1312/AccountsAnalysis13.xlsx',
-				'LiveCorp/1. 1009-1108/Accounts1.xlsx',
-				'LiveCorp/2. 1109-1110/Accounts2.xlsx',
-				'LiveCorp/3. 1111-1210/Accounts3.xlsx'
-		]
-
+		accounting_periods = get_filepaths(:accounts)
 		file = FileTools.new(accounting_periods[accounting_period - 1], :accounts)
 		doc = file.contents
 
@@ -298,18 +372,22 @@ class DeriveJournal
 		results[:errors].each { |_, value| value.sort_by! { |entry| entry.date } }
 		transactions_output = get_header_output.concat(get_transactions_output(results[:transactions]))
 		no_matches_output = get_header_output.concat(get_entries_output(results[:errors][:no_pattern_matches])[0])
-		no_successful_matches_output = get_header_output.concat(get_entries_output(results[:errors][:no_successful_pattern_matches])[0])
+		no_successful_matches_output = get_header_output(true).concat(get_entries_output(results[:errors][:no_successful_pattern_matches])[0])
+		exclusions_output = get_header_output.concat(get_entries_output(results[:errors][:exclusions])[0])
 		sheets = []
 		sheets << { sheet_name: 'transactions', output: transactions_output }
 		sheets << { sheet_name: 'no_pattern_matches', output: no_matches_output }
 		sheets << { sheet_name: 'no_successful_pattern_matches', output: no_successful_matches_output }
+		sheets << { sheet_name: 'exclusions', output: exclusions_output }
 		# ap sheets
 		sheets
 	end
 
-	def get_header_output
+	def get_header_output(exclusions = false)
+		headers = %w[Date Account Balance Value Adjusted Subtotal]
+		headers.concat(['Exclude? (specify balancing row)', 'Notes']) if exclusions
 		[
-				%w[Date Account Balance Value Adjusted Subtotal],
+				headers,
 				[]
 		]
 	end

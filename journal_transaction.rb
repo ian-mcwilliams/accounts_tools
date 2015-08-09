@@ -49,6 +49,10 @@ class JournalTransaction
             ct_payable:                     :dr,
             cash:                           :cr
         },
+        corporation_tax_refund: {
+            cash:                           :dr,
+            ct_payable:                     :cr
+        },
         employee_works: {
             salary_expenses:                :dr,
             empee_tax_ni_expenses:          :dr,

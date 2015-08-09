@@ -49,8 +49,8 @@ class JournalTransaction
             ct_payable:                     :dr,
             cash:                           :cr
         },
-        corporation_tax_refund: {
-            cash:                           :dr,
+        accrue_corporation_tax: {
+            capital:                        :dr,
             ct_payable:                     :cr
         },
         employee_works: {

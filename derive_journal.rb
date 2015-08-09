@@ -164,7 +164,8 @@ class DeriveJournal
 				'DummyCorp/1. 1301-1312',
 				'LiveCorp/1. 1009-1108',
 				'LiveCorp/2. 1109-1110',
-				'LiveCorp/3. 1111-1210'
+				'LiveCorp/3. 1111-1210',
+				'LiveCorp/4. 1211-1310'
 		].each_with_index do |filepath, index|
 			filepaths << "#{filepath}/#{accounts_filenames[index]}" if file == :accounts
 			filepaths << "#{filepath}/Exclusions.xlsx" if file == :results
@@ -183,7 +184,8 @@ class DeriveJournal
 				AccountsAnalysis13.xlsx,
 				Accounts1.xlsx,
 				Accounts2.xlsx,
-				Accounts3.xlsx
+				Accounts3.xlsx,
+				Accounts4.xlsx
 		]
 	end
 

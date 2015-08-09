@@ -64,6 +64,10 @@ class JournalTransaction
             salary_expenses:                :dr,
             salary_payable:                 :cr
         },
+        refund_overpaid_salary: {
+            cash:                           :dr,
+            salary_expenses:                :cr
+        },
         pay_salary: {
             salary_payable:                 :dr,
             cash:                           :cr

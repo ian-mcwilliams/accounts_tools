@@ -20,6 +20,7 @@ class DeriveJournal
 	end
 
 	def add_exclusions_to_results(accounting_period, results)
+		puts "NSPM COUNT: #{results[:errors][:no_successful_pattern_matches].count}"
 		exclusions = get_exclusions(accounting_period)
 		processed_exclusions = []
 		processed_entries = []
@@ -165,7 +166,8 @@ class DeriveJournal
 				'LiveCorp/1. 1009-1108',
 				'LiveCorp/2. 1109-1110',
 				'LiveCorp/3. 1111-1210',
-				'LiveCorp/4. 1211-1310'
+				'LiveCorp/4. 1211-1310',
+				'LiveCorp/5. 1311-1410'
 		].each_with_index do |filepath, index|
 			filepaths << "#{filepath}/#{accounts_filenames[index]}" if file == :accounts
 			filepaths << "#{filepath}/Exclusions.xlsx" if file == :results
@@ -185,7 +187,8 @@ class DeriveJournal
 				Accounts1.xlsx,
 				Accounts2.xlsx,
 				Accounts3.xlsx,
-				Accounts4.xlsx
+				Accounts4.xlsx,
+				Accounts5.xlsx
 		]
 	end
 

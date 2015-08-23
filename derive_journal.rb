@@ -153,45 +153,6 @@ class DeriveJournal
 		Time.new(cell_split[2], cell_split[1], cell_split[0])
 	end
 
-	# def get_filepaths(file)
-	# 	filepaths = []
-	# 	[
-	# 			'1. 1009-1108',
-	# 			'2. 1109-1110',
-	# 			'3. 1111-1210',
-	# 			'4. 1211-1310',
-	# 			'5. 1311-1410',
-	# 			'DummyCorp/1. 1201-1212',
-	# 			'DummyCorp/1. 1301-1312',
-	# 			'LiveCorp/1. 1009-1108',
-	# 			'LiveCorp/2. 1109-1110',
-	# 			'LiveCorp/3. 1111-1210',
-	# 			'LiveCorp/4. 1211-1310',
-	# 			'LiveCorp/5. 1311-1410'
-	# 	].each_with_index do |filepath, index|
-	# 		filepaths << "#{filepath}/#{accounts_filenames[index]}" if file == :accounts
-	# 		filepaths << "#{filepath}/Exclusions.xlsx" if file == :results
-	# 	end
-	# 	filepaths
-	# end
-  #
-	# def accounts_filenames
-	# 	%w[
-	# 			AccountsAnalysis1011.xlsx,
-	# 			AccountsAnalysisSep-Oct11.xlsx,
-	# 			AccountsAnalysis1112.xlsx,
-	# 			AccountsAnalysis1213.xlsx,
-	# 			AccountsAnalysis1314.xlsx,
-	# 			AccountsAnalysis12.xlsx,
-	# 			AccountsAnalysis13.xlsx,
-	# 			Accounts1.xlsx,
-	# 			Accounts2.xlsx,
-	# 			Accounts3.xlsx,
-	# 			Accounts4.xlsx,
-	# 			Accounts5.xlsx
-	# 	]
-	# end
-
 
 	def start_process(accounting_period)
 		file = FileTools.new(accounting_period, :accounts, :accounts)

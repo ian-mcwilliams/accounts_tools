@@ -41,9 +41,17 @@ class JournalTransaction
             withdrawal:                     :dr,
             cash:                           :cr
         },
+        reverse_withdrawal:{
+            cash:                           :dr,
+            withdrawal:                     :cr
+        },
         pay_vat: {
             vat_payable:                    :dr,
             cash:                           :cr
+        },
+        vat_refund: {
+            cash:                           :dr,
+            vat_payable:                    :cr
         },
         pay_corporation_tax: {
             ct_payable:                     :dr,
@@ -72,10 +80,10 @@ class JournalTransaction
             salary_payable:                 :dr,
             cash:                           :cr
         },
-        accrue_and_pay_salary: {
-            salary_expenses:                :dr,
-            cash:                           :cr
-        },
+        # accrue_and_pay_salary: {
+        #     salary_expenses:                :dr,
+        #     cash:                           :cr
+        # },
         accrue_paye: {
             empee_tax_ni_expenses:          :dr,
             emper_ni_expenses:              :dr,
@@ -125,6 +133,10 @@ class JournalTransaction
             bank_expenses:                  :dr,
             cash:                           :cr
         },
+        bank_interest: {
+            cash:                           :dr,
+            bank_expenses:                  :cr
+        },
         travel_payments: {
             travel_expenses:                :dr,
             cash:                           :cr
@@ -152,6 +164,18 @@ class JournalTransaction
         misc_expense: {
             comms_expenses:                 :dr,
             misc_payable:                   :cr
+        },
+        reverse_office_expenses: {
+            cash:                           :dr,
+            office_expenses_payable:        :cr
+        },
+        accrue_vat_fine: {
+            fines_expenses:                 :dr,
+            vat_payable:                    :cr
+        },
+        accrue_ct_fine: {
+            fines_expenses:                 :dr,
+            ct_payable:                     :cr
         }
     }
   end

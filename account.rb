@@ -25,6 +25,7 @@ class Account
         paye_payable:             'L4. PAYE',
         office_expenses_payable:  'L5. Office Expenses',
         misc_payable:             'L6. Misc',
+        directors_loans_payable:  'L7. Directors Loans',
         capital:                  'E1. Capital',
         withdrawal:               'E2. Withdrawal',
         ct:                       'E3. CT',

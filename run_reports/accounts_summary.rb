@@ -1,4 +1,4 @@
-require_relative 'file_tools'
+require_relative '../file_tools'
 require 'socket'
 
 class AccountsSummary

@@ -1,4 +1,4 @@
-require_relative 'derive_journal'
+require_relative 'derive_journal/derive_journal'
 
 output_excel = false
 exclusions = false

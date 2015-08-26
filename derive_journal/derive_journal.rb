@@ -4,8 +4,8 @@ require 'awesome_print'
 require_relative 'account'
 require_relative 'journal_entry'
 require_relative 'journal_transaction'
-require_relative 'file_tools'
-require_relative 'debug_tools'
+require_relative '../file_tools'
+require_relative '../debug_tools'
 
 class DeriveJournal
 

@@ -27,9 +27,9 @@ class FileTools
 
   def get_rel_path
     {
-        ian: 	  '../../../../../Applications/MAMP/bin/mamp/Dropbox/',
-        ian_w:  '../../../../ian/accounts/',
-        dad: 	  '../../../Users/John/Dropbox/'
+        ian: 	  '../../../../Applications/MAMP/bin/mamp/Dropbox/',
+        ian_w:  '../../../ian/accounts/',
+        dad: 	  '../../Users/John/Dropbox/'
     }[get_machine_key]
   end
 

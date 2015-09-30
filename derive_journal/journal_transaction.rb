@@ -5,11 +5,11 @@ class JournalTransaction
   def initialize(args={})
     @journal_entries = []
     if args.has_key?(:journal_entries)
-        if args[:journal_entries].is_a?(Array)
-            @journal_entries.concat(args[:journal_entries])
-        else
-            @journal_entries << args[:journal_entries]
-        end
+      if args[:journal_entries].is_a?(Array)
+        @journal_entries.concat(args[:journal_entries])
+      else
+        @journal_entries << args[:journal_entries]
+      end
     end
     @date = args[:date] if args.has_key?(:date)
     @description = args[:description] if args.has_key?(:description)
@@ -101,6 +101,10 @@ class JournalTransaction
             paye_payable:                   :dr,
             cash:                           :cr
         },
+        refund_pay_paye: {
+            cash:                           :dr,
+            paye_payable:                   :cr
+        },
         accrue_comms_office_expenses: {
             comms_office_expenses:          :dr,
             office_expenses_payable:        :cr
@@ -121,40 +125,8 @@ class JournalTransaction
             office_expenses_payable:        :dr,
             cash:                           :cr
         },
-        pay_co_house: {
-            co_house_expenses:              :dr,
-            cash:                           :cr
-        },
         pay_misc_payable: {
             misc_payable:                   :dr,
-            cash:                           :cr
-        },
-        bank_payments: {
-            bank_expenses:                  :dr,
-            cash:                           :cr
-        },
-        bank_interest: {
-            cash:                           :dr,
-            bank_expenses:                  :cr
-        },
-        travel_payments: {
-            travel_expenses:                :dr,
-            cash:                           :cr
-        },
-        comms_payments: {
-            comms_expenses:                 :dr,
-            cash:                           :cr
-        },
-        sundry_payments: {
-            sundry_expenses:                :dr,
-            cash:                           :cr
-        },
-        sundry_refunds: {
-            cash:                           :dr,
-            sundry_expenses:                :cr
-        },
-        fines_payments: {
-            fines_expenses:                 :dr,
             cash:                           :cr
         },
         incoming_loan: {
@@ -177,7 +149,49 @@ class JournalTransaction
             fines_expenses:                 :dr,
             ct_payable:                     :cr
         }
+    }.merge(self.direct_expense_transactions)
+  end
+
+  def self.direct_expense_transactions
+    transactions = {
+        bank_payments: {
+            bank_expenses:                  :dr,
+            cash:                           :cr
+        },
+        travel_payments: {
+            travel_expenses:                :dr,
+            cash:                           :cr
+        },
+        comms_payments: {
+            comms_expenses:                 :dr,
+            cash:                           :cr
+        },
+        sundry_payments: {
+            sundry_expenses:                :dr,
+            cash:                           :cr
+        },
+        fines_payments: {
+            fines_expenses:                 :dr,
+            cash:                           :cr
+        },
+        co_house_payments: {
+            co_house_expenses:              :dr,
+            cash:                           :cr
+        }
     }
+    transactions.merge(self.reverse_transactions(transactions))
+  end
+
+  def self.reverse_transactions(transactions)
+    new_transactions = {}
+    transactions.each do |key, entries|
+      new_entries = {}
+      entries.each do |account, balance|
+        new_entries[account] = balance[1].to_s.gsub('dr', 'cr').gsub('cr', 'dr').to_sym
+      end
+      new_transactions["reverse_#{key.to_s}".to_sym] = new_entries
+    end
+    new_transactions
   end
 
 end

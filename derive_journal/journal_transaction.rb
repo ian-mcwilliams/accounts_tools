@@ -158,17 +158,33 @@ class JournalTransaction
             bank_expenses:                  :dr,
             cash:                           :cr
         },
+        bank_refunds: {
+            cash:                           :dr,
+            bank_expenses:                  :cr
+        },
         travel_payments: {
             travel_expenses:                :dr,
             cash:                           :cr
+        },
+        travel_refunds: {
+            cash:                           :dr,
+            travel_expenses:                :cr
         },
         comms_payments: {
             comms_expenses:                 :dr,
             cash:                           :cr
         },
+        comms_refunds: {
+            cash:                           :dr,
+            comms_expenses:                 :cr
+        },
         sundry_payments: {
             sundry_expenses:                :dr,
             cash:                           :cr
+        },
+        sundry_refunds: {
+            cash:                           :dr,
+            sundry_expenses:                :cr
         },
         fines_payments: {
             fines_expenses:                 :dr,

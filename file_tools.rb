@@ -39,7 +39,7 @@ class FileTools
 
   def get_filepath(key)
     {
-        accounts: "F3Mmedia/Internal/ACcounts/___YEAR_END_FINAL_ACCOUNTS/"
+        accounts: "F3Mmedia/Internal/ACcounts/"
     }[key]
   end
 
@@ -57,20 +57,13 @@ class FileTools
 
   def get_filepaths(file)
     filepaths = []
-    [
-        '1. 1009-1108',
-        '2. 1109-1110',
-        '3. 1111-1210',
-        '4. 1211-1310',
-        '5. 1311-1410',
-        'DummyCorp/1. 1201-1212',
-        'DummyCorp/1. 1301-1312',
-        'LiveCorp/1.1009-1108',
-        'LiveCorp/2.1109-1110',
-        'LiveCorp/3.1111-1210',
-        'LiveCorp/4.1211-1310',
-        'LiveCorp/5.1311-1410',
-        'LiveCorp/6.1411-1510'
+    %w[
+        LiveCorp/1.1009-1108
+        LiveCorp/2.1109-1110
+        LiveCorp/3.1111-1210
+        LiveCorp/4.1211-1310
+        LiveCorp/5.1311-1410
+        LiveCorp/6.1411-1510
     ].each_with_index do |filepath, index|
       filepaths << "#{filepath}/#{accounts_filenames[index]}" if file == :accounts
       filepaths << "#{filepath}/Exclusions.xlsx" if file == :results
@@ -80,13 +73,6 @@ class FileTools
 
   def accounts_filenames
     %w[
-				AccountsAnalysis1011.xlsx
-				AccountsAnalysisSep-Oct11.xlsx
-				AccountsAnalysis1112.xlsx
-				AccountsAnalysis1213.xlsx
-				AccountsAnalysis1314.xlsx
-				AccountsAnalysis12.xlsx
-				AccountsAnalysis13.xlsx
 				Accounts1.xlsx
 				Accounts2.xlsx
 				Accounts3.xlsx

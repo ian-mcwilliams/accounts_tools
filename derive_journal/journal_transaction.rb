@@ -41,7 +41,7 @@ class JournalTransaction
             withdrawal:                     :dr,
             cash:                           :cr
         },
-        reverse_withdrawal:{
+        reverse_withdrawal: {
             cash:                           :dr,
             withdrawal:                     :cr
         },
@@ -80,10 +80,6 @@ class JournalTransaction
             salary_payable:                 :dr,
             cash:                           :cr
         },
-        # accrue_and_pay_salary: {
-        #     salary_expenses:                :dr,
-        #     cash:                           :cr
-        # },
         accrue_paye: {
             empee_tax_ni_expenses:          :dr,
             emper_ni_expenses:              :dr,
@@ -92,6 +88,10 @@ class JournalTransaction
         accrue_paye_empee: {
             empee_tax_ni_expenses:          :dr,
             paye_payable:                   :cr
+        },
+        reverse_accrue_paye_empee: {
+            paye_payable:                   :dr,
+            empee_tax_ni_expenses:          :cr
         },
         accrue_paye_emper: {
             emper_ni_expenses:              :dr,
@@ -124,6 +124,10 @@ class JournalTransaction
         pay_office_expenses: {
             office_expenses_payable:        :dr,
             cash:                           :cr
+        },
+        reverse_office_expenses_payment: {
+            cash:                           :dr,
+            office_expenses_payable:        :cr
         },
         pay_misc_payable: {
             misc_payable:                   :dr,

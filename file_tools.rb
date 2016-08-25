@@ -17,7 +17,8 @@ class FileTools
     {
         ian:  	['F3M3s-MacBook-Air.local', 'f3m3s-air.home', 'f3m3s-air', 'F3M3sMA.local', 'f3m3sma'],
         ian_w:  ['OE2021.local'],
-        dad: 	  ['John']
+        dad: 	  ['John'],
+        john:   ['Johns-Mac-mini.home']
     }
   end
 
@@ -29,7 +30,8 @@ class FileTools
     {
         ian: 	  '../../../../Applications/MAMP/bin/mamp/Dropbox/',
         ian_w:  '../../../ian/accounts/',
-        dad: 	  '../../Users/John/Dropbox/'
+        dad: 	  '../../Users/John/Dropbox/',
+        john:   '../../Dropbox/'
     }[get_machine_key]
   end
 

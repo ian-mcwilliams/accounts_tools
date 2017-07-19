@@ -121,6 +121,22 @@ class JournalTransaction
             sundry_office_expenses:         :dr,
             office_expenses_payable:        :cr
         },
+        direct_pay_comms_office_expenses: {
+            comms_office_expenses:          :dr,
+            cash:                           :cr
+        },
+        direct_pay_rent_office_expenses: {
+            rent_office_expenses:           :dr,
+            cash:                           :cr
+        },
+        direct_pay_power_office_expenses: {
+            power_office_expenses:          :dr,
+            cash:                           :cr
+        },
+        direct_pay_sundry_office_expenses: {
+            sundry_office_expenses:         :dr,
+            cash:                           :cr
+        },
         pay_office_expenses: {
             office_expenses_payable:        :dr,
             cash:                           :cr
@@ -152,6 +168,14 @@ class JournalTransaction
         accrue_ct_fine: {
             fines_expenses:                 :dr,
             ct_payable:                     :cr
+        },
+        directors_loans_incoming: {
+            cash:                           :dr,
+            directors_loans_payable:        :cr
+        },
+        directors_loans_outgoing: {
+            directors_loans_payable:        :dr,
+            cash:                           :cr
         }
     }.merge(self.direct_expense_transactions)
   end

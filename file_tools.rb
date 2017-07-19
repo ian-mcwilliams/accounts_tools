@@ -66,6 +66,7 @@ class FileTools
         LiveCorp/4.1211-1310
         LiveCorp/5.1311-1410
         LiveCorp/6.1411-1510
+        LiveCorp/7.1511-1610
     ].each_with_index do |filepath, index|
       filepaths << "#{filepath}/#{accounts_filenames[index]}" if file == :accounts
       filepaths << "#{filepath}/Exclusions.xlsx" if file == :results
@@ -81,6 +82,7 @@ class FileTools
 				Accounts4.xlsx
 				Accounts5.xlsx
         Accounts6.xlsx
+        Accounts7.xlsx
 		]
   end
 

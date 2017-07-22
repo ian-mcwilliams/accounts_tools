@@ -15,7 +15,7 @@ class FileTools
   # on mac, type hostname in terminal
   def machine_keys
     {
-        ian:  	['F3M3s-MacBook-Air.local', 'f3m3s-air.home', 'f3m3s-air', 'F3M3sMA.local', 'f3m3sma'],
+        ian:  	%w[F3M3s-MacBook-Air.local f3m3s-air.home f3m3s-air F3M3sMA.local f3m3sma F3M3sMA.home],
         ian_w:  ['OE2021.local'],
         dad: 	  ['John'],
         john:   ['Johns-Mac-mini.home']
@@ -66,6 +66,7 @@ class FileTools
         LiveCorp/4.1211-1310
         LiveCorp/5.1311-1410
         LiveCorp/6.1411-1510
+        LiveCorp/7.1511-1610
     ].each_with_index do |filepath, index|
       filepaths << "#{filepath}/#{accounts_filenames[index]}" if file == :accounts
       filepaths << "#{filepath}/Exclusions.xlsx" if file == :results
@@ -81,6 +82,7 @@ class FileTools
 				Accounts4.xlsx
 				Accounts5.xlsx
         Accounts6.xlsx
+        Accounts7.xlsx
 		]
   end
 

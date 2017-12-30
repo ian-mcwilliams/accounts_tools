@@ -112,7 +112,7 @@ class OfficeCostsBkToAc
             },
             {
                 date: transaction_row_hash[:date_paid].strftime('%d/%m/%Y'),
-                description: "#{transaction_row_hash[:description]} (MS share, recoup from IM)",
+                description: "#{transaction_row_hash[:description]} (MS share: recoup from IM)",
                 account: :ap,
                 type: :dr,
                 amount: transaction_row_hash[:im_payable_to_business]

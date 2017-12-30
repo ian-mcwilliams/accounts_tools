@@ -42,7 +42,7 @@ class OfficeCostsBkToAc
       @ledger_hash[account] = [] unless @ledger_hash.has_key?(account)
       @ledger_hash[journal_hash[:account]] << ledger_hash
     end
-    @ledger_hash.values.each { |value| value.sort_by { |item| item[:date] } }
+    @ledger_hash.values.each { |value| value.sort_by! { |item| DateTime.parse(item[:date]) } }
   end
 
   def sheet_to_row_hashes

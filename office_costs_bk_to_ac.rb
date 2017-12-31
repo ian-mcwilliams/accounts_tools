@@ -135,14 +135,15 @@ class OfficeCostsBkToAc
   end
 
   def current_hashes_balance?(current_hashes)
-    balance = 0.00
+    balance = 0
     current_hashes.each do |current_hash|
-      balance += {
-          cr: current_hash[:amount].to_f,
-          dr: current_hash[:amount].to_f - (current_hash[:amount].to_f * 2)
-      }[current_hash[:type]]
+      if current_hash[:type] == :cr
+        balance += current_hash[:amount].to_s.gsub('.', '').to_i
+      elsif current_hash[:type] == :dr
+        balance -= current_hash[:amount].to_s.gsub('.', '').to_i
+      end
     end
-    balance == 0.00
+    balance == 0
   end
 
   def get_account_from_description(description)

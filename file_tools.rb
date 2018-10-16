@@ -29,7 +29,7 @@ class FileTools
 
   def self.get_rel_path
     {
-        ian: 	  '../../../../Applications/MAMP/bin/mamp/Dropbox/',
+        ian: 	  '../../Dropbox/',
         ian_w:  '../../../ian/accounts/',
         dad: 	  '../../Users/John/Dropbox/',
         john:   '../../Dropbox/'
@@ -42,7 +42,7 @@ class FileTools
 
   def get_filepath(key)
     {
-        accounts: "F3Mmedia/Internal/ACcounts/"
+        accounts: 'F3Mmedia/Internal/ACcounts/'
     }[key]
   end
 
@@ -70,6 +70,7 @@ class FileTools
         LiveCorp/7.1511-1610
     ].each_with_index do |filepath, index|
       filepaths << "#{filepath}/#{accounts_filenames[index]}" if file == :accounts
+      filepaths << "#{filepath}/Reports#{index + 1}.xlsx" if file == :reports
       filepaths << "#{filepath}/Exclusions.xlsx" if file == :results
     end
     filepaths

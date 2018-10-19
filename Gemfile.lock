@@ -1,0 +1,29 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    awesome_print (1.8.0)
+    axlsx (2.0.1)
+      htmlentities (~> 4.3.1)
+      nokogiri (>= 1.4.1)
+      rubyzip (~> 1.0.0)
+    htmlentities (4.3.4)
+    mini_portile2 (2.1.0)
+    nokogiri (1.6.8)
+      mini_portile2 (~> 2.1.0)
+      pkg-config (~> 1.1.7)
+    pkg-config (1.1.7)
+    rubyzip (1.0.0)
+    simple_xlsx_reader (1.0.2)
+      nokogiri
+      rubyzip
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  awesome_print
+  axlsx
+  simple_xlsx_reader
+
+BUNDLED WITH
+   1.14.6

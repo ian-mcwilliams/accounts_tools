@@ -21,7 +21,7 @@ module TaxChecker
   end
 
   def self.report_calculations(reports_summary_hash)
-
+    {}
   end
 
   def self.accounts_summaries_ingress(period)
@@ -95,12 +95,12 @@ module TaxChecker
     end
   end
 
-  def self.assets_liabilities_equity_balances_hash(accounts_summary_array)
-    account_names = account_name_arrays_by_balance(accounts_summary_array)
-    assets_balance = specified_accounts_balance(account_names[:assets], accounts_summary_array)
-    liabilities_balance = specified_accounts_balance(account_names[:liabilities], accounts_summary_array)
-    equities_debit_balance = specified_accounts_balance(account_names[:equity_debit], accounts_summary_array)
-    equities_credit_balance = specified_accounts_balance(account_names[:equity_credit], accounts_summary_array)
+  def self.assets_liabilities_equity_balances_hash(summary_array)
+    account_names = account_name_arrays_by_balance(summary_array)
+    assets_balance = specified_accounts_balance(account_names[:assets], summary_array)
+    liabilities_balance = specified_accounts_balance(account_names[:liabilities], summary_array)
+    equities_debit_balance = specified_accounts_balance(account_names[:equity_debit], summary_array)
+    equities_credit_balance = specified_accounts_balance(account_names[:equity_credit], summary_array)
     {
       assets: assets_balance,
       liabilities: 0 - liabilities_balance,
@@ -108,24 +108,24 @@ module TaxChecker
     }
   end
 
-  def self.account_name_arrays_by_balance(accounts_summary_array)
-    all_account_names = accounts_summary_array.map { |item| item[:account_name] }
+  def self.account_name_arrays_by_balance(summary_array)
+    all_account_names = summary_array.map { |item| item[:account_name] }
     account_names = {
       assets: all_account_names.select { |item| item[/^A\d+.*$/] },
       liabilities: all_account_names.select { |item| item[/^L\d+.*$/] }
     }
     equities_account_names = all_account_names.select { |item| item[/^E\d+.*$/] }
     account_names[:equities_debit] = equities_account_names.select do |account_name|
-      accounts_summary_array.find { |item| item[:account_name] == account_name }[:account_balance] == :dr
+      summary_array.find { |item| item[:account_name] == account_name }[:account_balance] == :dr
     end
     account_names[:equities_credit] = equities_account_names.select do |account_name|
-      accounts_summary_array.find { |item| item[:account_name] == account_name }[:account_balance] == :cr
+      summary_array.find { |item| item[:account_name] == account_name }[:account_balance] == :cr
     end
     account_names
   end
 
-  def self.specified_accounts_balance(specified_accounts, accounts_summary_array)
-    assets_balances = accounts_summary_array.each_with_object([]) do |account_hash, a|
+  def self.specified_accounts_balance(specified_accounts, summary_array)
+    assets_balances = summary_array.each_with_object([]) do |account_hash, a|
       a << account_hash[:balance] if specified_accounts.include?(account_hash[:account_name])
     end
     assets_balances.inject(0, :+)

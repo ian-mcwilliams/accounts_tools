@@ -4,7 +4,10 @@ module TaxChecker
 
   def self.reports_summary(period)
     accounts_summaries = accounts_summaries_ingress(period)
-    accounts_summaries.values.each { |summary| accounts_summary_validation(summary) }
+    accounts_summaries.values.each do |summary|
+      summary[:balances] = assets_liabilities_equity_balances_hash(summary)
+      accounts_summary_validation(summary)
+    end
     {
       current_period: {
         accounts_summary: accounts_summaries[:current_period],
@@ -76,8 +79,8 @@ module TaxChecker
     end
   end
 
-  def self.accounts_summary_validation(accounts_summary_array)
-    accounts_summary_array.each do |account_hash|
+  def self.accounts_summary_validation(summary_array)
+    summary_array.each do |account_hash|
       calculation = {
         dr: account_hash[:dr] - account_hash[:cr],
         cr: account_hash[:cr] - account_hash[:dr]
@@ -86,29 +89,39 @@ module TaxChecker
         raise("summary validation failed for account '#{account_hash[:account_name]}'")
       end
     end
-    unless accounts_balance_to_zero?(accounts_summary_array)
-      raise('accounts do not balance to zero')
+    assets_less_liabilities = summary_array[:balances][:assets] - summary_array[:balances][:liabilities]
+    unless assets_less_liabilities == summary_array[:balances][:equity]
+      raise('assets less liabilities is not equal to equity')
     end
   end
 
-  def self.accounts_balance_to_zero?(accounts_summary_array)
+  def self.assets_liabilities_equity_balances_hash(accounts_summary_array)
+    account_names = account_name_arrays_by_balance(accounts_summary_array)
+    assets_balance = specified_accounts_balance(account_names[:assets], accounts_summary_array)
+    liabilities_balance = specified_accounts_balance(account_names[:liabilities], accounts_summary_array)
+    equities_debit_balance = specified_accounts_balance(account_names[:equity_debit], accounts_summary_array)
+    equities_credit_balance = specified_accounts_balance(account_names[:equity_credit], accounts_summary_array)
+    {
+      assets: assets_balance,
+      liabilities: 0 - liabilities_balance,
+      equities: equities_debit_balance - equities_credit_balance
+    }
+  end
+
+  def self.account_name_arrays_by_balance(accounts_summary_array)
     all_account_names = accounts_summary_array.map { |item| item[:account_name] }
-    assets_account_names = all_account_names.select { |item| item[/^A\d+.*$/] }
-    liabilities_account_names = all_account_names.select { |item| item[/^L\d+.*$/] }
+    account_names = {
+      assets: all_account_names.select { |item| item[/^A\d+.*$/] },
+      liabilities: all_account_names.select { |item| item[/^L\d+.*$/] }
+    }
     equities_account_names = all_account_names.select { |item| item[/^E\d+.*$/] }
-    equities_debit_account_names = equities_account_names.select do |account_name|
+    account_names[:equities_debit] = equities_account_names.select do |account_name|
       accounts_summary_array.find { |item| item[:account_name] == account_name }[:account_balance] == :dr
     end
-    equities_credit_account_names = equities_account_names.select do |account_name|
+    account_names[:equities_credit] = equities_account_names.select do |account_name|
       accounts_summary_array.find { |item| item[:account_name] == account_name }[:account_balance] == :cr
     end
-
-    assets_balance = specified_accounts_balance(assets_account_names, accounts_summary_array)
-    liabilities_balance = specified_accounts_balance(liabilities_account_names, accounts_summary_array)
-    equities_debit_balance = specified_accounts_balance(equities_debit_account_names, accounts_summary_array)
-    equities_credit_balance = specified_accounts_balance(equities_credit_account_names, accounts_summary_array)
-
-    (liabilities_balance + equities_credit_balance) - (assets_balance + equities_debit_balance) == 0
+    account_names
   end
 
   def self.specified_accounts_balance(specified_accounts, accounts_summary_array)

@@ -1,9 +1,9 @@
 require_relative '../file_tools'
-require_relative 'reports_summary_calculations'
+require_relative 'summary_calculations'
 require 'json'
 
 module TaxChecker
-  include ReportsSummaryCalculations
+  include SummaryCalculations
 
   def self.reports_summary(period)
     accounts_summaries = accounts_summaries_ingress(period)
@@ -14,7 +14,7 @@ module TaxChecker
       h[key] = {
         accounts_summary: value,
         balances: accounts_balances,
-        calculations: ReportsSummaryCalculations.report_calculations(key, value)
+        calculations: SummaryCalculations.report_calculations(key, value)
       }
     end
   end

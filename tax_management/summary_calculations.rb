@@ -1,4 +1,4 @@
-module ReportsSummaryCalculations
+module SummaryCalculations
 
   def self.report_calculations(period, summary)
     calculation_spec = JSON.parse(File.read('tax_management/summary_calculations.json'))

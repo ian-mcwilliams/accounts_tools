@@ -1,23 +1,22 @@
 require_relative '../file_tools'
+require_relative 'reports_summary_calculations'
+require 'json'
 
 module TaxChecker
+  include ReportsSummaryCalculations
 
   def self.reports_summary(period)
     accounts_summaries = accounts_summaries_ingress(period)
     accounts_summaries.each_with_object({}) do |(key, value), h|
       accounts_summary_validation(value)
       accounts_balances = accounts_balances_hash(value)
-      accounts_balances_validation(accounts_balances)
+      accounts_balances_validation(key, accounts_balances)
       h[key] = {
         accounts_summary: value,
         balances: accounts_balances,
-        calculations: report_calculations(value)
+        calculations: ReportsSummaryCalculations.report_calculations(key, value)
       }
     end
-  end
-
-  def self.report_calculations(reports_summary_hash)
-    {}
   end
 
   def self.accounts_summaries_ingress(period)
@@ -65,8 +64,11 @@ module TaxChecker
   def self.accounts_summary_array(period)
     rows = accounts_summary_rows(period)
     (1..27).each_with_object([]) do |i, a|
+      account_code = rows[i][1][/^\D\d+/]
+      account_name = rows[i][1].delete("#{account_code}. ")
       a << {
-        account_name: rows[i][1],
+        account_code: account_code,
+        account_name: account_name,
         account_balance: { debit: :dr, credit: :cr }[rows[i][2].downcase.to_sym],
         dr: (rows[i][3] * 100).round.to_i,
         cr: (rows[i][4] * 100).round.to_i,
@@ -87,10 +89,10 @@ module TaxChecker
     end
   end
 
-  def self.accounts_balances_validation(accounts_balances)
-    assets_less_liabilities = accounts_balances[:assets] - accounts_balances[:liabilities]
+  def self.accounts_balances_validation(period, accounts_balances)
+    assets_less_liabilities = accounts_balances[:assets] + accounts_balances[:liabilities]
     unless assets_less_liabilities == accounts_balances[:equity]
-      raise('assets less liabilities is not equal to equity')
+      raise("assets less liabilities (#{assets_less_liabilities}) is not equal to equity (#{accounts_balances[:equity]}) for #{period}")
     end
   end
 
@@ -101,8 +103,8 @@ module TaxChecker
     equity_debit_balance = specified_accounts_balance(account_names[:equity_debit], summary_array)
     equity_credit_balance = specified_accounts_balance(account_names[:equity_credit], summary_array)
     {
-      assets: assets_balance,
-      liabilities: 0 - liabilities_balance,
+      assets: 0 - assets_balance,
+      liabilities: liabilities_balance,
       equity: equity_debit_balance - equity_credit_balance
     }
   end

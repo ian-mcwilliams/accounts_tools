@@ -161,7 +161,7 @@ class DeriveJournal
 		accounts = {}
 
 		doc.sheets.each do |sheet|
-			unless ['Accounts Summary', 'Closing to Capital'].include?(sheet.name)
+			unless ['opening_balances', 'Accounts Summary', 'Closing to Capital'].include?(sheet.name)
 				rows = sheet.rows.drop(2)[0..-5]
 				entries = get_entries_from_rows(rows)
 				accounts[sheet.name] = Account.new(entries: entries)

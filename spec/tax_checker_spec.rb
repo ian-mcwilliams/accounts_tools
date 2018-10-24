@@ -46,4 +46,25 @@ describe TaxChecker do
 
   end
 
+  context 'validate accounting equation' do
+
+    it 'raises an exception when the accounting equation fails' do
+      sample_hashes = [
+        { assets: 0, liabilities: 1, equity: 2 },
+        { assets: 0, liabilities: 1, equity: 0 }
+      ]
+      sample_hashes.each do |sample_hash|
+        assets_less_liabilities = sample_hash[:assets] + sample_hash[:liabilities]
+        error_message = "assets less liabilities (#{assets_less_liabilities}) is not equal to equity (#{sample_hash[:equity]}) for test_period"
+        expect { TaxChecker.accounts_balances_validation('test_period', sample_hash) }.to raise_error(error_message)
+      end
+    end
+
+    it 'does not raise an exception when the accounting equation passes' do
+      sample_hash = { assets: 0, liabilities: 1, equity: 1 }
+      expect { TaxChecker.accounts_balances_validation('test_period', sample_hash) }.not_to raise_error
+    end
+
+  end
+
 end

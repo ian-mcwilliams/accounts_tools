@@ -88,4 +88,17 @@ module TaxCheckerSpecHelpers
     ]
   end
 
+  def self.simple_unbalanced_accounts_array
+    [
+      { account_code: 'A1', account_name: 'test_asset_account', account_balance: :dr, dr: 200, cr: 50,
+        balance: 150 },
+      { account_code: 'L1', account_name: 'test_liability_account', account_balance: :cr, dr: 50, cr: 300,
+        balance: 250 },
+      { account_code: 'E1', account_name: 'test_equity_debit_account', account_balance: :dr, dr: 20, cr: 400,
+        balance: 380 },
+      { account_code: 'E2', account_name: 'test_equity_credit_account', account_balance: :cr, dr: 60, cr: 500,
+        balance: 440 }
+    ]
+  end
+
 end

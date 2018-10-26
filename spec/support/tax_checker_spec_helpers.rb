@@ -1,91 +1,60 @@
 module TaxCheckerSpecHelpers
 
-  def self.test_expected_hash_array_a
+  def self.test_unbalanced_hash_array_generator(inputs, start_val)
+    dr, cr, balance = [start_val, start_val + 100000, start_val + 200000]
+    inputs.each_with_object([]) do |input, a|
+      a << {
+        account_code: input[:account_code],
+        account_name: input[:account_name],
+        account_balance: input[:account_balance],
+        dr: dr,
+        cr: cr,
+        balance: balance
+      }
+      dr += 100
+      cr += 100
+      balance += 100
+    end
+  end
+
+  def self.test_actual_account_array
     [
-      { account_code: 'A1', account_name: 'CASH', account_balance: :dr, dr: 400000, cr: 500000, balance: 600000 },
-      { account_code: 'A2', account_name: 'AR', account_balance: :dr, dr: 400100, cr: 500100, balance: 600100 },
-      { account_code: 'L1', account_name: 'VAT Payable', account_balance: :cr, dr: 400200, cr: 500200,
-        balance: 600200 },
-      { account_code: 'L2', account_name: 'CT Payable', account_balance: :cr, dr: 400300, cr: 500300, balance: 600300 },
-      { account_code: 'L3', account_name: 'Salary Payable', account_balance: :cr, dr: 400400, cr: 500400,
-        balance: 600400 },
-      { account_code: 'L4', account_name: 'PAYE Payable', account_balance: :cr, dr: 400500, cr: 500500,
-        balance: 600500 },
-      { account_code: 'L5', account_name: 'Office Expenses Payable', account_balance: :cr, dr: 400600, cr: 500600,
-        balance: 600600 },
-      { account_code: 'L6', account_name: 'Misc Expenses Payable', account_balance: :cr, dr: 400700, cr: 500700,
-        balance: 600700 },
-      { account_code: 'L7', account_name: "Directors' Loans Payable", account_balance: :cr, dr: 400800, cr: 500800,
-        balance: 600800 },
-      { account_code: 'E1', account_name: 'Capital', account_balance: :cr, dr: 400900, cr: 500900, balance: 600900 },
-      { account_code: 'E2', account_name: 'Withdrawal', account_balance: :dr, dr: 401000, cr: 501000, balance: 601000 },
-      { account_code: 'E3', account_name: 'CT', account_balance: :dr, dr: 401100, cr: 501100, balance: 601100 },
-      { account_code: 'E4', account_name: 'Net Sales', account_balance: :cr, dr: 401200, cr: 501200, balance: 601200 },
-      { account_code: 'E5', account_name: 'Retained VAT', account_balance: :cr, dr: 401300, cr: 501300,
-        balance: 601300 },
-      { account_code: 'E6', account_name: 'Bank', account_balance: :dr, dr: 401400, cr: 501400, balance: 601400 },
-      { account_code: 'E7', account_name: 'Travel', account_balance: :dr, dr: 401500, cr: 501500, balance: 601500 },
-      { account_code: 'E8', account_name: 'Comms', account_balance: :dr, dr: 401600, cr: 501600, balance: 601600 },
-      { account_code: 'E9', account_name: 'Sundry', account_balance: :dr, dr: 401700, cr: 501700, balance: 601700 },
-      { account_code: 'E10', account_name: 'Salary', account_balance: :dr, dr: 401800, cr: 501800, balance: 601800 },
-      { account_code: 'E11', account_name: "Emp'ee tax & NI", account_balance: :dr, dr: 401900, cr: 501900,
-        balance: 601900 },
-      { account_code: 'E12', account_name: "Emp'er NI", account_balance: :dr, dr: 402000, cr: 502000, balance: 602000 },
-      { account_code: 'E13', account_name: 'Fines', account_balance: :dr, dr: 402100, cr: 502100, balance: 602100 },
-      { account_code: 'E14', account_name: 'Co House', account_balance: :dr, dr: 402200, cr: 502200, balance: 602200 },
-      { account_code: 'E15', account_name: 'Office (Comms)', account_balance: :dr, dr: 402300, cr: 502300,
-        balance: 602300 },
-      { account_code: 'E16', account_name: 'Office (Rent)', account_balance: :dr, dr: 402400, cr: 502400,
-        balance: 602400 },
-      { account_code: 'E17', account_name: 'Office (Power)', account_balance: :dr, dr: 402500, cr: 502500,
-        balance: 602500 },
-      { account_code: 'E18', account_name: 'Office (Sundry)', account_balance: :dr, dr: 402600, cr: 502600,
-        balance: 602600 },
+      { account_code: 'A1', account_name: 'CASH', account_balance: :dr },
+      { account_code: 'A2', account_name: 'AR', account_balance: :dr },
+      { account_code: 'L1', account_name: 'VAT Payable', account_balance: :cr },
+      { account_code: 'L2', account_name: 'CT Payable', account_balance: :cr },
+      { account_code: 'L3', account_name: 'Salary Payable', account_balance: :cr },
+      { account_code: 'L4', account_name: 'PAYE Payable', account_balance: :cr },
+      { account_code: 'L5', account_name: 'Office Expenses Payable', account_balance: :cr },
+      { account_code: 'L6', account_name: 'Misc Expenses Payable', account_balance: :cr },
+      { account_code: 'L7', account_name: "Directors' Loans Payable", account_balance: :cr },
+      { account_code: 'E1', account_name: 'Capital', account_balance: :cr },
+      { account_code: 'E2', account_name: 'Withdrawal', account_balance: :dr },
+      { account_code: 'E3', account_name: 'CT', account_balance: :dr },
+      { account_code: 'E4', account_name: 'Net Sales', account_balance: :cr },
+      { account_code: 'E5', account_name: 'Retained VAT', account_balance: :cr },
+      { account_code: 'E6', account_name: 'Bank', account_balance: :dr },
+      { account_code: 'E7', account_name: 'Travel', account_balance: :dr },
+      { account_code: 'E8', account_name: 'Comms', account_balance: :dr },
+      { account_code: 'E9', account_name: 'Sundry', account_balance: :dr },
+      { account_code: 'E10', account_name: 'Salary', account_balance: :dr },
+      { account_code: 'E11', account_name: "Emp'ee tax & NI", account_balance: :dr },
+      { account_code: 'E12', account_name: "Emp'er NI", account_balance: :dr },
+      { account_code: 'E13', account_name: 'Fines', account_balance: :dr },
+      { account_code: 'E14', account_name: 'Co House', account_balance: :dr },
+      { account_code: 'E15', account_name: 'Office (Comms)', account_balance: :dr },
+      { account_code: 'E16', account_name: 'Office (Rent)', account_balance: :dr },
+      { account_code: 'E17', account_name: 'Office (Power)', account_balance: :dr },
+      { account_code: 'E18', account_name: 'Office (Sundry)', account_balance: :dr }
     ]
   end
 
+  def self.test_expected_hash_array_a
+    test_unbalanced_hash_array_generator(test_actual_account_array, 400000)
+  end
+
   def self.test_expected_hash_array_b
-    [
-      { account_code: 'A1', account_name: 'CASH', account_balance: :dr, dr: 100000, cr: 200000, balance: 300000 },
-      { account_code: 'A2', account_name: 'AR', account_balance: :dr, dr: 100100, cr: 200100, balance: 300100 },
-      { account_code: 'L1', account_name: 'VAT Payable', account_balance: :cr, dr: 100200, cr: 200200,
-        balance: 300200 },
-      { account_code: 'L2', account_name: 'CT Payable', account_balance: :cr, dr: 100300, cr: 200300, balance: 300300 },
-      { account_code: 'L3', account_name: 'Salary Payable', account_balance: :cr, dr: 100400, cr: 200400,
-        balance: 300400 },
-      { account_code: 'L4', account_name: 'PAYE Payable', account_balance: :cr, dr: 100500, cr: 200500,
-        balance: 300500 },
-      { account_code: 'L5', account_name: 'Office Expenses Payable', account_balance: :cr, dr: 100600, cr: 200600,
-        balance: 300600 },
-      { account_code: 'L6', account_name: 'Misc Expenses Payable', account_balance: :cr, dr: 100700, cr: 200700,
-        balance: 300700 },
-      { account_code: 'L7', account_name: "Directors' Loans Payable", account_balance: :cr, dr: 100800, cr: 200800,
-        balance: 300800 },
-      { account_code: 'E1', account_name: 'Capital', account_balance: :cr, dr: 100900, cr: 200900, balance: 300900 },
-      { account_code: 'E2', account_name: 'Withdrawal', account_balance: :dr, dr: 101000, cr: 201000, balance: 301000 },
-      { account_code: 'E3', account_name: 'CT', account_balance: :dr, dr: 101100, cr: 201100, balance: 301100 },
-      { account_code: 'E4', account_name: 'Net Sales', account_balance: :cr, dr: 101200, cr: 201200, balance: 301200 },
-      { account_code: 'E5', account_name: 'Retained VAT', account_balance: :cr, dr: 101300, cr: 201300,
-        balance: 301300 },
-      { account_code: 'E6', account_name: 'Bank', account_balance: :dr, dr: 101400, cr: 201400, balance: 301400 },
-      { account_code: 'E7', account_name: 'Travel', account_balance: :dr, dr: 101500, cr: 201500, balance: 301500 },
-      { account_code: 'E8', account_name: 'Comms', account_balance: :dr, dr: 101600, cr: 201600, balance: 301600 },
-      { account_code: 'E9', account_name: 'Sundry', account_balance: :dr, dr: 101700, cr: 201700, balance: 301700 },
-      { account_code: 'E10', account_name: 'Salary', account_balance: :dr, dr: 101800, cr: 201800, balance: 301800 },
-      { account_code: 'E11', account_name: "Emp'ee tax & NI", account_balance: :dr, dr: 101900, cr: 201900,
-        balance: 301900 },
-      { account_code: 'E12', account_name: "Emp'er NI", account_balance: :dr, dr: 102000, cr: 202000, balance: 302000 },
-      { account_code: 'E13', account_name: 'Fines', account_balance: :dr, dr: 102100, cr: 202100, balance: 302100 },
-      { account_code: 'E14', account_name: 'Co House', account_balance: :dr, dr: 102200, cr: 202200, balance: 302200 },
-      { account_code: 'E15', account_name: 'Office (Comms)', account_balance: :dr, dr: 102300, cr: 202300,
-        balance: 302300 },
-      { account_code: 'E16', account_name: 'Office (Rent)', account_balance: :dr, dr: 102400, cr: 202400,
-        balance: 302400 },
-      { account_code: 'E17', account_name: 'Office (Power)', account_balance: :dr, dr: 102500, cr: 202500,
-        balance: 302500 },
-      { account_code: 'E18', account_name: 'Office (Sundry)', account_balance: :dr, dr: 102600, cr: 202600,
-        balance: 302600 },
-    ]
+    test_unbalanced_hash_array_generator(test_actual_account_array, 100000)
   end
 
   def self.test_simple_unbalanced_hash_array

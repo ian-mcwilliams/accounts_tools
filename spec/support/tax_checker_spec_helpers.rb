@@ -1,6 +1,6 @@
 module TaxCheckerSpecHelpers
 
-  def self.expected_first_period_ingress_hash_array
+  def self.test_expected_hash_array_a
     [
       { account_code: 'A1', account_name: 'CASH', account_balance: :dr, dr: 400000, cr: 500000, balance: 600000 },
       { account_code: 'A2', account_name: 'AR', account_balance: :dr, dr: 400100, cr: 500100, balance: 600100 },
@@ -44,7 +44,7 @@ module TaxCheckerSpecHelpers
     ]
   end
 
-  def self.expected_second_period_ingress_hash_array
+  def self.test_expected_hash_array_b
     [
       { account_code: 'A1', account_name: 'CASH', account_balance: :dr, dr: 100000, cr: 200000, balance: 300000 },
       { account_code: 'A2', account_name: 'AR', account_balance: :dr, dr: 100100, cr: 200100, balance: 300100 },
@@ -88,7 +88,7 @@ module TaxCheckerSpecHelpers
     ]
   end
 
-  def self.simple_unbalanced_accounts_array
+  def self.test_simple_unbalanced_hash_array
     [
       { account_code: 'A1', account_name: 'test_asset_account', account_balance: :dr, dr: 200, cr: 50,
         balance: 150 },

@@ -39,7 +39,7 @@ describe TaxChecker do
 
     it 'returns a hash of the assets, liabilities and equity balances' do
       expected = { assets: -150, equity: -60, liabilities: 250 }
-      summary_array = TaxCheckerSpecHelpers.simple_unbalanced_accounts_array
+      summary_array = TaxCheckerSpecHelpers.test_simple_unbalanced_hash_array
       result = TaxChecker.accounts_balances_hash(summary_array)
       expect(result).to eq(expected)
     end

@@ -30,16 +30,42 @@ module TaxCheckerSpecHelpers
     end
   end
 
-  def self.expected_initial_calculations
+  def self.non_zero_account_array
+    initial_array = test_unbalanced_hash_array_generator(test_actual_account_array, 0)
+    initial_array.each do |account|
+      account.merge!(non_zero_balancing_account_values(account[:account_code], account[:account_balance]))
+    end
+  end
+
+  def self.non_zero_balancing_account_values(code, balance_type)
+    return { dr: 1, cr: 0, balance: 1 } if balance_type == :dr
+    return { dr: 0, cr: 2, balance: 2 } if code[/^L\d$/]
+    { dr: 0, cr: 1, balance: 1 }
+  end
+
+  def self.expected_initial_zero_calculations
     [
-      account_code: 'S1', account_name: 'Total Comms Exp', balance_type: :dr, dr: 0, cr: 0, balance: 0,
-      account_code: 'S2', account_name: 'Total Sundry Exp', balance_type: :dr, dr: 0, cr: 0, balance: 0,
-      account_code: 'S3', account_name: 'Total PAYE Exp', balance_type: :dr, dr: 0, cr: 0, balance: 0,
-      account_code: 'S4', account_name: 'A/P excl VAT', balance_type: :cr, dr: 0, cr: 0, balance: 0,
-      account_code: 'S9', account_name: 'Total Revenue', balance_type: :cr, dr: 0, cr: 0, balance: 0,
-      account_code: 'S10', account_name: 'Total Expenses', balance_type: :dr, dr: 0, cr: 0, balance: 0,
-      account_code: 'S17', account_name: 'Total Liabilities', balance_type: :cr, dr: 0, cr: 0, balance: 0,
-      account_code: 'S19', account_name: 'Admin & Office Exp', balance_type: :dr, dr: 0, cr: 0, balance: 0
+      { account_code: 'S1', account_name: 'Total Comms Exp', balance_type: :dr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S2', account_name: 'Total Sundry Exp', balance_type: :dr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S3', account_name: 'Total PAYE Exp', balance_type: :dr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S4', account_name: 'A/P excl VAT', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S9', account_name: 'Total Revenue', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S10', account_name: 'Total Expenses', balance_type: :dr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S17', account_name: 'Total Liabilities', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S19', account_name: 'Admin & Office Exp', balance_type: :dr, dr: 0, cr: 0, balance: 0 }
+    ]
+  end
+
+  def self.expected_initial_non_zero_calculations
+    [
+      { account_code: 'S1', account_name: 'Total Comms Exp', balance_type: :dr, dr: 2, cr: 0, balance: 2 },
+      { account_code: 'S2', account_name: 'Total Sundry Exp', balance_type: :dr, dr: 2, cr: 0, balance: 2 },
+      { account_code: 'S3', account_name: 'Total PAYE Exp', balance_type: :dr, dr: 2, cr: 0, balance: 2 },
+      { account_code: 'S4', account_name: 'A/P excl VAT', balance_type: :cr, dr: 0, cr: 10, balance: 10 },
+      { account_code: 'S9', account_name: 'Total Revenue', balance_type: :cr, dr: 0, cr: 2, balance: 2 },
+      { account_code: 'S10', account_name: 'Total Expenses', balance_type: :dr, dr: 13, cr: 0, balance: 13 },
+      { account_code: 'S17', account_name: 'Total Liabilities', balance_type: :cr, dr: 0, cr: 14, balance: 14 },
+      { account_code: 'S19', account_name: 'Admin & Office Exp', balance_type: :dr, dr: 4, cr: 0, balance: 4 }
     ]
   end
 

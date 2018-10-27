@@ -17,6 +17,10 @@ module TaxCheckerSpecHelpers
     end
   end
 
+  def self.unbalanced_actual_account_array(start_val)
+    test_unbalanced_hash_array_generator(test_actual_account_array, start_val)
+  end
+
   def self.test_actual_account_array
     [
       { account_code: 'A1', account_name: 'CASH', account_balance: :dr },
@@ -47,14 +51,6 @@ module TaxCheckerSpecHelpers
       { account_code: 'E17', account_name: 'Office (Power)', account_balance: :dr },
       { account_code: 'E18', account_name: 'Office (Sundry)', account_balance: :dr }
     ]
-  end
-
-  def self.test_expected_hash_array_a
-    test_unbalanced_hash_array_generator(test_actual_account_array, 400000)
-  end
-
-  def self.test_expected_hash_array_b
-    test_unbalanced_hash_array_generator(test_actual_account_array, 100000)
   end
 
   def self.test_simple_unbalanced_hash_array

@@ -76,4 +76,8 @@ module TaxChecker
     assets_balances.inject(0, :+)
   end
 
+  def self.calculation_inputs
+    JSON.parse(File.read('tax_management/calculation_inputs.json'))['calculation_inputs']
+  end
+
 end

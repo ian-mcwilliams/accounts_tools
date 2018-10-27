@@ -1,0 +1,60 @@
+{
+  "calculation_inputs": [
+    {
+      "period": 1,
+      "S5B": 0,
+      "PS12D": 0,
+      "S22B": 0,
+      "no_of_shares": 1,
+      "share_value": 100
+    },
+    {
+      "period": 2,
+      "S5B": 0,
+      "PS12D": 0,
+      "S22B": 0,
+      "no_of_shares": 1,
+      "share_value": 100
+    },
+    {
+      "period": 3,
+      "S5B": 0,
+      "PS12D": 0,
+      "S22B": 0,
+      "no_of_shares": 1,
+      "share_value": 100
+    },
+    {
+      "period": 4,
+      "S5B": 0,
+      "PS12D": 0,
+      "S22B": 0,
+      "no_of_shares": 1,
+      "share_value": 100
+    },
+    {
+      "period": 5,
+      "S5B": 0,
+      "PS12D": 0,
+      "S22B": 0,
+      "no_of_shares": 1,
+      "share_value": 100
+    },
+    {
+      "period": 6,
+      "S5B": 566972,
+      "PS12D": 994366,
+      "S22B": 99900,
+      "no_of_shares": 1,
+      "share_value": 100
+    },
+    {
+      "period": 7,
+      "S5B": 2677119,
+      "PS12D": 994366,
+      "S22B": 99900,
+      "no_of_shares": 1,
+      "share_value": 100
+    }
+  ]
+}

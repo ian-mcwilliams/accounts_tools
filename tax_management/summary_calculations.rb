@@ -16,6 +16,21 @@ module SummaryCalculations
     end
   end
 
+  def self.input_calculations(period, inputs)
+    accounts = [
+      { account_code: 'S5', account_name: 'B/F Capital', balance_type: :cr, dr: 0, cr: inputs['S5C'],
+        balance: inputs['S5C'] },
+      { account_code: 'S22', account_name: 'Creditors > 1 year', balance_type: :cr, dr: 0, cr: inputs['S22C'],
+        balance: inputs['S22C'] }
+    ]
+    if period == :previous
+      ct_account = { account_code: 'S12', account_name: 'CT Payable', balance_type: :dr, dr: inputs['S12D'], cr: 0,
+                     balance: inputs['S12D'] }
+      accounts.concat([ct_account])
+    end
+    accounts
+  end
+
   def self.calculation(summary, accounts, balance_type)
     dr_cr = accounts.each_with_object({ dr: 0, cr: 0 }) do |account, h|
       h[:dr] += account_balance(summary, account, :dr)

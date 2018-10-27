@@ -43,7 +43,7 @@ module TaxCheckerSpecHelpers
     { dr: 0, cr: 1, balance: 1 }
   end
 
-  def self.expected_initial_zero_calculations
+  def self.initial_calculation_zero_array
     [
       { account_code: 'S1', account_name: 'Total Comms Exp', balance_type: :dr, dr: 0, cr: 0, balance: 0 },
       { account_code: 'S2', account_name: 'Total Sundry Exp', balance_type: :dr, dr: 0, cr: 0, balance: 0 },
@@ -67,6 +67,24 @@ module TaxCheckerSpecHelpers
       { account_code: 'S17', account_name: 'Total Liabilities', balance_type: :cr, dr: 0, cr: 14, balance: 14 },
       { account_code: 'S19', account_name: 'Admin & Office Exp', balance_type: :dr, dr: 4, cr: 0, balance: 4 }
     ]
+  end
+
+  def self.input_calculation_zero_array(period)
+    accounts = [
+      { account_code: 'S5', account_name: 'B/F Capital', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S22', account_name: 'Creditors > 1 year', balance_type: :cr, dr: 0, cr: 0, balance: 0 }
+    ]
+    ct_account = { account_code: 'S12', account_name: 'CT Payable', balance_type: :dr, dr: 0, cr: 0, balance: 0 }
+    { current: accounts, previous: accounts + [ct_account] }[period]
+  end
+
+  def self.input_calculation_non_zero_array(period)
+    accounts = [
+      { account_code: 'S5', account_name: 'B/F Capital', balance_type: :cr, dr: 0, cr: 1, balance: 1 },
+      { account_code: 'S22', account_name: 'Creditors > 1 year', balance_type: :cr, dr: 0, cr: 1, balance: 1 }
+    ]
+    ct_account = { account_code: 'S12', account_name: 'CT Payable', balance_type: :dr, dr: 1, cr: 0, balance: 1 }
+    { current: accounts, previous: accounts + [ct_account] }[period]
   end
 
   def self.test_actual_account_array

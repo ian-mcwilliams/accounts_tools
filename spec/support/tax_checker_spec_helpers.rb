@@ -21,6 +21,28 @@ module TaxCheckerSpecHelpers
     test_unbalanced_hash_array_generator(test_actual_account_array, start_val)
   end
 
+  def self.zero_actual_account_array
+    initial_array = test_unbalanced_hash_array_generator(test_actual_account_array, 0)
+    initial_array.each do |account|
+      account[:dr] = 0
+      account[:cr] = 0
+      account[:balance] = 0
+    end
+  end
+
+  def self.expected_initial_calculations
+    [
+      account_code: 'S1', account_name: 'Total Comms Exp', balance_type: :dr, dr: 0, cr: 0, balance: 0,
+      account_code: 'S2', account_name: 'Total Sundry Exp', balance_type: :dr, dr: 0, cr: 0, balance: 0,
+      account_code: 'S3', account_name: 'Total PAYE Exp', balance_type: :dr, dr: 0, cr: 0, balance: 0,
+      account_code: 'S4', account_name: 'A/P excl VAT', balance_type: :cr, dr: 0, cr: 0, balance: 0,
+      account_code: 'S9', account_name: 'Total Revenue', balance_type: :cr, dr: 0, cr: 0, balance: 0,
+      account_code: 'S10', account_name: 'Total Expenses', balance_type: :dr, dr: 0, cr: 0, balance: 0,
+      account_code: 'S17', account_name: 'Total Liabilities', balance_type: :cr, dr: 0, cr: 0, balance: 0,
+      account_code: 'S19', account_name: 'Admin & Office Exp', balance_type: :dr, dr: 0, cr: 0, balance: 0
+    ]
+  end
+
   def self.test_actual_account_array
     [
       { account_code: 'A1', account_name: 'CASH', account_balance: :dr },

@@ -16,7 +16,7 @@ module TaxChecker
       h[key] = {
         accounts_summary: value,
         balances: accounts_balances,
-        calculations: SummaryCalculations.report_calculations(key, value)
+        calculations: SummaryCalculations.report_calculations(value)
       }
     end
   end

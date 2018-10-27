@@ -4,9 +4,9 @@ module SummaryCalculations
     initial_calculations(summary)
   end
 
-  def self.initial_calculations(summary)
-    initial_calculation_data.each_with_object([]) do |account, a|
-      current_calculation = calculation(summary, account[:accounts], account[:balance_type])
+  def self.accounts_spec_to_accounts(accounts, spec)
+    spec.each_with_object([]) do |account, a|
+      current_calculation = calculation(accounts, account[:accounts], account[:balance_type])
       current_hash = {
         account_code: account[:code],
         account_name: account[:name],
@@ -14,6 +14,10 @@ module SummaryCalculations
       }
       a << current_hash.merge(current_calculation)
     end
+  end
+
+  def self.initial_calculations(summary)
+    accounts_spec_to_accounts(summary, initial_calculation_data)
   end
 
   def self.input_calculations(period, inputs)
@@ -33,6 +37,26 @@ module SummaryCalculations
     accounts
   end
 
+  def self.composite_calculations(period, accounts)
+    profit_after_tax_accounts = { current: %w[S9 S10], previous: %w[S9 S10 S12] }[period]
+    profit_and_loss_accounts = { current: %w[S5 S11 -E2 -S7], previous: %w[S5 S11 -E2 -S7 -S12] }[period]
+    composite_accounts_spec = [
+      { code: 'S11', name: 'Profit before tax', balance_type: :cr, accounts: %w[S9 S10] },
+      { code: 'S13', name: 'Profit after tax', balance_type: :cr, accounts: profit_after_tax_accounts },
+      { code: 'S14', name: 'Final Capital', balance_type: :cr, accounts: %w[S5 S11 -E2] },
+      { code: 'S18', name: 'Total Salary Exp', balance_type: :dr, accounts: %w[E10 S3] },
+      { code: 'S20', name: 'Profit and Loss Acc', balance_type: :cr, accounts: profit_and_loss_accounts },
+      { code: 'S21', name: 'Creditors < 1 year', balance_type: :cr, accounts: %w[S17 -S22] },
+      { code: 'S23', name: 'Opening Balance', balance_type: :cr, accounts: %w[S5 -S7] },
+      { code: 'S24', name: 'CH P&L Account', balance_type: :cr, accounts: %w[S5 S11 -E2 -S7] }
+    ]
+    composite_accounts = []
+    composite_accounts_spec.each do |spec|
+      composite_accounts.concat(accounts_spec_to_accounts(accounts + composite_accounts, [spec]))
+    end
+    composite_accounts
+  end
+
   def self.calculation(summary, accounts, balance_type)
     dr_cr = accounts.each_with_object({ dr: 0, cr: 0 }) do |account, h|
       h[:dr] += account_balance(summary, account, :dr)
@@ -46,9 +70,9 @@ module SummaryCalculations
   end
 
   def self.account_balance(summary, account, key)
-    account_hash = summary.find { |item| item[:account_code] == account }
+    account_hash = summary.find { |item| item[:account_code] == account.gsub('-', '') }
     raise("no account found for #{account}") unless account_hash
-    account_hash[key]
+    account[0] == '-' ? account_hash[key] - (account_hash[key] * 2) : account_hash[key]
   end
 
   def self.initial_calculation_data

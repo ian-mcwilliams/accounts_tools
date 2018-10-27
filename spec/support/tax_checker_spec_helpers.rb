@@ -89,6 +89,19 @@ module TaxCheckerSpecHelpers
     { current: accounts, previous: accounts + [ct_account] }[period]
   end
 
+  def self.composite_calculation_zero_array
+    [
+      { account_code: 'S11', account_name: 'Profit before tax', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S13', account_name: 'Profit after tax', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S14', account_name: 'Final Capital', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S18', account_name: 'Total Salary Expenses', balance_type: :dr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S20', account_name: 'Profit and Loss Account', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S21', account_name: 'Creditors < 1 year', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S23', account_name: 'Opening Balance', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S24', account_name: 'CH P&L Account', balance_type: :cr, dr: 0, cr: 0, balance: 0 }
+    ]
+  end
+
   def self.test_actual_account_array
     [
       { account_code: 'A1', account_name: 'CASH', account_balance: :dr },

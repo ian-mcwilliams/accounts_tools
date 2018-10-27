@@ -67,7 +67,7 @@ describe TaxChecker do
 
   end
 
-  context 'draw in inputs from file', :run_test do
+  context 'draw in inputs from file' do
 
     it 'reads input figures for calculations' do
       result = TaxChecker.calculation_inputs

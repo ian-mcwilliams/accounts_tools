@@ -1,4 +1,13 @@
 module TaxCheckerSpecHelpers
+  include RSpec::Matchers
+
+  def self.verify_accounts_array(r, actual, expected)
+    r.expect(actual).to r.be_a(Array)
+    r.expect(actual.map { |item| item[:account_code] }.sort).to r.eq(expected.map { |item| item[:account_code] }.sort)
+    expected.each do |account|
+      r.expect(actual.select { |item| item[:account_code] == account[:account_code] }[0]).to r.eq(account)
+    end
+  end
 
   def self.test_unbalanced_hash_array_generator(inputs, start_val)
     dr, cr, balance = [start_val, start_val + 100000, start_val + 200000]
@@ -94,8 +103,8 @@ module TaxCheckerSpecHelpers
       { account_code: 'S11', account_name: 'Profit before tax', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
       { account_code: 'S13', account_name: 'Profit after tax', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
       { account_code: 'S14', account_name: 'Final Capital', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
-      { account_code: 'S18', account_name: 'Total Salary Expenses', balance_type: :dr, dr: 0, cr: 0, balance: 0 },
-      { account_code: 'S20', account_name: 'Profit and Loss Account', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S18', account_name: 'Total Salary Exp', balance_type: :dr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S20', account_name: 'Profit and Loss Acc', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
       { account_code: 'S21', account_name: 'Creditors < 1 year', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
       { account_code: 'S23', account_name: 'Opening Balance', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
       { account_code: 'S24', account_name: 'CH P&L Account', balance_type: :cr, dr: 0, cr: 0, balance: 0 }

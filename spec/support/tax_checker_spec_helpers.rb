@@ -72,6 +72,7 @@ module TaxCheckerSpecHelpers
   def self.input_calculation_zero_array(period)
     accounts = [
       { account_code: 'S5', account_name: 'B/F Capital', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S7', account_name: 'Share Capital', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
       { account_code: 'S22', account_name: 'Creditors > 1 year', balance_type: :cr, dr: 0, cr: 0, balance: 0 }
     ]
     ct_account = { account_code: 'S12', account_name: 'CT Payable', balance_type: :dr, dr: 0, cr: 0, balance: 0 }
@@ -81,6 +82,7 @@ module TaxCheckerSpecHelpers
   def self.input_calculation_non_zero_array(period)
     accounts = [
       { account_code: 'S5', account_name: 'B/F Capital', balance_type: :cr, dr: 0, cr: 1, balance: 1 },
+      { account_code: 'S7', account_name: 'Share Capital', balance_type: :cr, dr: 0, cr: 1, balance: 1 },
       { account_code: 'S22', account_name: 'Creditors > 1 year', balance_type: :cr, dr: 0, cr: 1, balance: 1 }
     ]
     ct_account = { account_code: 'S12', account_name: 'CT Payable', balance_type: :dr, dr: 1, cr: 0, balance: 1 }

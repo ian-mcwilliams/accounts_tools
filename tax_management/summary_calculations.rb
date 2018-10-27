@@ -20,6 +20,8 @@ module SummaryCalculations
     accounts = [
       { account_code: 'S5', account_name: 'B/F Capital', balance_type: :cr, dr: 0, cr: inputs['S5C'],
         balance: inputs['S5C'] },
+      { account_code: 'S7', account_name: 'Share Capital', balance_type: :cr, dr: 0, cr: inputs['S7C'],
+        balance: inputs['S5C'] },
       { account_code: 'S22', account_name: 'Creditors > 1 year', balance_type: :cr, dr: 0, cr: inputs['S22C'],
         balance: inputs['S22C'] }
     ]

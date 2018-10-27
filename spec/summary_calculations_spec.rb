@@ -26,7 +26,7 @@ describe SummaryCalculations, :summary_calculations do
   end
 
   it 'returns the input calculations for the current period when given zero inputs', :run_test do
-    inputs = { 'S5C' => 0, 'S22C' => 0 }
+    inputs = { 'S5C' => 0, 'S7C' => 0, 'S22C' => 0 }
     result = SummaryCalculations.input_calculations(:current, inputs)
     expected = TaxCheckerSpecHelpers.input_calculation_zero_array(:current)
     expect(result).to be_a(Array)
@@ -37,7 +37,7 @@ describe SummaryCalculations, :summary_calculations do
   end
 
   it 'returns the input calculations for the previous period when given zero inputs', :run_test do
-    inputs = { 'S5C' => 0, 'S12D' => 0, 'S22C' => 0 }
+    inputs = { 'S5C' => 0, 'S7C' => 0, 'S12D' => 0, 'S22C' => 0 }
     result = SummaryCalculations.input_calculations(:previous, inputs)
     expected = TaxCheckerSpecHelpers.input_calculation_zero_array(:previous)
     expect(result).to be_a(Array)
@@ -48,7 +48,7 @@ describe SummaryCalculations, :summary_calculations do
   end
 
   it 'returns the input calculations for the current period when given non zero inputs', :run_test do
-    inputs = { 'S5C' => 1, 'S22C' => 1 }
+    inputs = { 'S5C' => 1, 'S7C' => 0, 'S22C' => 1 }
     result = SummaryCalculations.input_calculations(:current, inputs)
     expected = TaxCheckerSpecHelpers.input_calculation_non_zero_array(:current)
     expect(result).to be_a(Array)
@@ -59,7 +59,7 @@ describe SummaryCalculations, :summary_calculations do
   end
 
   it 'returns the input calculations for the previous period when given non zero inputs', :run_test do
-    inputs = { 'S5C' => 1, 'S12D' => 1, 'S22C' => 1 }
+    inputs = { 'S5C' => 1, 'S7C' => 0, 'S12D' => 1, 'S22C' => 1 }
     result = SummaryCalculations.input_calculations(:previous, inputs)
     expected = TaxCheckerSpecHelpers.input_calculation_non_zero_array(:previous)
     expect(result).to be_a(Array)

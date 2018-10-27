@@ -1,5 +1,5 @@
+require_relative 'spec_helper'
 require_relative '../tax_management/tax_checker'
-require_relative 'spec_helpers'
 
 describe TaxChecker do
 

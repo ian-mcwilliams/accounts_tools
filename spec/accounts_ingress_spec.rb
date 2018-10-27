@@ -1,6 +1,5 @@
+require_relative 'spec_helper'
 require_relative '../tax_management/accounts_ingress'
-require_relative 'spec_helpers'
-require 'rspec'
 
 describe AccountsIngress do
   include TaxCheckerSpecHelpers

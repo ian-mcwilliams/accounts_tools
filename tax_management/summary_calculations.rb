@@ -1,6 +1,10 @@
 module SummaryCalculations
 
   def self.report_calculations(summary)
+    initial_calculations(summary)
+  end
+
+  def self.initial_calculations(summary)
     initial_calculation_data.each_with_object([]) do |account, a|
       current_calculation = calculation(summary, account[:accounts], account[:balance_type])
       current_hash = {

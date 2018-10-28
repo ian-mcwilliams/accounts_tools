@@ -95,7 +95,7 @@ describe SummaryCalculations, :summary_calculations do
 
   context 'all calculations' do
 
-    it 'returns the full calculations array for the current period', :run_test do
+    it 'returns the full calculations array for the current period' do
       accounts = TaxCheckerSpecHelpers.non_zero_account_array
       inputs = { 'S5C' => 1, 'S7C' => 1, 'S22C' => 1 }
       actual = SummaryCalculations.report_calculations(:current, accounts, inputs)

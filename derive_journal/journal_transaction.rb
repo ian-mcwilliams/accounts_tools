@@ -180,6 +180,10 @@ class JournalTransaction
         directors_loans_outgoing: {
             directors_loans_payable:        :dr,
             cash:                           :cr
+        },
+        training_expenses_accrual: {
+          sundry_expenses:                :dr,
+          misc_payable:                   :cr
         }
     }.merge(self.direct_expense_transactions)
   end

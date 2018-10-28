@@ -52,6 +52,12 @@ module TaxCheckerSpecHelpers
     { dr: 0, cr: 1, balance: 1 }
   end
 
+  def self.all_calculations_non_zero_array(period)
+    initial_calculation_non_zero_array +
+      input_calculation_non_zero_array(period) +
+      composite_calculation_non_zero_array(period)
+  end
+
   def self.initial_calculation_zero_array
     [
       { account_code: 'S1', account_name: 'Total Comms Exp', balance_type: :dr, dr: 0, cr: 0, balance: 0 },

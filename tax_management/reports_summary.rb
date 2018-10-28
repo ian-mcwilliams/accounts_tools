@@ -15,7 +15,7 @@ module ReportsSummary
       h[key] = {
         accounts_summary: value,
         balances: accounts_balances,
-        calculations: SummaryCalculations.report_calculations(value)
+        calculations: SummaryCalculations.report_calculations(key, value, calculation_inputs(period))
       }
     end
   end
@@ -75,8 +75,9 @@ module ReportsSummary
     assets_balances.inject(0, :+)
   end
 
-  def self.calculation_inputs
-    JSON.parse(File.read('tax_management/calculation_inputs.json'))['calculation_inputs']
+  def self.calculation_inputs(period = nil)
+    all_periods = JSON.parse(File.read('tax_management/calculation_inputs.json'))['calculation_inputs']
+    period ? all_periods[period] : all_periods
   end
 
 end

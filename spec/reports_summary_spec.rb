@@ -1,7 +1,9 @@
 require_relative 'spec_helper'
 require_relative '../tax_management/reports_summary'
+require_relative 'support/reports_summary_spec_helpers'
 
 describe ReportsSummary do
+  include ReportsSummarySpecHelpers
 
   context 'reports_summary' do
 
@@ -12,7 +14,7 @@ describe ReportsSummary do
         previous: TaxCheckerSpecHelpers.non_zero_account_array
       }
       actual = ReportsSummary.reports_summary(accounts_hash, inputs)
-      expected = TaxCheckerSpecHelpers.full_reports_summary_balanced_output
+      expected = ReportsSummarySpecHelpers.full_reports_summary_balanced_output
       expect(actual).to be_a(Hash)
       expect(actual.keys.sort).to eq(expected.keys.sort)
       expect(actual[:current]).to be_a(Hash)

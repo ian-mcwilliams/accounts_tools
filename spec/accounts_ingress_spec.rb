@@ -1,15 +1,16 @@
 require_relative 'spec_helper'
 require_relative '../tax_management/accounts_ingress'
+require_relative 'support/accounts_ingress_spec_helpers'
 
 describe AccountsIngress do
-  include TaxCheckerSpecHelpers
+  include AccountsIngressSpecHelpers
 
   it 'gets just the first period hash when period 1 specified' do
     accounts_hash = AccountsIngress.accounts_summaries_ingress(1, true)
     expect(accounts_hash.keys.sort).to eq(%i[previous_period current_period].sort)
     expect(accounts_hash[:previous_period]).to be(nil)
     expect(accounts_hash[:current_period].class).to be(Array)
-    expected = TaxCheckerSpecHelpers.unbalanced_actual_account_array(400000)
+    expected = AccountsIngressSpecHelpers.unbalanced_actual_account_array(400000)
     accounts_hash[:current_period].each_with_index do |account_hash, i|
       expect(account_hash).to eq(expected[i])
     end
@@ -19,12 +20,12 @@ describe AccountsIngress do
     accounts_hash = AccountsIngress.accounts_summaries_ingress(2, true)
     expect(accounts_hash.keys.sort).to eq(%i[previous_period current_period].sort)
     expect(accounts_hash[:previous_period].class).to be(Array)
-    expected = TaxCheckerSpecHelpers.unbalanced_actual_account_array(400000)
+    expected = AccountsIngressSpecHelpers.unbalanced_actual_account_array(400000)
     accounts_hash[:previous_period].each_with_index do |account_hash, i|
       expect(account_hash).to eq(expected[i])
     end
     expect(accounts_hash[:current_period].class).to be(Array)
-    expected = TaxCheckerSpecHelpers.unbalanced_actual_account_array(100000)
+    expected = AccountsIngressSpecHelpers.unbalanced_actual_account_array(100000)
     accounts_hash[:current_period].each_with_index do |account_hash, i|
       expect(account_hash).to eq(expected[i])
     end

@@ -1,5 +1,6 @@
 require_relative 'spec_helper'
 require_relative '../tax_management/summary_calculations'
+require_relative 'support/summary_calculations_spec_helpers'
 
 describe SummaryCalculations, :summary_calculations do
 
@@ -99,7 +100,7 @@ describe SummaryCalculations, :summary_calculations do
       accounts = TaxCheckerSpecHelpers.non_zero_account_array
       inputs = TaxCheckerSpecHelpers.inputs_hash
       actual = SummaryCalculations.report_calculations(:current, accounts, inputs)
-      expected = TaxCheckerSpecHelpers.all_calculations_non_zero_array(:current)
+      expected = SummaryCalculationsSpecHelpers.all_calculations_non_zero_array(:current)
       TaxCheckerSpecHelpers.verify_accounts_array(self, actual, expected)
     end
 
@@ -107,7 +108,7 @@ describe SummaryCalculations, :summary_calculations do
       accounts = TaxCheckerSpecHelpers.non_zero_account_array
       inputs = TaxCheckerSpecHelpers.inputs_hash
       actual = SummaryCalculations.report_calculations(:previous, accounts, inputs)
-      expected = TaxCheckerSpecHelpers.all_calculations_non_zero_array(:previous)
+      expected = SummaryCalculationsSpecHelpers.all_calculations_non_zero_array(:previous)
       TaxCheckerSpecHelpers.verify_accounts_array(self, actual, expected)
     end
 

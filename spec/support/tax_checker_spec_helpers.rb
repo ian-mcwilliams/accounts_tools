@@ -1,5 +1,4 @@
 module TaxCheckerSpecHelpers
-  include RSpec::Matchers
 
   def self.verify_accounts_array(r, actual, expected)
     r.expect(actual).to r.be_a(Array)
@@ -7,28 +6,6 @@ module TaxCheckerSpecHelpers
     expected.each do |account|
       r.expect(actual.select { |item| item[:account_code] == account[:account_code] }[0]).to r.eq(account)
     end
-  end
-
-  def self.full_reports_summary_balanced_output
-    current_period_calculations = initial_calculation_non_zero_array +
-      input_calculation_non_zero_array(:current) +
-      composite_calculation_non_zero_array(:current)
-    previous_period_calculations = initial_calculation_non_zero_array +
-      input_calculation_non_zero_array(:previous) +
-      composite_calculation_non_zero_array(:previous)
-    balances = accounting_equation_hash_balanced_non_zero
-    {
-      current: {
-        accounts: non_zero_account_array,
-        balances: balances,
-        calculations: current_period_calculations
-      },
-      previous: {
-        accounts: non_zero_account_array,
-        balances: balances,
-        calculations: previous_period_calculations
-      }
-    }
   end
 
   def self.test_unbalanced_hash_array_generator(inputs, start_val)
@@ -46,14 +23,6 @@ module TaxCheckerSpecHelpers
       cr += 100
       balance += 100
     end
-  end
-
-  def self.accounting_equation_hash_balanced_non_zero
-    { assets: -2, liabilities: 14, equity: 12 }
-  end
-
-  def self.unbalanced_actual_account_array(start_val)
-    test_unbalanced_hash_array_generator(test_actual_account_array, start_val)
   end
 
   def self.zero_actual_account_array
@@ -76,12 +45,6 @@ module TaxCheckerSpecHelpers
     return { dr: 1, cr: 0, balance: 1 } if balance_type == :dr
     return { dr: 0, cr: 2, balance: 2 } if code[/^L\d$/]
     { dr: 0, cr: 1, balance: 1 }
-  end
-
-  def self.all_calculations_non_zero_array(period)
-    initial_calculation_non_zero_array +
-      input_calculation_non_zero_array(period) +
-      composite_calculation_non_zero_array(period)
   end
 
   def self.inputs_hash(zero = false)
@@ -212,78 +175,6 @@ module TaxCheckerSpecHelpers
       { account_code: 'E2', account_name: 'test_equity_credit_account', account_balance: :cr, dr: 60, cr: 500,
         balance: 440 }
     ]
-  end
-
-  def self.abbreviated_accounts_input_accounts
-    accounts = {
-      accounts: [
-        { account_code: 'A1', account_name: 'CASH', account_balance: :dr, dr: 15000, cr: 5000, balance: 10000 },
-        { account_code: 'A2', account_name: 'AR', account_balance: :dr, dr: 12000, cr: 2000, balance: 10000 }
-      ],
-      calculations: [
-        { account_code: 'S21', account_name: 'Creditors < 1 year', account_balance: :cr, dr: 3000, cr: 13000, balance: 10000 },
-        { account_code: 'S22', account_name: 'Creditors > 1 year', account_balance: :cr, dr: 2000, cr: 12000, balance: 10000 },
-        { account_code: 'S7', account_name: 'Share', account_balance: :cr, dr: 0, cr: 10000, balance: 10000 },
-        { account_code: 'S20', account_name: 'Profit & Loss Acc', account_balance: :cr, dr: 500, cr: 10500, balance: 10000 }
-      ]
-    }
-    { current: accounts, previous: accounts }
-  end
-
-  def self.abbreviated_accounts_hash
-    data = {
-      debtors: 10000,
-      cash_in_bank_and_at_hand: 10000,
-      creditors_within_one_year: -10000,
-      creditors_after_one_year: -10000,
-      called_up_share_capital: 10000,
-      profit_and_loss_account: 10000
-    }
-    { current: data, previous: data }
-  end
-
-  def self.ch_error_messages(values)
-    message_values = [
-      %w[£0.00 £0.01 current],
-      %w[£0.01 £0.00 current],
-      %w[£0.00 £0.01 previous],
-      %w[£0.01 £0.00 previous],
-    ]
-    values.each_with_object([]) do |value, a|
-      a << [
-        'total net assets (liabilities) [',
-        message_values[value][0],
-        "] different from shareholders' funds [",
-        message_values[value][1],
-        '] for ',
-        message_values[value][2],
-        ' period'
-      ].join
-    end
-  end
-
-  def self.ch_verify_accounts_tests
-    tests = [
-      { inputs: [0, 0, 0, 0], expected: [] },
-      { inputs: [1, 1, 1, 1], expected: [] },
-      { inputs: [0, 1, 0, 0], expected: [0] },
-      { inputs: [1, 0, 0, 0], expected: [1] },
-      { inputs: [0, 0, 0, 1], expected: [2] },
-      { inputs: [0, 0, 1, 0], expected: [3] },
-      { inputs: [0, 1, 0, 1], expected: [0, 2] },
-      { inputs: [1, 0, 1, 0], expected: [1, 3] },
-      { inputs: [0, 1, 1, 0], expected: [0, 3] },
-      { inputs: [1, 0, 0, 1], expected: [1, 2] }
-    ]
-    tests.each_with_object([]) do |test, a|
-      a << {
-        inputs: {
-          current: { total_net_assets: test[:inputs][0], shareholders_funds: test[:inputs][1] },
-          previous: { total_net_assets: test[:inputs][2], shareholders_funds: test[:inputs][3] }
-        },
-        expected: ch_error_messages(test[:expected])
-      }
-    end
   end
 
 end

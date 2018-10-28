@@ -5,7 +5,7 @@ describe ReportsSummary do
 
   context 'reports_summary' do
 
-    it 'returns all accounts, balances and summary accounts for the current and previous period', :run_test do
+    it 'returns all accounts, balances and summary accounts for the current and previous period' do
       inputs = TaxCheckerSpecHelpers.inputs_hash
       accounts_hash = {
         current: TaxCheckerSpecHelpers.non_zero_account_array,

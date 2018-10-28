@@ -19,7 +19,7 @@ class FileTools
         ian:  	%w[F3M3s-MacBook-Air.local f3m3s-air.home f3m3s-air F3M3sMA.local f3m3sma F3M3sMA.home],
         ian_w:  ['OE2021.local'],
         dad: 	  ['John'],
-        john:   ['Johns-Mac-mini.home']
+        john:   ['Johns-Mac-mini.home', 'Johns-Mac-mini.local']
     }
   end
 

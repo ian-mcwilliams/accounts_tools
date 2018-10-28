@@ -1,4 +1,5 @@
 require_relative 'support/tax_checker_spec_helpers'
+require 'awesome_print'
 require 'rspec'
 
 # RSpec.configure do |config|

@@ -214,6 +214,34 @@ module TaxCheckerSpecHelpers
     ]
   end
 
+  def self.abbreviated_accounts_input_accounts
+    accounts = {
+      accounts: [
+        { account_code: 'A1', account_name: 'CASH', account_balance: :dr, dr: 15000, cr: 5000, balance: 10000 },
+        { account_code: 'A2', account_name: 'AR', account_balance: :dr, dr: 12000, cr: 2000, balance: 10000 }
+      ],
+      calculations: [
+        { account_code: 'S21', account_name: 'Creditors < 1 year', account_balance: :cr, dr: 3000, cr: 13000, balance: 10000 },
+        { account_code: 'S22', account_name: 'Creditors > 1 year', account_balance: :cr, dr: 2000, cr: 12000, balance: 10000 },
+        { account_code: 'S7', account_name: 'Share', account_balance: :cr, dr: 0, cr: 10000, balance: 10000 },
+        { account_code: 'S20', account_name: 'Profit & Loss Acc', account_balance: :cr, dr: 500, cr: 10500, balance: 10000 }
+      ]
+    }
+    { current: accounts, previous: accounts }
+  end
+
+  def self.abbreviated_accounts_hash
+    data = {
+      debtors: 10000,
+      cash_in_bank_and_at_hand: 10000,
+      creditors_within_one_year: -10000,
+      creditors_after_one_year: -10000,
+      called_up_share_capital: 10000,
+      profit_and_loss_account: 10000
+    }
+    { current: data, previous: data }
+  end
+
   def self.ch_error_messages(values)
     message_values = [
       %w[£0.00 £0.01 current],

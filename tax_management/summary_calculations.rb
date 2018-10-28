@@ -1,4 +1,7 @@
+require_relative 'accounts_helpers'
+
 module SummaryCalculations
+  include AccountsHelpers
 
   def self.report_calculations(period, summary, inputs)
     accounts = initial_calculations(summary)
@@ -62,20 +65,14 @@ module SummaryCalculations
 
   def self.calculation(summary, accounts, balance_type)
     dr_cr = accounts.each_with_object({ dr: 0, cr: 0 }) do |account, h|
-      h[:dr] += account_balance(summary, account, :dr)
-      h[:cr] += account_balance(summary, account, :cr)
+      h[:dr] += AccountsHelpers.account_balance(summary, account, :dr)
+      h[:cr] += AccountsHelpers.account_balance(summary, account, :cr)
     end
     balance = {
       dr: dr_cr[:dr] - dr_cr[:cr],
       cr: dr_cr[:cr] - dr_cr[:dr]
     }[balance_type]
     dr_cr.merge(balance: balance)
-  end
-
-  def self.account_balance(summary, account, key)
-    account_hash = summary.find { |item| item[:account_code] == account.gsub('-', '') }
-    raise("no account found for #{account}") unless account_hash
-    account[0] == '-' ? account_hash[key] - (account_hash[key] * 2) : account_hash[key]
   end
 
   def self.initial_calculation_data

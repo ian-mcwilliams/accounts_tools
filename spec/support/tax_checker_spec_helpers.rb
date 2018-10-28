@@ -65,7 +65,7 @@ module TaxCheckerSpecHelpers
     ]
   end
 
-  def self.expected_initial_non_zero_calculations
+  def self.initial_calculation_non_zero_array
     [
       { account_code: 'S1', account_name: 'Total Comms Exp', balance_type: :dr, dr: 2, cr: 0, balance: 2 },
       { account_code: 'S2', account_name: 'Total Sundry Exp', balance_type: :dr, dr: 2, cr: 0, balance: 2 },
@@ -108,6 +108,27 @@ module TaxCheckerSpecHelpers
       { account_code: 'S21', account_name: 'Creditors < 1 year', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
       { account_code: 'S23', account_name: 'Opening Balance', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
       { account_code: 'S24', account_name: 'CH P&L Account', balance_type: :cr, dr: 0, cr: 0, balance: 0 }
+    ]
+  end
+
+  def self.composite_calculation_non_zero_array(period)
+    profit_after_tax_balances = {
+      current: { dr: 13, cr: 2, balance: -11 },
+      previous: { dr: 14, cr: 2, balance: -12 }
+    }[period]
+    profit_and_loss_acc_balances = {
+      current: { dr: 12, cr: 2, balance: -10 },
+      previous: { dr: 11, cr: 2, balance: -9 }
+    }[period]
+    [
+      { account_code: 'S11', account_name: 'Profit before tax', balance_type: :cr, dr: 13, cr: 2, balance: -11 },
+      { account_code: 'S13', account_name: 'Profit after tax', balance_type: :cr }.merge(profit_after_tax_balances),
+      { account_code: 'S14', account_name: 'Final Capital', balance_type: :cr, dr: 12, cr: 3, balance: -9 },
+      { account_code: 'S18', account_name: 'Total Salary Exp', balance_type: :dr, dr: 3, cr: 0, balance: 3 },
+      { account_code: 'S20', account_name: 'Profit and Loss Acc', balance_type: :cr }.merge(profit_and_loss_acc_balances),
+      { account_code: 'S21', account_name: 'Creditors < 1 year', balance_type: :cr, dr: 0, cr: 13, balance: 13 },
+      { account_code: 'S23', account_name: 'Opening Balance', balance_type: :cr, dr: 0, cr: 0, balance: 0 },
+      { account_code: 'S24', account_name: 'CH P&L Account', balance_type: :cr, dr: 12, cr: 2, balance: -10 }
     ]
   end
 

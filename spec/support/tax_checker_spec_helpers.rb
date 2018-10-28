@@ -214,4 +214,48 @@ module TaxCheckerSpecHelpers
     ]
   end
 
+  def self.ch_error_messages(values)
+    message_values = [
+      %w[£0.00 £0.01 current],
+      %w[£0.01 £0.00 current],
+      %w[£0.00 £0.01 previous],
+      %w[£0.01 £0.00 previous],
+    ]
+    values.each_with_object([]) do |value, a|
+      a << [
+        'total net assets (liabilities) [',
+        message_values[value][0],
+        "] different from shareholders' funds [",
+        message_values[value][1],
+        '] for ',
+        message_values[value][2],
+        ' period'
+      ].join
+    end
+  end
+
+  def self.ch_verify_accounts_tests
+    tests = [
+      { inputs: [0, 0, 0, 0], expected: [] },
+      { inputs: [1, 1, 1, 1], expected: [] },
+      { inputs: [0, 1, 0, 0], expected: [0] },
+      { inputs: [1, 0, 0, 0], expected: [1] },
+      { inputs: [0, 0, 0, 1], expected: [2] },
+      { inputs: [0, 0, 1, 0], expected: [3] },
+      { inputs: [0, 1, 0, 1], expected: [0, 2] },
+      { inputs: [1, 0, 1, 0], expected: [1, 3] },
+      { inputs: [0, 1, 1, 0], expected: [0, 3] },
+      { inputs: [1, 0, 0, 1], expected: [1, 2] }
+    ]
+    tests.each_with_object([]) do |test, a|
+      a << {
+        inputs: {
+          current: { total_net_assets: test[:inputs][0], shareholders_funds: test[:inputs][1] },
+          previous: { total_net_assets: test[:inputs][2], shareholders_funds: test[:inputs][3] }
+        },
+        expected: ch_error_messages(test[:expected])
+      }
+    end
+  end
+
 end

@@ -9,6 +9,28 @@ module TaxCheckerSpecHelpers
     end
   end
 
+  def self.full_reports_summary_balanced_output
+    current_period_calculations = initial_calculation_non_zero_array +
+      input_calculation_non_zero_array(:current) +
+      composite_calculation_non_zero_array(:current)
+    previous_period_calculations = initial_calculation_non_zero_array +
+      input_calculation_non_zero_array(:previous) +
+      composite_calculation_non_zero_array(:previous)
+    balances = accounting_equation_hash_balanced_non_zero
+    {
+      current: {
+        accounts: non_zero_account_array,
+        balances: balances,
+        calculations: current_period_calculations
+      },
+      previous: {
+        accounts: non_zero_account_array,
+        balances: balances,
+        calculations: previous_period_calculations
+      }
+    }
+  end
+
   def self.test_unbalanced_hash_array_generator(inputs, start_val)
     dr, cr, balance = [start_val, start_val + 100000, start_val + 200000]
     inputs.each_with_object([]) do |input, a|
@@ -24,6 +46,10 @@ module TaxCheckerSpecHelpers
       cr += 100
       balance += 100
     end
+  end
+
+  def self.accounting_equation_hash_balanced_non_zero
+    { assets: -2, liabilities: 14, equity: 12 }
   end
 
   def self.unbalanced_actual_account_array(start_val)
@@ -56,6 +82,11 @@ module TaxCheckerSpecHelpers
     initial_calculation_non_zero_array +
       input_calculation_non_zero_array(period) +
       composite_calculation_non_zero_array(period)
+  end
+
+  def self.inputs_hash(zero = false)
+    keys = %w[S5C S7C S12D S22C]
+    keys.each_with_object({}) { |key, h| h[key] = zero ? 0 : 1 }
   end
 
   def self.initial_calculation_zero_array

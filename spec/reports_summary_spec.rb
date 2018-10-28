@@ -3,6 +3,34 @@ require_relative '../tax_management/reports_summary'
 
 describe ReportsSummary do
 
+  context 'reports_summary' do
+
+    it 'returns all accounts, balances and summary accounts for the current and previous period', :run_test do
+      inputs = TaxCheckerSpecHelpers.inputs_hash
+      accounts_hash = {
+        current: TaxCheckerSpecHelpers.non_zero_account_array,
+        previous: TaxCheckerSpecHelpers.non_zero_account_array
+      }
+      actual = ReportsSummary.reports_summary(accounts_hash, inputs)
+      expected = TaxCheckerSpecHelpers.full_reports_summary_balanced_output
+      expect(actual).to be_a(Hash)
+      expect(actual.keys.sort).to eq(expected.keys.sort)
+      expect(actual[:current]).to be_a(Hash)
+      expect(actual[:current].keys.sort).to eq(expected[:current].keys.sort)
+      expect(actual[:current][:accounts]).to be_a(Array)
+      TaxCheckerSpecHelpers.verify_accounts_array(self, actual[:current][:accounts], expected[:current][:accounts])
+      expect(actual[:current][:balances]).to eq(expected[:current][:balances])
+      TaxCheckerSpecHelpers.verify_accounts_array(self, actual[:current][:calculations], expected[:current][:calculations])
+      expect(actual[:previous]).to be_a(Hash)
+      expect(actual[:previous].keys.sort).to eq(expected[:current].keys.sort)
+      expect(actual[:previous][:accounts]).to be_a(Array)
+      TaxCheckerSpecHelpers.verify_accounts_array(self, actual[:previous][:accounts], expected[:previous][:accounts])
+      expect(actual[:previous][:balances]).to eq(expected[:current][:balances])
+      TaxCheckerSpecHelpers.verify_accounts_array(self, actual[:previous][:calculations], expected[:previous][:calculations])
+    end
+
+  end
+
   context 'validate account' do
 
     it 'does not raise an exception when the credit and debit figures balance to the balance figure' do
@@ -63,21 +91,6 @@ describe ReportsSummary do
     it 'does not raise an exception when the accounting equation passes' do
       sample_hash = { assets: 0, liabilities: 1, equity: 1 }
       expect { ReportsSummary.accounts_balances_validation('test_period', sample_hash) }.not_to raise_error
-    end
-
-  end
-
-  context 'draw in inputs from file' do
-
-    it 'reads input figures for calculations' do
-      result = ReportsSummary.calculation_inputs
-      expect(result).to be_a(Array)
-      result.each_with_index do |item, i|
-        expect(item).to be_a(Hash)
-        expect(item.keys.sort).to eq(%w[period no_of_shares share_value PS12D S5B S22B].sort)
-        item.values.each { |value| expect(value).to be_a(Fixnum) }
-        expect(item['period']).to eq(i + 1)
-      end
     end
 
   end

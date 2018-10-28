@@ -97,9 +97,17 @@ describe SummaryCalculations, :summary_calculations do
 
     it 'returns the full calculations array for the current period' do
       accounts = TaxCheckerSpecHelpers.non_zero_account_array
-      inputs = { 'S5C' => 1, 'S7C' => 1, 'S22C' => 1 }
+      inputs = TaxCheckerSpecHelpers.inputs_hash
       actual = SummaryCalculations.report_calculations(:current, accounts, inputs)
-      expected = accounts + TaxCheckerSpecHelpers.all_calculations_non_zero_array(:current)
+      expected = TaxCheckerSpecHelpers.all_calculations_non_zero_array(:current)
+      TaxCheckerSpecHelpers.verify_accounts_array(self, actual, expected)
+    end
+
+    it 'returns the full calculations array for the previous period' do
+      accounts = TaxCheckerSpecHelpers.non_zero_account_array
+      inputs = TaxCheckerSpecHelpers.inputs_hash
+      actual = SummaryCalculations.report_calculations(:previous, accounts, inputs)
+      expected = TaxCheckerSpecHelpers.all_calculations_non_zero_array(:previous)
       TaxCheckerSpecHelpers.verify_accounts_array(self, actual, expected)
     end
 

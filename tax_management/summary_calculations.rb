@@ -1,10 +1,9 @@
 module SummaryCalculations
 
   def self.report_calculations(period, summary, inputs)
-    accounts = [].concat(summary)
-    accounts.concat(initial_calculations(accounts))
+    accounts = initial_calculations(summary)
     accounts.concat(input_calculations(period, inputs))
-    accounts.concat(composite_calculations(period, accounts))
+    accounts.concat(composite_calculations(period, summary + accounts))
     accounts
   end
 

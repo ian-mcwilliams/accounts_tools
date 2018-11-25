@@ -11,12 +11,12 @@ module ChAccounts
 
   def self.period_data(accounts)
     {
-      debtors: AccountsHelpers.account_balance(accounts[:accounts], 'A2', :balance),
-      cash_in_bank_and_at_hand: AccountsHelpers.account_balance(accounts[:accounts], 'A1', :balance),
-      creditors_within_one_year: AccountsHelpers.account_balance(accounts[:calculations], '-S21', :balance),
-      creditors_after_one_year: AccountsHelpers.account_balance(accounts[:calculations], '-S22', :balance),
-      called_up_share_capital: AccountsHelpers.account_balance(accounts[:calculations], 'S7', :balance),
-      profit_and_loss_account: AccountsHelpers.account_balance(accounts[:calculations], 'S20', :balance)
+      debtors: AccountsHelpers.account_balance(accounts, 'A2', :balance),
+      cash_in_bank_and_at_hand: AccountsHelpers.account_balance(accounts, 'A1', :balance),
+      creditors_within_one_year: AccountsHelpers.account_balance(accounts, '-S21', :balance),
+      creditors_after_one_year: AccountsHelpers.account_balance(accounts, '-S22', :balance),
+      called_up_share_capital: AccountsHelpers.account_balance(accounts, 'S7', :balance),
+      profit_and_loss_account: AccountsHelpers.account_balance(accounts, 'S20', :balance)
     }
   end
 

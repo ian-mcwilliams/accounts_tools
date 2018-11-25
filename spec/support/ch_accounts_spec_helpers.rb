@@ -1,18 +1,14 @@
 module ChAccountsSpecHelpers
 
   def self.abbreviated_accounts_input_accounts
-    accounts = {
-      accounts: [
-        { account_code: 'A1', account_name: 'CASH', account_balance: :dr, dr: 15000, cr: 5000, balance: 10000 },
-        { account_code: 'A2', account_name: 'AR', account_balance: :dr, dr: 12000, cr: 2000, balance: 10000 }
-      ],
-      calculations: [
-        { account_code: 'S21', account_name: 'Creditors < 1 year', account_balance: :cr, dr: 3000, cr: 13000, balance: 10000 },
-        { account_code: 'S22', account_name: 'Creditors > 1 year', account_balance: :cr, dr: 2000, cr: 12000, balance: 10000 },
-        { account_code: 'S7', account_name: 'Share', account_balance: :cr, dr: 0, cr: 10000, balance: 10000 },
-        { account_code: 'S20', account_name: 'Profit & Loss Acc', account_balance: :cr, dr: 500, cr: 10500, balance: 10000 }
-      ]
-    }
+    accounts = [
+      { account_code: 'A1', account_name: 'CASH', account_balance: :dr, dr: 15000, cr: 5000, balance: 10000 },
+      { account_code: 'A2', account_name: 'AR', account_balance: :dr, dr: 12000, cr: 2000, balance: 10000 },
+      { account_code: 'S21', account_name: 'Creditors < 1 year', account_balance: :cr, dr: 3000, cr: 13000, balance: 10000 },
+      { account_code: 'S22', account_name: 'Creditors > 1 year', account_balance: :cr, dr: 2000, cr: 12000, balance: 10000 },
+      { account_code: 'S7', account_name: 'Share', account_balance: :cr, dr: 0, cr: 10000, balance: 10000 },
+      { account_code: 'S20', account_name: 'Profit & Loss Acc', account_balance: :cr, dr: 500, cr: 10500, balance: 10000 }
+    ]
     { current: accounts, previous: accounts }
   end
 

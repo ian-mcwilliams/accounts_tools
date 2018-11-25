@@ -13,14 +13,12 @@ module ReportsSummarySpecHelpers
     balances = accounting_equation_hash_balanced_non_zero
     {
       current: {
-        accounts: TaxCheckerSpecHelpers.non_zero_account_array,
-        balances: balances,
-        calculations: current_period_calculations
+        accounts: TaxCheckerSpecHelpers.non_zero_account_array + current_period_calculations,
+        balances: balances
       },
       previous: {
-        accounts: TaxCheckerSpecHelpers.non_zero_account_array,
-        balances: balances,
-        calculations: previous_period_calculations
+        accounts: TaxCheckerSpecHelpers.non_zero_account_array + previous_period_calculations,
+        balances: balances
       }
     }
   end

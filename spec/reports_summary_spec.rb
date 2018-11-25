@@ -22,13 +22,12 @@ describe ReportsSummary do
       expect(actual[:current][:accounts]).to be_a(Array)
       TaxCheckerSpecHelpers.verify_accounts_array(self, actual[:current][:accounts], expected[:current][:accounts])
       expect(actual[:current][:balances]).to eq(expected[:current][:balances])
-      TaxCheckerSpecHelpers.verify_accounts_array(self, actual[:current][:calculations], expected[:current][:calculations])
       expect(actual[:previous]).to be_a(Hash)
       expect(actual[:previous].keys.sort).to eq(expected[:current].keys.sort)
       expect(actual[:previous][:accounts]).to be_a(Array)
       TaxCheckerSpecHelpers.verify_accounts_array(self, actual[:previous][:accounts], expected[:previous][:accounts])
       expect(actual[:previous][:balances]).to eq(expected[:current][:balances])
-      TaxCheckerSpecHelpers.verify_accounts_array(self, actual[:previous][:calculations], expected[:previous][:calculations])
+      ap actual
     end
 
   end

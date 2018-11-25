@@ -1,3 +1,5 @@
 /.idea
 sandbox.*
 **/~$*.xlsx
+run_results/
+bank_statements/

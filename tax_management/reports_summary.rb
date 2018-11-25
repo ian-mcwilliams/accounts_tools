@@ -3,8 +3,6 @@ require_relative 'summary_calculations'
 require 'json'
 
 module ReportsSummary
-  include AccountsIngress
-  include SummaryCalculations
 
   def self.reports_summary(accounts_summaries, inputs)
     accounts_summaries.each_with_object({}) do |(key, value), h|

@@ -12,7 +12,7 @@ module CtReturnSpecHelpers
     accounts_summary
   end
 
-  def self.pnl_inputs
+  def self.ct_profit_and_loss_hashes
     [
       { box: 'AC12', value: -20000 },
       { box: 'AC13', value: -20000 },

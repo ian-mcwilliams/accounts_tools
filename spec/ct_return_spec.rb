@@ -6,8 +6,8 @@ describe CtReturn do
 
   it 'returns a profit and loss hash when provided a full reports summery hash' do
     input_accounts = CtReturnSpecHelpers.input_accounts
-    actual = CtReturn.pnl_inputs(input_accounts)
-    expected = CtReturnSpecHelpers.pnl_inputs
+    actual = CtReturn.ct_profit_and_loss(input_accounts)
+    expected = CtReturnSpecHelpers.ct_profit_and_loss_hashes
     expect(actual.map { |item| item[:box] }).to eq(expected.map { |item| item[:box] })
     expected.each { |item| expect(actual).to include(item) }
   end

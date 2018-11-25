@@ -2,7 +2,7 @@ require_relative 'accounts_helpers'
 
 class CtReturn
 
-  def self.pnl_inputs(summary)
+  def self.ct_profit_and_loss(summary)
     [
       { box: 'AC12', value: AccountsHelpers.account_balance(summary[:current], 'S9', :balance) },
       { box: 'AC13', value: AccountsHelpers.account_balance(summary[:previous], 'S9', :balance) },

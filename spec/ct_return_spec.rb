@@ -8,8 +8,14 @@ describe CtReturn do
     input_accounts = CtReturnSpecHelpers.input_accounts
     actual = CtReturn.ct_profit_and_loss(input_accounts)
     expected = CtReturnSpecHelpers.ct_profit_and_loss_hashes
-    expect(actual.map { |item| item[:box] }).to eq(expected.map { |item| item[:box] })
-    expected.each { |item| expect(actual).to include(item) }
+    CtReturnSpecHelpers.verify_box_array(self, actual, expected)
+  end
+
+  it 'returns a balance sheet hash whn provided a full reports summary hash' do
+    input_accounts = CtReturnSpecHelpers.input_accounts
+    actual = CtReturn.ct_balance_sheet_inputs(input_accounts)
+    expected = CtReturnSpecHelpers.ct_balance_sheet_hashes
+    CtReturnSpecHelpers.verify_box_array(self, actual, expected)
   end
 
 end

@@ -2,8 +2,18 @@ require_relative '../../tax_management/summary_calculations'
 
 module CtReturnSpecHelpers
 
+  def self.verify_box_array(r, actual, expected)
+    r.expect(actual).to r.be_a(Array)
+    actual.each do |item|
+      r.expect(item).to r.be_a(Hash)
+      r.expect(item.keys).to r.eq(%i[box value])
+    end
+    r.expect(actual.map { |item| item[:box] }).to r.eq(expected.map { |item| item[:box] })
+    expected.each { |item| r.expect(actual).to r.include(item) }
+  end
+
   def self.input_accounts
-    accounts_summary = { current: [] + balanced_accounts_summary, previous: [] + balanced_accounts_summary }
+    accounts_summary = { current: balanced_accounts_summary, previous: balanced_accounts_summary }
     %i[current previous].each do |period|
       inputs = TaxCheckerSpecHelpers.inputs_hash
       calculations = SummaryCalculations.report_calculations(period, accounts_summary[period], inputs)
@@ -21,6 +31,20 @@ module CtReturnSpecHelpers
       { box: 'AC35', value: 1 },
       { box: 'AC38', value: 10000 },
       { box: 'AC39', value: 10000 }
+    ]
+  end
+
+  def self.ct_balance_sheet_hashes
+    [
+      { box: 'AC52', value: 10000 },
+      { box: 'AC53', value: 10000 },
+      { box: 'AC54', value: 10000 },
+      { box: 'AC55', value: 10000 },
+      { box: 'AC58', value: -70001 },
+      { box: 'AC59', value: -70001 },
+      { box: 'AC64', value: 1 },
+      { box: 'AC65', value: 1 },
+      { box: 'AC67', value: 1 }
     ]
   end
 

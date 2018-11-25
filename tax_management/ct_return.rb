@@ -14,4 +14,18 @@ class CtReturn
     ]
   end
 
+  def self.ct_balance_sheet_inputs(summary)
+    [
+      { box: 'AC52', value: AccountsHelpers.account_balance(summary[:current], 'A2', :balance) },
+      { box: 'AC53', value: AccountsHelpers.account_balance(summary[:previous], 'A2', :balance) },
+      { box: 'AC54', value: AccountsHelpers.account_balance(summary[:current], 'A1', :balance) },
+      { box: 'AC55', value: AccountsHelpers.account_balance(summary[:previous], 'A1', :balance) },
+      { box: 'AC58', value: AccountsHelpers.account_balance(summary[:current], 'S21', :balance) },
+      { box: 'AC59', value: AccountsHelpers.account_balance(summary[:previous], 'S21', :balance) },
+      { box: 'AC64', value: AccountsHelpers.account_balance(summary[:current], 'S22', :balance) },
+      { box: 'AC65', value: AccountsHelpers.account_balance(summary[:previous], 'S22', :balance) },
+      { box: 'AC67', value: AccountsHelpers.account_balance(summary[:previous], 'S12', :balance) }
+    ]
+  end
+
 end

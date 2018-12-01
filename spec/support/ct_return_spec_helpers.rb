@@ -22,6 +22,17 @@ module CtReturnSpecHelpers
     accounts_summary
   end
 
+  def self.reports_summary_inputs
+    {
+      'period' => 6,
+      'S5B' => 566972,
+      'PS12D' => 994366,
+      'S22B' => 99900,
+      'no_of_shares' => 1,
+      'share_value' => 100
+    }
+  end
+
   def self.ct_profit_and_loss_hashes
     [
       { box: 'AC12', value: -20000 },
@@ -45,6 +56,16 @@ module CtReturnSpecHelpers
       { box: 'AC64', value: 1 },
       { box: 'AC65', value: 1 },
       { box: 'AC67', value: 1 }
+    ]
+  end
+
+  def self.ct_account_notes_hashes
+    [
+      { box: 'AC273', value: 1 },
+      { box: 'AC274', value: 100 },
+      { box: 'AC280', value: 1 },
+      { box: 'AC281', value: 100 },
+      { box: 'AC215', value: 0 }
     ]
   end
 

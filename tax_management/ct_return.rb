@@ -28,4 +28,14 @@ class CtReturn
     ]
   end
 
+  def self.ct_account_notes_inputs(summary, current_period_inputs, previous_period_inputs)
+    [
+      { box: 'AC273', value: previous_period_inputs['no_of_shares'] },
+      { box: 'AC274', value: previous_period_inputs['share_value'] },
+      { box: 'AC280', value: current_period_inputs['no_of_shares'] },
+      { box: 'AC281', value: current_period_inputs['share_value'] },
+      { box: 'AC215', value: AccountsHelpers.account_balance(summary[:current], 'S23', :balance) }
+    ]
+  end
+
 end

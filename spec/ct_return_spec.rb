@@ -11,10 +11,18 @@ describe CtReturn do
     CtReturnSpecHelpers.verify_box_array(self, actual, expected)
   end
 
-  it 'returns a balance sheet hash whn provided a full reports summary hash' do
+  it 'returns a balance sheet hash when provided a full reports summary hash' do
     input_accounts = CtReturnSpecHelpers.input_accounts
     actual = CtReturn.ct_balance_sheet_inputs(input_accounts)
     expected = CtReturnSpecHelpers.ct_balance_sheet_hashes
+    CtReturnSpecHelpers.verify_box_array(self, actual, expected)
+  end
+
+  it 'returns an accounts notes hash when provided a full reports summary hash' do
+    input_accounts = CtReturnSpecHelpers.input_accounts
+    inputs = CtReturnSpecHelpers.reports_summary_inputs
+    actual = CtReturn.ct_account_notes_inputs(input_accounts, inputs, inputs)
+    expected = CtReturnSpecHelpers.ct_account_notes_hashes
     CtReturnSpecHelpers.verify_box_array(self, actual, expected)
   end
 

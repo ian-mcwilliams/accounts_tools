@@ -38,4 +38,17 @@ class CtReturn
     ]
   end
 
+  def self.ct_computations_inputs(summary)
+    [
+      { box: 'CP7', value: AccountsHelpers.account_balance(summary[:current], 'S9', :balance) },
+      { box: 'CP17', value: AccountsHelpers.account_balance(summary[:current], 'S18', :balance) },
+      { box: 'CP22', value: AccountsHelpers.account_balance(summary[:current], 'E17', :balance) },
+      { box: 'CP23', value: AccountsHelpers.account_balance(summary[:current], 'E12', :balance) },
+      { box: 'CP27', value: AccountsHelpers.account_balance(summary[:current], 'E6', :balance) },
+      { box: 'CP34', value: AccountsHelpers.account_balance(summary[:current], 'E7', :balance) },
+      { box: 'CP36', value: AccountsHelpers.account_balance(summary[:current], 'S19', :balance) },
+      { box: 'CP37', value: AccountsHelpers.account_balance(summary[:current], 'S2', :balance) },
+    ]
+  end
+
 end

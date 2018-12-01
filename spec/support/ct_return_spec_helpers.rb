@@ -69,6 +69,19 @@ module CtReturnSpecHelpers
     ]
   end
 
+  def self.ct_computations_hashes
+    [
+      { box: 'CP7', value: -20000 },
+      { box: 'CP17', value: 30000 },
+      { box: 'CP22', value: 10000 },
+      { box: 'CP23', value: 10000 },
+      { box: 'CP27', value: 10000 },
+      { box: 'CP34', value: 10000 },
+      { box: 'CP36', value: 40000 },
+      { box: 'CP37', value: 20000 }
+    ]
+  end
+
   def self.balanced_accounts_summary
     [
       { account_code: 'A1', account_name: 'CASH', account_balance: :dr, dr: 15000, cr: 5000, balance: 10000 },

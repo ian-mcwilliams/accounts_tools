@@ -51,4 +51,10 @@ class CtReturn
     ]
   end
 
+  def self.ct_inputs(summary)
+    [
+      { box: '1', value: AccountsHelpers.account_balance(summary[:current], 'S9', :balance) }
+    ]
+  end
+
 end

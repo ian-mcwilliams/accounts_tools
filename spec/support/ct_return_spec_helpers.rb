@@ -82,6 +82,12 @@ module CtReturnSpecHelpers
     ]
   end
 
+  def self.ct_hashes
+    [
+      { box: '1', value: -20000 }
+    ]
+  end
+
   def self.balanced_accounts_summary
     [
       { account_code: 'A1', account_name: 'CASH', account_balance: :dr, dr: 15000, cr: 5000, balance: 10000 },

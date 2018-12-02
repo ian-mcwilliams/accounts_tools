@@ -88,6 +88,14 @@ module CtReturnSpecHelpers
     ]
   end
 
+  def self.corporation_tax_return_hashes
+    ct_profit_and_loss_hashes +
+      ct_balance_sheet_hashes +
+      ct_account_notes_hashes +
+      ct_computations_hashes +
+      ct_section_hashes
+  end
+
   def self.balanced_accounts_summary
     [
       { account_code: 'A1', account_name: 'CASH', account_balance: :dr, dr: 15000, cr: 5000, balance: 10000 },

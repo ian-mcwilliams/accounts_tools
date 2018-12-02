@@ -40,4 +40,12 @@ describe CtReturn do
     CtReturnSpecHelpers.verify_box_array(self, actual, expected)
   end
 
+  it 'returns a full tax return inputs hash when provided a full reports summary hash' do
+    input_accounts = CtReturnSpecHelpers.input_accounts
+    inputs = CtReturnSpecHelpers.reports_summary_inputs
+    actual = CtReturn.corporation_tax_return_inputs(input_accounts, inputs, inputs)
+    expected = CtReturnSpecHelpers.corporation_tax_return_hashes
+    CtReturnSpecHelpers.verify_box_array(self, actual, expected)
+  end
+
 end

@@ -57,4 +57,12 @@ class CtReturn
     ]
   end
 
+  def self.corporation_tax_return_inputs(summary, current_period_inputs, previous_period_inputs)
+    ct_profit_and_loss(summary) +
+      ct_balance_sheet_inputs(summary) +
+      ct_account_notes_inputs(summary, current_period_inputs, previous_period_inputs) +
+      ct_computations_inputs(summary) +
+      ct_section_inputs(summary)
+  end
+
 end

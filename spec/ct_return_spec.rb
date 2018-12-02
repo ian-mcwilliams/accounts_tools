@@ -33,10 +33,10 @@ describe CtReturn do
     CtReturnSpecHelpers.verify_box_array(self, actual, expected)
   end
 
-  it 'returns a CT hash when provided a full reports summary hash' do
+  it 'returns a CT600 section hash when provided a full reports summary hash' do
     input_accounts = CtReturnSpecHelpers.input_accounts
-    actual = CtReturn.ct_inputs(input_accounts)
-    expected = CtReturnSpecHelpers.ct_hashes
+    actual = CtReturn.ct_section_inputs(input_accounts)
+    expected = CtReturnSpecHelpers.ct_section_hashes
     CtReturnSpecHelpers.verify_box_array(self, actual, expected)
   end
 

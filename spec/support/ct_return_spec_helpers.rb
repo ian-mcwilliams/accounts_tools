@@ -82,7 +82,7 @@ module CtReturnSpecHelpers
     ]
   end
 
-  def self.ct_section_inputs
+  def self.ct_section_hashes
     [
       { box: '1', value: -20000 }
     ]

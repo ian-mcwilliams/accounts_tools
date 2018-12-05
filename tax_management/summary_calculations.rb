@@ -1,7 +1,6 @@
 require_relative 'accounts_helpers'
 
 module SummaryCalculations
-  include AccountsHelpers
 
   def self.report_calculations(period, summary, inputs)
     accounts = initial_calculations(summary)
@@ -27,17 +26,18 @@ module SummaryCalculations
   end
 
   def self.input_calculations(period, inputs)
+    share_capital = inputs['no_of_shares'] * inputs['share_value']
     accounts = [
-      { account_code: 'S5', account_name: 'B/F Capital', balance_type: :cr, dr: 0, cr: inputs['S5C'],
-        balance: inputs['S5C'] },
-      { account_code: 'S7', account_name: 'Share Capital', balance_type: :cr, dr: 0, cr: inputs['S7C'],
-        balance: inputs['S5C'] },
-      { account_code: 'S22', account_name: 'Creditors > 1 year', balance_type: :cr, dr: 0, cr: inputs['S22C'],
-        balance: inputs['S22C'] }
+      { account_code: 'S5', account_name: 'B/F Capital', balance_type: :cr, dr: 0, cr: inputs['S5B'],
+        balance: inputs['S5B'] },
+      { account_code: 'S7', account_name: 'Share Capital', balance_type: :cr, dr: 0, cr: share_capital,
+        balance: share_capital },
+      { account_code: 'S22', account_name: 'Creditors > 1 year', balance_type: :cr, dr: 0, cr: inputs['S22B'],
+        balance: inputs['S22B'] }
     ]
     if period == :previous
-      ct_account = { account_code: 'S12', account_name: 'CT Payable', balance_type: :dr, dr: inputs['S12D'], cr: 0,
-                     balance: inputs['S12D'] }
+      ct_account = { account_code: 'S12', account_name: 'CT Payable', balance_type: :dr, dr: inputs['PS12D'], cr: 0,
+                     balance: inputs['PS12D'] }
       accounts.concat([ct_account])
     end
     accounts

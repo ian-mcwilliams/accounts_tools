@@ -58,8 +58,10 @@ module TaxCheckerSpecHelpers
   end
 
   def self.inputs_hash(zero = false)
-    keys = %w[S5C S7C S12D S22C]
-    keys.each_with_object({}) { |key, h| h[key] = zero ? 0 : 1 }
+    keys = %w[S5B PS12D S22B]
+    value = zero ? 0 : 1
+    inputs = keys.each_with_object({}) { |key, h| h[key] = value }
+    inputs.merge('no_of_shares' => value, 'share_value' => value)
   end
 
   def self.initial_calculation_zero_array

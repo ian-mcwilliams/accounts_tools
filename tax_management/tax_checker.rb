@@ -1,11 +1,11 @@
 require_relative 'reports_summary'
+require_relative 'ch_accounts'
 
 module TaxChecker
-  include ReportsSummary
 
-  def self.generate_reports(period)
-    accounts_summaries = AccountsIngress.accounts_summaries_ingress(period)
-    ReportsSummary.reports_summary(accounts_summaries, calculation_inputs(period))
+  def self.generate_reports_summary(period, inputs)
+    accounts_summaries = AccountsIngress.accounts_summaries_ingress(period, true)
+    ReportsSummary.reports_summary(accounts_summaries, inputs)
   end
 
   def self.calculation_inputs(period = nil)

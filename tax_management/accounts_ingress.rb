@@ -7,11 +7,11 @@ module AccountsIngress
       raise('period must be an integer greater than 0')
     end
     accounts_summaries = {
-      current_period: accounts_summary_array(period, test),
-      previous_period: nil
+      current: accounts_summary_array(period, test),
+      previous: nil
     }
     if period > 1
-      accounts_summaries[:previous_period] = accounts_summary_array(period - 1, test)
+      accounts_summaries[:previous] = accounts_summary_array(period - 1, test)
     end
     accounts_summaries
   end

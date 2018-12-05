@@ -3,7 +3,6 @@ require_relative '../tax_management/reports_summary'
 require_relative 'support/reports_summary_spec_helpers'
 
 describe ReportsSummary do
-  include ReportsSummarySpecHelpers
 
   context 'reports_summary' do
 
@@ -17,17 +16,7 @@ describe ReportsSummary do
       expected = ReportsSummarySpecHelpers.full_reports_summary_balanced_output
       expect(actual).to be_a(Hash)
       expect(actual.keys.sort).to eq(expected.keys.sort)
-      expect(actual[:current]).to be_a(Hash)
-      expect(actual[:current].keys.sort).to eq(expected[:current].keys.sort)
-      expect(actual[:current][:accounts]).to be_a(Array)
-      TaxCheckerSpecHelpers.verify_accounts_array(self, actual[:current][:accounts], expected[:current][:accounts])
-      expect(actual[:current][:balances]).to eq(expected[:current][:balances])
-      expect(actual[:previous]).to be_a(Hash)
-      expect(actual[:previous].keys.sort).to eq(expected[:current].keys.sort)
-      expect(actual[:previous][:accounts]).to be_a(Array)
-      TaxCheckerSpecHelpers.verify_accounts_array(self, actual[:previous][:accounts], expected[:previous][:accounts])
-      expect(actual[:previous][:balances]).to eq(expected[:current][:balances])
-      ap actual
+      TaxCheckerSpecHelpers.verify_reports_summary(self, actual, expected)
     end
 
   end

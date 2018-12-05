@@ -8,6 +8,16 @@ module TaxCheckerSpecHelpers
     end
   end
 
+  def self.verify_reports_summary(r, actual, expected)
+    %i[current previous].each do |period|
+      r.expect(actual[period]).to r.be_a(Hash)
+      r.expect(actual[period].keys.sort).to r.eq(expected[period].keys.sort)
+      r.expect(actual[period][:accounts]).to r.be_a(Array)
+      verify_accounts_array(r, actual[period][:accounts], expected[period][:accounts])
+      r.expect(actual[period][:balances]).to r.eq(expected[period][:balances])
+    end
+  end
+
   def self.test_unbalanced_hash_array_generator(inputs, start_val)
     dr, cr, balance = [start_val, start_val + 100000, start_val + 200000]
     inputs.each_with_object([]) do |input, a|

@@ -2,7 +2,7 @@ require 'simple_xlsx_reader'
 
 module AccountsIngress
 
-  def self.accounts_summaries_ingress(period, test=false)
+  def self.accounts_summaries_ingress(period, test = false)
     unless period.is_a?(Integer) && period > 0
       raise('period must be an integer greater than 0')
     end

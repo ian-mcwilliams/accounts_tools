@@ -42,14 +42,14 @@ describe TaxChecker do
     it 'should generate a reports summary' do
       expected = ReportsSummarySpecHelpers.full_reports_summary_balanced_output
       inputs = {current: TaxCheckerSpecHelpers.inputs_hash, previous: TaxCheckerSpecHelpers.inputs_hash}
-      actual = TaxChecker.generate_reports_summary(4, inputs)
+      actual = TaxChecker.generate_reports_summary(4, inputs, true)
       TaxCheckerSpecHelpers.verify_reports_summary(self, actual, expected)
     end
 
     it 'should generate companies house abbreviated accounts' do
       expected = TaxCheckerSpecHelpers.abbreviated_accounts_hash
       inputs = {current: TaxCheckerSpecHelpers.inputs_hash, previous: TaxCheckerSpecHelpers.inputs_hash}
-      actual = TaxChecker.generate_ch_accounts(4, inputs)
+      actual = TaxChecker.generate_ch_accounts(4, inputs, true)
       expect(actual).to be_a(Hash)
       expect(actual.keys.sort).to eq([:current, :previous])
       %i[current previous].each do |period|
@@ -60,7 +60,7 @@ describe TaxChecker do
     it 'should generate corporation tax return inputs' do
       expected = TaxCheckerSpecHelpers.ct_return_inputs_array
       inputs = {current: TaxCheckerSpecHelpers.inputs_hash, previous: TaxCheckerSpecHelpers.inputs_hash}
-      actual = TaxChecker.generate_ct_return_inputs(4, inputs)
+      actual = TaxChecker.generate_ct_return_inputs(4, inputs, true)
       expect(actual).to be_a(Array)
       expect(actual.length).to eq(expected.length)
       expected.each do |item|

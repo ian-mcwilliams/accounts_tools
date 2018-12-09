@@ -13,11 +13,14 @@ module CtReturnSpecHelpers
   end
 
   def self.input_accounts
-    accounts_summary = { current: balanced_accounts_summary, previous: balanced_accounts_summary }
+    accounts_summary = {
+      current: { accounts: balanced_accounts_summary },
+      previous: { accounts: balanced_accounts_summary }
+    }
     %i[current previous].each do |period|
       inputs = TaxCheckerSpecHelpers.inputs_hash
-      calculations = SummaryCalculations.report_calculations(period, accounts_summary[period], inputs)
-      accounts_summary[period].concat(calculations)
+      calculations = SummaryCalculations.report_calculations(period, accounts_summary[period][:accounts], inputs)
+      accounts_summary[period][:accounts].concat(calculations)
     end
     accounts_summary
   end

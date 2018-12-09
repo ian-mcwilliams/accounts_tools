@@ -4,27 +4,27 @@ class CtReturn
 
   def self.ct_profit_and_loss(summary)
     [
-      { box: 'AC12', value: AccountsHelpers.account_balance(summary[:current], 'S9', :balance) },
-      { box: 'AC13', value: AccountsHelpers.account_balance(summary[:previous], 'S9', :balance) },
-      { box: 'AC20', value: AccountsHelpers.account_balance(summary[:current], 'S10', :balance) },
-      { box: 'AC21', value: AccountsHelpers.account_balance(summary[:previous], 'S10', :balance) },
-      { box: 'AC35', value: AccountsHelpers.account_balance(summary[:previous], 'S12', :balance) },
-      { box: 'AC38', value: AccountsHelpers.account_balance(summary[:current], 'E2', :balance) },
-      { box: 'AC39', value: AccountsHelpers.account_balance(summary[:previous], 'E2', :balance) }
+      { box: 'AC12', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'S9', :balance) },
+      { box: 'AC13', value: AccountsHelpers.account_balance(summary[:previous][:accounts], 'S9', :balance) },
+      { box: 'AC20', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'S10', :balance) },
+      { box: 'AC21', value: AccountsHelpers.account_balance(summary[:previous][:accounts], 'S10', :balance) },
+      { box: 'AC35', value: AccountsHelpers.account_balance(summary[:previous][:accounts], 'S12', :balance) },
+      { box: 'AC38', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'E2', :balance) },
+      { box: 'AC39', value: AccountsHelpers.account_balance(summary[:previous][:accounts], 'E2', :balance) }
     ]
   end
 
   def self.ct_balance_sheet_inputs(summary)
     [
-      { box: 'AC52', value: AccountsHelpers.account_balance(summary[:current], 'A2', :balance) },
-      { box: 'AC53', value: AccountsHelpers.account_balance(summary[:previous], 'A2', :balance) },
-      { box: 'AC54', value: AccountsHelpers.account_balance(summary[:current], 'A1', :balance) },
-      { box: 'AC55', value: AccountsHelpers.account_balance(summary[:previous], 'A1', :balance) },
-      { box: 'AC58', value: AccountsHelpers.account_balance(summary[:current], 'S21', :balance) },
-      { box: 'AC59', value: AccountsHelpers.account_balance(summary[:previous], 'S21', :balance) },
-      { box: 'AC64', value: AccountsHelpers.account_balance(summary[:current], 'S22', :balance) },
-      { box: 'AC65', value: AccountsHelpers.account_balance(summary[:previous], 'S22', :balance) },
-      { box: 'AC67', value: AccountsHelpers.account_balance(summary[:previous], 'S12', :balance) }
+      { box: 'AC52', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'A2', :balance) },
+      { box: 'AC53', value: AccountsHelpers.account_balance(summary[:previous][:accounts], 'A2', :balance) },
+      { box: 'AC54', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'A1', :balance) },
+      { box: 'AC55', value: AccountsHelpers.account_balance(summary[:previous][:accounts], 'A1', :balance) },
+      { box: 'AC58', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'S21', :balance) },
+      { box: 'AC59', value: AccountsHelpers.account_balance(summary[:previous][:accounts], 'S21', :balance) },
+      { box: 'AC64', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'S22', :balance) },
+      { box: 'AC65', value: AccountsHelpers.account_balance(summary[:previous][:accounts], 'S22', :balance) },
+      { box: 'AC67', value: AccountsHelpers.account_balance(summary[:previous][:accounts], 'S12', :balance) }
     ]
   end
 
@@ -34,26 +34,26 @@ class CtReturn
       { box: 'AC274', value: previous_period_inputs['share_value'] },
       { box: 'AC280', value: current_period_inputs['no_of_shares'] },
       { box: 'AC281', value: current_period_inputs['share_value'] },
-      { box: 'AC215', value: AccountsHelpers.account_balance(summary[:current], 'S23', :balance) }
+      { box: 'AC215', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'S23', :balance) }
     ]
   end
 
   def self.ct_computations_inputs(summary)
     [
-      { box: 'CP7', value: AccountsHelpers.account_balance(summary[:current], 'S9', :balance) },
-      { box: 'CP17', value: AccountsHelpers.account_balance(summary[:current], 'S18', :balance) },
-      { box: 'CP22', value: AccountsHelpers.account_balance(summary[:current], 'E17', :balance) },
-      { box: 'CP23', value: AccountsHelpers.account_balance(summary[:current], 'E12', :balance) },
-      { box: 'CP27', value: AccountsHelpers.account_balance(summary[:current], 'E6', :balance) },
-      { box: 'CP34', value: AccountsHelpers.account_balance(summary[:current], 'E7', :balance) },
-      { box: 'CP36', value: AccountsHelpers.account_balance(summary[:current], 'S19', :balance) },
-      { box: 'CP37', value: AccountsHelpers.account_balance(summary[:current], 'S2', :balance) },
+      { box: 'CP7', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'S9', :balance) },
+      { box: 'CP17', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'S18', :balance) },
+      { box: 'CP22', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'E17', :balance) },
+      { box: 'CP23', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'E12', :balance) },
+      { box: 'CP27', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'E6', :balance) },
+      { box: 'CP34', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'E7', :balance) },
+      { box: 'CP36', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'S19', :balance) },
+      { box: 'CP37', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'S2', :balance) },
     ]
   end
 
   def self.ct_section_inputs(summary)
     [
-      { box: '1', value: AccountsHelpers.account_balance(summary[:current], 'S9', :balance) }
+      { box: '1', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'S9', :balance) }
     ]
   end
 

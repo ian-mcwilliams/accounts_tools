@@ -210,4 +210,39 @@ module TaxCheckerSpecHelpers
     }
   end
 
+  def self.ct_return_inputs_array
+    [
+      { box: 'AC12', value: 2 },
+      { box: 'AC13', value: 2 },
+      { box: 'AC20', value: 13 },
+      { box: 'AC21', value: 13 },
+      { box: 'AC35', value: 1 },
+      { box: 'AC38', value: 1 },
+      { box: 'AC39', value: 1 },
+      { box: 'AC52', value: 1 },
+      { box: 'AC53', value: 1 },
+      { box: 'AC54', value: 1 },
+      { box: 'AC55', value: 1 },
+      { box: 'AC58', value: 13 },
+      { box: 'AC59', value: 13 },
+      { box: 'AC64', value: 1 },
+      { box: 'AC65', value: 1 },
+      { box: 'AC67', value: 1 },
+      { box: 'AC273', value: 1 },
+      { box: 'AC274', value: 1 },
+      { box: 'AC280', value: 1 },
+      { box: 'AC281', value: 1 },
+      { box: 'AC215', value: 0 },
+      { box: 'CP7', value: 2 },
+      { box: 'CP17', value: 3 },
+      { box: 'CP22', value: 1 },
+      { box: 'CP23', value: 1 },
+      { box: 'CP27', value: 1 },
+      { box: 'CP34', value: 1 },
+      { box: 'CP36', value: 4 },
+      { box: 'CP37', value: 2 },
+      { box: '1', value: 2 }
+    ]
+  end
+
 end

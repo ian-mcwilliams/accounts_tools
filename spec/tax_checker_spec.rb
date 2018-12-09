@@ -39,6 +39,17 @@ describe TaxChecker do
       end
     end
 
+    it 'should generate corporation tax return inputs' do
+      expected = TaxCheckerSpecHelpers.ct_return_inputs_array
+      inputs = {current: TaxCheckerSpecHelpers.inputs_hash, previous: TaxCheckerSpecHelpers.inputs_hash}
+      actual = TaxChecker.generate_ct_return_inputs(4, inputs)
+      expect(actual).to be_a(Array)
+      expect(actual.length).to eq(expected.length)
+      expected.each do |item|
+        expect(actual).to include(item)
+      end
+    end
+
   end
 
 end

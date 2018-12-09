@@ -21,7 +21,9 @@ module TaxChecker
 
   def self.calculation_inputs(period = nil)
     all_periods = JSON.parse(File.read('tax_management/calculation_inputs.json'))['calculation_inputs']
-    period ? all_periods[period] : all_periods
+    inputs_hash = { current: all_periods.find { |item| item['period'] == period } }
+    inputs_hash[:previous] = all_periods.find { |item| item['period'] == period - 1 } if period > 1
+    inputs_hash
   end
 
 end

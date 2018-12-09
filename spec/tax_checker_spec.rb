@@ -6,14 +6,32 @@ describe TaxChecker do
 
   context 'draw in inputs from file' do
 
-    it 'reads input figures for calculations' do
-      result = TaxChecker.calculation_inputs
-      expect(result).to be_a(Array)
-      result.each_with_index do |item, i|
-        expect(item).to be_a(Hash)
-        expect(item.keys.sort).to eq(%w[period no_of_shares share_value PS12D S5B S22B].sort)
-        item.values.each { |value| expect(value).to be_a(Fixnum) }
-        expect(item['period']).to eq(i + 1)
+    it 'throws an exception if the period is less than 1' do
+      [0, -1].each do |period|
+        message = "the period must be greater than 0 - got #{period}"
+        expect { TaxChecker.calculation_inputs(period) }.to raise_error(message)
+      end
+    end
+
+    it 'reads input figures for calculations with period set to 1' do
+      result = TaxChecker.calculation_inputs(1)
+      expect(result).to be_a(Hash)
+      expect(result.keys).to eq(%i[current])
+      expect(result[:current]).to be_a(Hash)
+      expect(result[:current].keys.sort).to eq(%w[period no_of_shares share_value PS12D S5B S22B].sort)
+      result[:current].values.each { |value| expect(value).to be_a(Fixnum) }
+      expect(result[:current]['period']).to eq(1)
+    end
+
+    it 'reads input figures for calculations with period greater than 1' do
+      result = TaxChecker.calculation_inputs(2)
+      expect(result).to be_a(Hash)
+      expect(result.keys).to eq(%i[current previous])
+      %i[current previous].each do |period|
+        expect(result[period]).to be_a(Hash)
+        expect(result[period].keys.sort).to eq(%w[period no_of_shares share_value PS12D S5B S22B].sort)
+        result[period].values.each { |value| expect(value).to be_a(Fixnum) }
+        expect(result[period]['period']).to eq({ current: 2, previous: 1 }[period])
       end
     end
 

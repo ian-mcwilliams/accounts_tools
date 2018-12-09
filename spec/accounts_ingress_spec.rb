@@ -3,7 +3,6 @@ require_relative '../tax_management/accounts_ingress'
 require_relative 'support/accounts_ingress_spec_helpers'
 
 describe AccountsIngress do
-  include AccountsIngressSpecHelpers
 
   it 'gets just the first period hash when period 1 specified' do
     accounts_hash = AccountsIngress.accounts_summaries_ingress(1, true)

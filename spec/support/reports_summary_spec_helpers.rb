@@ -1,7 +1,6 @@
 require_relative 'tax_checker_spec_helpers'
 
 module ReportsSummarySpecHelpers
-  include TaxCheckerSpecHelpers
 
   def self.full_reports_summary_balanced_output
     current_period_calculations = TaxCheckerSpecHelpers.initial_calculation_non_zero_array +

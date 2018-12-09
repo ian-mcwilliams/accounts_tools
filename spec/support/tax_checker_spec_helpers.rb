@@ -189,4 +189,25 @@ module TaxCheckerSpecHelpers
     ]
   end
 
+  def self.abbreviated_accounts_hash
+    {
+      current: {
+        debtors: 1,
+        cash_in_bank_and_at_hand: 1,
+        creditors_within_one_year: -13,
+        creditors_after_one_year: -1,
+        called_up_share_capital: 1,
+        profit_and_loss_account: -10
+      },
+      previous: {
+        debtors: 1,
+        cash_in_bank_and_at_hand: 1,
+        creditors_within_one_year: -13,
+        creditors_after_one_year: -1,
+        called_up_share_capital: 1,
+        profit_and_loss_account: -9
+      }
+    }
+  end
+
 end

@@ -3,6 +3,11 @@ require_relative 'ch_accounts'
 
 module TaxChecker
 
+  def self.generate_ch_accounts(period, inputs)
+    summary = generate_reports_summary(period, inputs)
+    ChAccounts.abbreviated_accounts(summary)
+  end
+
   def self.generate_reports_summary(period, inputs)
     accounts_summaries = AccountsIngress.accounts_summaries_ingress(period, true)
     ReportsSummary.reports_summary(accounts_summaries, inputs)

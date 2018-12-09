@@ -23,10 +23,20 @@ describe TaxChecker do
 
     it 'should generate a reports summary' do
       expected = ReportsSummarySpecHelpers.full_reports_summary_balanced_output
-      # ap expected[:previous][:accounts].map { |item| "#{item[:account_code]} - #{item[:dr]}, #{item[:cr]}, #{item[:balance]}" }
       inputs = {current: TaxCheckerSpecHelpers.inputs_hash, previous: TaxCheckerSpecHelpers.inputs_hash}
       actual = TaxChecker.generate_reports_summary(4, inputs)
       TaxCheckerSpecHelpers.verify_reports_summary(self, actual, expected)
+    end
+
+    it 'should generate companies house abbreviated accounts' do
+      expected = TaxCheckerSpecHelpers.abbreviated_accounts_hash
+      inputs = {current: TaxCheckerSpecHelpers.inputs_hash, previous: TaxCheckerSpecHelpers.inputs_hash}
+      actual = TaxChecker.generate_ch_accounts(4, inputs)
+      expect(actual).to be_a(Hash)
+      expect(actual.keys.sort).to eq([:current, :previous])
+      %i[current previous].each do |period|
+        expect(actual[period]).to eq(expected[period])
+      end
     end
 
   end

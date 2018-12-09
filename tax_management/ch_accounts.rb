@@ -1,11 +1,10 @@
 require_relative 'accounts_helpers'
 
 module ChAccounts
-  include AccountsHelpers
 
-  def self.abbreviated_accounts(accounts)
+  def self.abbreviated_accounts(summary)
     %i[current previous].each_with_object({}) do |period, h|
-      h[period] = period_data(accounts[period])
+      h[period] = period_data(summary[period][:accounts])
     end
   end
 

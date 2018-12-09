@@ -9,7 +9,8 @@ module ChAccountsSpecHelpers
       { account_code: 'S7', account_name: 'Share', account_balance: :cr, dr: 0, cr: 10000, balance: 10000 },
       { account_code: 'S20', account_name: 'Profit & Loss Acc', account_balance: :cr, dr: 500, cr: 10500, balance: 10000 }
     ]
-    { current: accounts, previous: accounts }
+    summary = { accounts: accounts, balances: nil }
+    { current: summary, previous: summary }
   end
 
   def self.abbreviated_accounts_hash

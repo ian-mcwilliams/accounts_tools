@@ -10,7 +10,7 @@ module ReportsSummary
       accounts_balances = accounts_balances_hash(value)
       accounts_balances_validation(key, accounts_balances)
       h[key] = {
-        accounts: value + SummaryCalculations.report_calculations(key, value, inputs[key]),
+        accounts: value + SummaryCalculations.report_calculations(key, value, inputs),
         balances: accounts_balances
       }
     end

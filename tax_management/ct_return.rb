@@ -43,7 +43,7 @@ class CtReturn
       { box: 'CP7', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'S9', :balance) },
       { box: 'CP17', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'S18', :balance) },
       { box: 'CP22', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'E17', :balance) },
-      { box: 'CP23', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'E12', :balance) },
+      { box: 'CP23', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'E16', :balance) },
       { box: 'CP27', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'E6', :balance) },
       { box: 'CP34', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'E7', :balance) },
       { box: 'CP36', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'S19', :balance) },

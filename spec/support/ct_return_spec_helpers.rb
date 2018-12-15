@@ -78,7 +78,7 @@ module CtReturnSpecHelpers
       { box: 'CP7', value: -20000 },
       { box: 'CP17', value: 30000 },
       { box: 'CP22', value: 10000 },
-      { box: 'CP23', value: 10000 },
+      { box: 'CP23', value: 10 },
       { box: 'CP27', value: 10000 },
       { box: 'CP34', value: 10000 },
       { box: 'CP36', value: 40000 },

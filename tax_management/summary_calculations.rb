@@ -26,18 +26,18 @@ module SummaryCalculations
   end
 
   def self.input_calculations(period, inputs)
-    share_capital = inputs['no_of_shares'] * inputs['share_value']
+    share_capital = inputs[period]['no_of_shares'] * inputs[period]['share_value']
     accounts = [
-      { account_code: 'S5', account_name: 'B/F Capital', balance_type: :cr, dr: 0, cr: inputs['S5B'],
-        balance: inputs['S5B'] },
+      { account_code: 'S5', account_name: 'B/F Capital', balance_type: :cr, dr: 0, cr: inputs[period]['S5B'],
+        balance: inputs[period]['S5B'] },
       { account_code: 'S7', account_name: 'Share Capital', balance_type: :cr, dr: 0, cr: share_capital,
         balance: share_capital },
-      { account_code: 'S22', account_name: 'Creditors > 1 year', balance_type: :cr, dr: 0, cr: inputs['S22B'],
-        balance: inputs['S22B'] }
+      { account_code: 'S22', account_name: 'Creditors > 1 year', balance_type: :cr, dr: 0, cr: inputs[period]['S22B'],
+        balance: inputs[period]['S22B'] }
     ]
     if period == :previous
-      ct_account = { account_code: 'S12', account_name: 'CT Payable', balance_type: :dr, dr: inputs['PS12D'], cr: 0,
-                     balance: inputs['PS12D'] }
+      ct_account = { account_code: 'S12', account_name: 'CT Payable', balance_type: :dr, dr: inputs[:current]['PS12D'],
+                     cr: 0, balance: inputs[:current]['PS12D'] }
       accounts.concat([ct_account])
     end
     accounts

@@ -46,7 +46,8 @@ describe SummaryCalculations, :summary_calculations do
     end
 
     it 'returns the input calculations for the previous period when given non zero inputs' do
-      inputs = TaxCheckerSpecHelpers.inputs_hash
+      inputs = { current: TaxCheckerSpecHelpers.inputs_hash, previous: TaxCheckerSpecHelpers.inputs_hash }
+      inputs[:previous]['PS12D'] = 2
       actual = SummaryCalculations.input_calculations(:previous, inputs)
       expected = TaxCheckerSpecHelpers.input_calculation_non_zero_array(:previous)
       TaxCheckerSpecHelpers.verify_accounts_array(self, actual, expected)

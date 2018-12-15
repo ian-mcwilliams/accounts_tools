@@ -34,7 +34,7 @@ class CtReturn
       { box: 'AC274', value: previous_period_inputs['share_value'] },
       { box: 'AC280', value: current_period_inputs['no_of_shares'] },
       { box: 'AC281', value: current_period_inputs['share_value'] },
-      { box: 'AC215', value: AccountsHelpers.account_balance(summary[:current][:accounts], 'S23', :balance) }
+      { box: 'AC215', value: AccountsHelpers.account_balance(summary[:previous][:accounts], 'S23', :balance) }
     ]
   end
 

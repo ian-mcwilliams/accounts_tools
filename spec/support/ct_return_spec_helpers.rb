@@ -69,7 +69,7 @@ module CtReturnSpecHelpers
       { box: 'AC274', value: 100 },
       { box: 'AC280', value: 1 },
       { box: 'AC281', value: 100 },
-      { box: 'AC215', value: 0 }
+      { box: 'AC215', value: 10 }
     ]
   end
 

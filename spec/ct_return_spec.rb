@@ -20,6 +20,8 @@ describe CtReturn do
 
   it 'returns an accounts notes hash when provided a full reports summary hash' do
     input_accounts = CtReturnSpecHelpers.input_accounts
+    opening_balance = input_accounts[:previous][:accounts].find { |item| item[:account_code] == 'S23' }
+    %i[cr balance].each { |key| opening_balance[key] = 10 }
     inputs = CtReturnSpecHelpers.reports_summary_inputs
     actual = CtReturn.ct_account_notes_inputs(input_accounts, inputs, inputs)
     expected = CtReturnSpecHelpers.ct_account_notes_hashes
@@ -42,6 +44,8 @@ describe CtReturn do
 
   it 'returns a full tax return inputs hash when provided a full reports summary hash' do
     input_accounts = CtReturnSpecHelpers.input_accounts
+    opening_balance = input_accounts[:previous][:accounts].find { |item| item[:account_code] == 'S23' }
+    %i[cr balance].each { |key| opening_balance[key] = 10 }
     inputs = CtReturnSpecHelpers.reports_summary_inputs
     actual = CtReturn.corporation_tax_return_inputs(input_accounts, inputs, inputs)
     expected = CtReturnSpecHelpers.corporation_tax_return_hashes

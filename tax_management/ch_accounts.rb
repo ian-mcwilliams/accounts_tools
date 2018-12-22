@@ -19,7 +19,7 @@ module ChAccounts
     }
   end
 
-  def self.verify_accounts(accounts)
+  def self.abbreviated_accounts_validations(accounts)
     %i[current previous].each_with_object([]) do |period, a|
       unless accounts[period][:total_net_assets] == accounts[period][:shareholders_funds]
         a << [

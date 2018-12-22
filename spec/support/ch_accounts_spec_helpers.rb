@@ -25,48 +25,93 @@ module ChAccountsSpecHelpers
     { current: data, previous: data }
   end
 
-  def self.ch_error_messages(values)
-    message_values = [
-      %w[£0.00 £0.01 current],
-      %w[£0.01 £0.00 current],
-      %w[£0.00 £0.01 previous],
-      %w[£0.01 £0.00 previous],
-    ]
-    values.each_with_object([]) do |value, a|
-      a << [
-        'total net assets (liabilities) [',
-        message_values[value][0],
-        "] different from shareholders' funds [",
-        message_values[value][1],
-        '] for ',
-        message_values[value][2],
-        ' period'
-      ].join
-    end
-  end
-
   def self.ch_verify_accounts_tests
-    tests = [
-      { inputs: [0, 0, 0, 0], expected: [] },
-      { inputs: [1, 1, 1, 1], expected: [] },
-      { inputs: [0, 1, 0, 0], expected: [0] },
-      { inputs: [1, 0, 0, 0], expected: [1] },
-      { inputs: [0, 0, 0, 1], expected: [2] },
-      { inputs: [0, 0, 1, 0], expected: [3] },
-      { inputs: [0, 1, 0, 1], expected: [0, 2] },
-      { inputs: [1, 0, 1, 0], expected: [1, 3] },
-      { inputs: [0, 1, 1, 0], expected: [0, 3] },
-      { inputs: [1, 0, 0, 1], expected: [1, 2] }
-    ]
-    tests.each_with_object([]) do |test, a|
-      a << {
+    nil_assets_current = "total net assets (liabilities) [£0.00] different from shareholders' funds [£0.01] for current period"
+    nil_funds_current = "total net assets (liabilities) [£0.01] different from shareholders' funds [£0.00] for current period"
+    nil_assets_previous = "total net assets (liabilities) [£0.00] different from shareholders' funds [£0.01] for previous period"
+    nil_funds_previous = "total net assets (liabilities) [£0.01] different from shareholders' funds [£0.00] for previous period"
+    [
+      {
+        title: 'no messages are returned where all values are zero',
         inputs: {
-          current: { total_net_assets: test[:inputs][0], shareholders_funds: test[:inputs][1] },
-          previous: { total_net_assets: test[:inputs][2], shareholders_funds: test[:inputs][3] }
+          current: { total_net_assets: 0, shareholders_funds: 0 },
+          previous: { total_net_assets: 0, shareholders_funds: 0 },
         },
-        expected: ch_error_messages(test[:expected])
+        expected: []
+      },
+      {
+        title: 'no messages are returned where all values are one',
+        inputs: {
+          current: { total_net_assets: 1, shareholders_funds: 1 },
+          previous: { total_net_assets: 1, shareholders_funds: 1 },
+        },
+        expected: []
+      },
+      {
+        title: 'a message is returned where all values are zero except current funds',
+        inputs: {
+          current: { total_net_assets: 0, shareholders_funds: 1 },
+          previous: { total_net_assets: 0, shareholders_funds: 0 },
+        },
+        expected: [nil_assets_current]
+      },
+      {
+        title: 'a message is returned where all values are zero except current assets',
+        inputs: {
+          current: { total_net_assets: 1, shareholders_funds: 0 },
+          previous: { total_net_assets: 0, shareholders_funds: 0 },
+        },
+        expected: [nil_funds_current]
+      },
+      {
+        title: 'a message is returned where all values are zero except previous funds',
+        inputs: {
+          current: { total_net_assets: 0, shareholders_funds: 0 },
+          previous: { total_net_assets: 0, shareholders_funds: 1 },
+        },
+        expected: [nil_assets_previous]
+      },
+      {
+        title: 'a message is returned where all values are zero except previous assets',
+        inputs: {
+          current: { total_net_assets: 0, shareholders_funds: 0 },
+          previous: { total_net_assets: 1, shareholders_funds: 0 },
+        },
+        expected: [nil_funds_previous]
+      },
+      {
+        title: 'two messages are returned where both assets are zero, both funds are one',
+        inputs: {
+          current: { total_net_assets: 0, shareholders_funds: 1 },
+          previous: { total_net_assets: 0, shareholders_funds: 1 },
+        },
+        expected: [nil_assets_current, nil_assets_previous]
+      },
+      {
+        title: 'two messages are returned where both assets are one, both funds are zero',
+        inputs: {
+          current: { total_net_assets: 1, shareholders_funds: 0 },
+          previous: { total_net_assets: 1, shareholders_funds: 0 },
+        },
+        expected: [nil_funds_current, nil_funds_previous]
+      },
+      {
+        title: 'two messages are returned where current has zero assets, one funds and previous has one assets, zero funds',
+        inputs: {
+          current: { total_net_assets: 0, shareholders_funds: 1 },
+          previous: { total_net_assets: 1, shareholders_funds: 0 },
+        },
+        expected: [nil_assets_current, nil_funds_previous]
+      },
+      {
+        title: 'two messages are returned where current has one assets, zero funds and previous has zero assets, one funds',
+        inputs: {
+          current: { total_net_assets: 1, shareholders_funds: 0 },
+          previous: { total_net_assets: 0, shareholders_funds: 1 },
+        },
+        expected: [nil_funds_current, nil_assets_previous]
       }
-    end
+    ]
   end
 
 end

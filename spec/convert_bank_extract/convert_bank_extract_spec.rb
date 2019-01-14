@@ -7,6 +7,26 @@ describe 'ConvertBankExtract' do
     File.delete('spec/convert_bank_extract/test_artefacts/output.xlsx')
   end
 
+  context 'integration tests' do
+
+    it 'saves an excel file built from csv data' do
+      ConvertBankExtract.convert_bank_extract
+      file = SimpleXlsxReader.open(ConvertBankExtract.config['save'])
+      expect(file.sheets[0].name).to eq('output')
+      hashes = ConvertBankExtractSpecHelpers.integration_test_hashes
+      hashes.each_with_index do |hash, i|
+        row_index = hashes.count - 1 - i
+        expect(file.sheets[0].rows[row_index][0]).to eq(hash[:date])
+        expect(file.sheets[0].rows[row_index][1]).to eq(hash[:debit])
+        expect(file.sheets[0].rows[row_index][2]).to eq(hash[:credit])
+        expect(file.sheets[0].rows[row_index][3]).to be_nil
+        expect(file.sheets[0].rows[row_index][4]).to eq(hash[:subcat])
+        expect(file.sheets[0].rows[row_index][5]).to eq(hash[:description])
+      end
+    end
+
+  end
+
   context 'unit tests' do
 
     it 'loads the file into memory' do

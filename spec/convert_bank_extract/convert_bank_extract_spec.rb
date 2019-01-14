@@ -1,6 +1,5 @@
 require_relative '../../convert_bank_extract/convert_bank_extract'
 require_relative 'spec_helper'
-require 'awesome_print'
 
 describe 'ConvertBankExtract' do
 
@@ -30,6 +29,13 @@ describe 'ConvertBankExtract' do
       expect(hash[:description]).to be_a(String)
       expect(hash[:description]).not_to be_empty
     end
+  end
+
+  it 'returns a new axlsx object' do
+    return_value = ConvertBankExtract.new_excel_file
+    expect(return_value).to be_a(Axlsx::Package)
+    expect(return_value.workbook.worksheets.count).to be(1)
+    expect(return_value.workbook.worksheets[0].name).to eq('output')
   end
 
 end

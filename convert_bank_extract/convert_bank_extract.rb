@@ -1,4 +1,5 @@
 require 'csv'
+require 'axlsx'
 
 module ConvertBankExtract
 
@@ -19,6 +20,13 @@ module ConvertBankExtract
         description: array[5]
       }
     end
+  end
+
+  def self.new_excel_file
+    file = Axlsx::Package.new
+    workbook = file.workbook
+    workbook.add_worksheet(name: 'output')
+    file
   end
 
 end

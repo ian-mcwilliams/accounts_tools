@@ -2,8 +2,9 @@ require_relative 'support/convert_bank_extract_spec_helpers'
 require 'awesome_print'
 require 'axlsx'
 require 'rspec'
+require 'simple_xlsx_reader'
 
-ENV['convert_bank_extract_file_source'] = 'spec/convert_bank_extract/test_artefacts/data.csv'
+ENV['test'] = 'true'
 
 # RSpec.configure do |config|
 #   config.treat_symbols_as_metadata_keys_with_true_values = true

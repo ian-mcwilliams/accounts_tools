@@ -1,0 +1,4 @@
+default:
+  livecorp_path: "F3Mmedia/Internal/ACcounts/LiveCorp/"
+ians_macbook_pro_local:
+  rel_dropbox_path: "../../../Dropbox/"

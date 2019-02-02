@@ -1,4 +1,5 @@
 require 'simple_xlsx_reader'
+require_relative '../../config'
 
 module AccountsIngress
 
@@ -27,10 +28,9 @@ module AccountsIngress
     if test
       "tax_management/spec/test_artefacts/TestAccounts#{period}.xlsx"
     else
-      rel_dropbox_path = '../../../Dropbox/'
-      livecorp_path = 'F3Mmedia/Internal/ACcounts/LiveCorp/'
+      config = Config.get_config
       accounts_file_path = "#{period}.#{period_strings[period - 1]}/Accounts#{period}.xlsx"
-      "#{rel_dropbox_path}#{livecorp_path}#{accounts_file_path}"
+      "#{config['rel_dropbox_path']}#{config['livecorp_path']}#{accounts_file_path}"
     end
   end
 

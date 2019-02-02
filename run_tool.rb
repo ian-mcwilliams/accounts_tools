@@ -36,7 +36,7 @@ ARGV.each_with_index { |arg, index| index == 0 ? target = arg : args << arg }
 #  - verify that the balance on the last row matches the balance on the final transaction on the bank statement
 
 if target == 'convert_bank_extract'
-  require_relative 'convert_bank_extract/convert_bank_extract'
+  require_relative 'convert_bank_extract/lib/convert_bank_extract'
   ConvertBankExtract.convert_bank_extract
 end
 

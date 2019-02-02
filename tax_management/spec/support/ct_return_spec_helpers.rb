@@ -1,4 +1,4 @@
-require_relative '../../tax_management/summary_calculations'
+require_relative '../../lib/summary_calculations'
 
 module CtReturnSpecHelpers
 

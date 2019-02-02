@@ -1,5 +1,5 @@
 require_relative 'spec_helper'
-require_relative '../tax_management/accounts_ingress'
+require_relative '../lib/accounts_ingress'
 require_relative 'support/accounts_ingress_spec_helpers'
 
 describe AccountsIngress do

@@ -1,5 +1,5 @@
 require_relative 'spec_helper'
-require_relative '../tax_management/ch_accounts'
+require_relative '../lib/ch_accounts'
 require_relative 'support/ch_accounts_spec_helpers'
 
 describe ChAccounts do

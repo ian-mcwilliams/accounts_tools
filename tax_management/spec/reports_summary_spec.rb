@@ -1,5 +1,5 @@
 require_relative 'spec_helper'
-require_relative '../tax_management/reports_summary'
+require_relative '../lib/reports_summary'
 require_relative 'support/reports_summary_spec_helpers'
 
 describe ReportsSummary do

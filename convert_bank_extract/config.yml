@@ -1,6 +1,6 @@
 test:
-  source: 'spec/convert_bank_extract/test_artefacts/data.csv'
-  save: 'spec/convert_bank_extract/test_artefacts/output.xlsx'
+  source: 'convert_bank_extract/spec/test_artefacts/data.csv'
+  save: 'convert_bank_extract/spec/test_artefacts/output.xlsx'
 default:
   source: 'source_file/data.csv'
   save: 'run_results/convert_bank_extract/output.xlsx'

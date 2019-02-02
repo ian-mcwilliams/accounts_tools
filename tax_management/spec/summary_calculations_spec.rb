@@ -1,5 +1,5 @@
 require_relative 'spec_helper'
-require_relative '../tax_management/summary_calculations'
+require_relative '../lib/summary_calculations'
 require_relative 'support/summary_calculations_spec_helpers'
 
 describe SummaryCalculations, :summary_calculations do

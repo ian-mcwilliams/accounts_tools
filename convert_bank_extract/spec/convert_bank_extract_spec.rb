@@ -1,10 +1,10 @@
-require_relative '../../convert_bank_extract/convert_bank_extract'
+require_relative '../lib/convert_bank_extract'
 require_relative 'spec_helper'
 
 describe 'ConvertBankExtract' do
 
   after(:all) do
-    File.delete('spec/convert_bank_extract/test_artefacts/output.xlsx')
+    File.delete('convert_bank_extract/spec/test_artefacts/output.xlsx')
   end
 
   context 'integration tests' do

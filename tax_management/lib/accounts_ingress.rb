@@ -25,9 +25,9 @@ module AccountsIngress
 
   def self.accounts_file_path(period, test=false)
     if test
-      "spec/test_artefacts/TestAccounts#{period}.xlsx"
+      "tax_management/spec/test_artefacts/TestAccounts#{period}.xlsx"
     else
-      rel_dropbox_path = '../../Dropbox/'
+      rel_dropbox_path = '../../../Dropbox/'
       livecorp_path = 'F3Mmedia/Internal/ACcounts/LiveCorp/'
       accounts_file_path = "#{period}.#{period_strings[period - 1]}/Accounts#{period}.xlsx"
       "#{rel_dropbox_path}#{livecorp_path}#{accounts_file_path}"

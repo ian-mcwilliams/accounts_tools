@@ -1,5 +1,5 @@
 require_relative 'spec_helper'
-require_relative '../tax_management/ct_return'
+require_relative '../lib/ct_return'
 require_relative 'support/ct_return_spec_helpers'
 
 describe CtReturn do

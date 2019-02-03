@@ -1,4 +1,10 @@
-default:
-  livecorp_path: "F3Mmedia/Internal/ACcounts/LiveCorp/"
-ians_macbook_pro_local:
-  rel_dropbox_path: "../../../Dropbox/"
+prod:
+  default:
+    bookkeeping_path: "bookkeeping/"
+  ians_macbook_pro_local:
+    rel_livecorp_path: "../../../Dropbox/F3Mmedia/Internal/ACcounts/LiveCorp/"
+test:
+  default:
+    bookkeeping_path: "bookkeeping/"
+  ians_macbook_pro_local:
+    rel_livecorp_path: "spec/support/source_test_files/"

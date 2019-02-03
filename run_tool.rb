@@ -1,3 +1,5 @@
+require_relative 'env'
+
 # THIS FILE SHOULD EVENTUALLY CONTAIN ALL ACCOUNTS TOOLS CALLS AND INFO ON HOW TO RUN EACH
 
 # The call to this file takes an argument specifying what task to run, see the documentation for the relevant task for
@@ -41,4 +43,9 @@ if target == 'convert_bank_extract'
 end
 
 
+# RECONCILE SALES
 
+if target == 'reconcile_sales'
+  require_relative 'contract_management/lib/books_ingress'
+  BooksIngress.import_books
+end

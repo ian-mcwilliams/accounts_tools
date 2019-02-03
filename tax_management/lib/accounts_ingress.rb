@@ -30,7 +30,7 @@ module AccountsIngress
     else
       config = Config.get_config
       accounts_file_path = "#{period}.#{period_strings[period - 1]}/Accounts#{period}.xlsx"
-      "#{config['rel_dropbox_path']}#{config['livecorp_path']}#{accounts_file_path}"
+      "#{config['rel_livecorp_path']}#{accounts_file_path}"
     end
   end
 

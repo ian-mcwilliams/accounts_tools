@@ -4,7 +4,7 @@ require 'axlsx'
 require 'rspec'
 require 'simple_xlsx_reader'
 
-ENV['test'] = 'true'
+ENV['RUN_ENV'] = 'test'
 
 # RSpec.configure do |config|
 #   config.treat_symbols_as_metadata_keys_with_true_values = true

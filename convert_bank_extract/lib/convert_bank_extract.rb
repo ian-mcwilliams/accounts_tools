@@ -6,7 +6,7 @@ module ConvertBankExtract
 
   def self.config
     all_config = YAML.load_file('convert_bank_extract/config.yml')
-    ENV['test'] ? all_config['test'] : all_config['default']
+    ENV['RUN_ENV'] == 'test' ? all_config['test'] : all_config['default']
   end
 
   def self.convert_bank_extract

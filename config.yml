@@ -1,10 +1,11 @@
+default:
+  bookkeeping_path: "bookkeeping/"
+  contracts_filename: "contracts.xlsx"
+  sales_and_vat_filename: "sales_and_vat.xlsx"
+  dropbox_path:
+    ians_macbook_pro_local:
+      rel_livecorp_path: "../../../Dropbox/"
 prod:
-  default:
-    bookkeeping_path: "bookkeeping/"
-  ians_macbook_pro_local:
-    rel_livecorp_path: "../../../Dropbox/F3Mmedia/Internal/ACcounts/LiveCorp/"
+  rel_livecorp_path: "F3Mmedia/Internal/ACcounts/LiveCorp/"
 test:
-  default:
-    bookkeeping_path: "bookkeeping/"
-  ians_macbook_pro_local:
-    rel_livecorp_path: "spec/support/source_test_files/"
+  rel_livecorp_path: "spec/support/source_test_files/"

@@ -1,3 +1,4 @@
+require_relative 'env'
 require_relative 'tax_management/lib/tax_checker'
 require 'awesome_print'
 

@@ -2,16 +2,17 @@ require_relative '../lib/convert_bank_extract'
 require_relative 'spec_helper'
 
 describe 'ConvertBankExtract' do
+  SAVE_FILEPATH = ENV['CONVERT_BANK_EXTRACT_SAVE_FILEPATH']
 
   after(:all) do
-    File.delete('convert_bank_extract/spec/test_artefacts/output.xlsx')
+    File.delete(SAVE_FILEPATH)
   end
 
   context 'integration tests' do
 
     it 'saves an excel file built from csv data' do
       ConvertBankExtract.convert_bank_extract
-      file = SimpleXlsxReader.open(ConvertBankExtract.config['save'])
+      file = SimpleXlsxReader.open(SAVE_FILEPATH)
       expect(file.sheets[0].name).to eq('output')
       hashes = ConvertBankExtractSpecHelpers.integration_test_hashes
       hashes.each_with_index do |hash, i|
@@ -67,7 +68,7 @@ describe 'ConvertBankExtract' do
     it 'saves the hashes to file' do
       hashes = ConvertBankExtractSpecHelpers.test_hashes
       ConvertBankExtract.create_excel_file(ConvertBankExtract.sorted_hashes(hashes))
-      file = SimpleXlsxReader.open(ConvertBankExtract.config['save'])
+      file = SimpleXlsxReader.open(SAVE_FILEPATH)
       expect(file.sheets[0].name).to eq('output')
       hashes.each_with_index do |hash, i|
         row_index = hashes.count - 1 - i

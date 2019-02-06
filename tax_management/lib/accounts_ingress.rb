@@ -25,12 +25,11 @@ module AccountsIngress
   end
 
   def self.accounts_file_path(period, test=false)
-    if test
+    if ENV['RUN_ENV'] == 'test'
       "tax_management/spec/test_artefacts/TestAccounts#{period}.xlsx"
     else
-      config = Config.get_config
       accounts_file_path = "#{period}.#{period_strings[period - 1]}/Accounts#{period}.xlsx"
-      "#{config['rel_livecorp_path']}#{accounts_file_path}"
+      "#{ENV['REL_LIVECORP_PATH']}#{accounts_file_path}"
     end
   end
 

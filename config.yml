@@ -1,11 +1,20 @@
 default:
-  bookkeeping_path: "bookkeeping/"
-  contracts_filename: "contracts.xlsx"
-  sales_and_vat_filename: "sales_and_vat.xlsx"
-  dropbox_path:
-    ians_macbook_pro_local:
-      rel_livecorp_path: "../../../Dropbox/"
+  filenames:
+    contracts: "contracts.xlsx"
+    convert_bank_extract_save: "output.xlsx"
+    convert_bank_extract_source: "data.csv"
+    sales_and_vat: "sales_and_vat.xlsx"
+  rel_paths:
+    bookkeeping: "bookkeeping/"
+    dropbox:
+      ians_macbook_pro_local: "../../../Dropbox/"
 prod:
-  rel_livecorp_path: "F3Mmedia/Internal/ACcounts/LiveCorp/"
+  rel_paths:
+    livecorp: "F3Mmedia/Internal/ACcounts/LiveCorp/"
+    save_files: "run_results/"
+    source_files: "source_files/"
 test:
-  rel_livecorp_path: "spec/support/source_test_files/"
+  rel_paths:
+    livecorp: "spec/support/test_files/"
+    save_files: "spec/support/test_files/"
+    source_files: "spec/support/test_files/"

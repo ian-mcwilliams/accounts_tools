@@ -8,7 +8,7 @@ module Config
     params['rel_paths']['dropbox'] = params['rel_paths']['dropbox'][host_key]
     params = merge_config(params, raw_config[ENV['RUN_ENV']])
     params['accounting_periods'] ||= (0..9).to_a.map { '' }
-    params['accounting_period_filepaths'] = params['accounting_periods'].map.with_index do |item, i|
+    params['accounting_period_filepaths'] = params['accounting_periods'].map.with_index(1) do |item, i|
       "#{ENV['TOOL_ROOT']}#{params['rel_paths']['dropbox']}#{params['rel_paths']['livecorp']}#{item}Accounts#{i}.xlsx"
     end
     params

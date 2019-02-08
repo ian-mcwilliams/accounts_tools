@@ -19,7 +19,7 @@ module AccountsIngress
   end
 
   def self.accounts_summary_rows(period)
-    file = SimpleXlsxReader.open(CONFIG['accounting_period_filepaths'][period].to_s)
+    file = SimpleXlsxReader.open(CONFIG['accounting_period_filepaths'][period - 1].to_s)
     file.sheets.each do |sheet|
       return sheet.rows if sheet.name == 'Accounts Summary'
     end

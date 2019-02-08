@@ -5,7 +5,7 @@ describe 'ConvertBankExtract' do
   SAVE_FILEPATH = ENV['CONVERT_BANK_EXTRACT_SAVE_FILEPATH']
 
   after(:all) do
-    File.delete(SAVE_FILEPATH)
+    File.delete(SAVE_FILEPATH) if File.exist?(SAVE_FILEPATH)
   end
 
   context 'integration tests' do

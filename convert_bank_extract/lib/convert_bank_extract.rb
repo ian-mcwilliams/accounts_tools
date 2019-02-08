@@ -3,8 +3,6 @@ require 'axlsx'
 require 'yaml'
 
 module ConvertBankExtract
-  SOURCE_FILEPATH = ENV['CONVERT_BANK_EXTRACT_SOURCE_FILEPATH']
-  SAVE_FILEPATH = ENV['CONVERT_BANK_EXTRACT_SAVE_FILEPATH']
 
   def self.convert_bank_extract
     file = load_file
@@ -13,7 +11,7 @@ module ConvertBankExtract
   end
 
   def self.load_file
-    file = CSV.open(SOURCE_FILEPATH).map { |row| row }
+    file = CSV.open(ENV['CONVERT_BANK_EXTRACT_SOURCE_FILEPATH']).map { |row| row }
     file.shift
     file
   end
@@ -50,7 +48,7 @@ module ConvertBankExtract
         sheet.add_row(row)
       end
     end
-    file.serialize(SAVE_FILEPATH)
+    file.serialize(ENV['CONVERT_BANK_EXTRACT_SAVE_FILEPATH'])
   end
 
 end

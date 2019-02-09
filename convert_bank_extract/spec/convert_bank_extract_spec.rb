@@ -12,18 +12,13 @@ describe 'ConvertBankExtract' do
 
     it 'saves an excel file built from csv data' do
       ConvertBankExtract.convert_bank_extract
-      file = SimpleXlsxReader.open(SAVE_FILEPATH)
-      expect(file.sheets[0].name).to eq('output')
-      hashes = ConvertBankExtractSpecHelpers.integration_test_hashes
-      hashes.each_with_index do |hash, i|
-        row_index = hashes.count - 1 - i
-        expect(file.sheets[0].rows[row_index][0]).to eq(hash[:date])
-        expect(file.sheets[0].rows[row_index][1]).to eq(hash[:debit])
-        expect(file.sheets[0].rows[row_index][2]).to eq(hash[:credit])
-        expect(file.sheets[0].rows[row_index][3]).to be_nil
-        expect(file.sheets[0].rows[row_index][4]).to eq(hash[:subcat])
-        expect(file.sheets[0].rows[row_index][5]).to eq(hash[:description])
-      end
+      workbook = Rxl.read_file(SAVE_FILEPATH)
+      expect(workbook.keys).to eq(['output'])
+      expected = ConvertBankExtractSpecHelpers.integration_test_hashes
+      expect(workbook['output'].count).to eq(expected.count)
+      actual_values = {}
+      workbook['output'].each { |key, value| actual_values[key] = { value: value[:value] } }
+      expect(actual_values).to eq(expected)
     end
 
   end
@@ -68,17 +63,7 @@ describe 'ConvertBankExtract' do
     it 'saves the hashes to file' do
       hashes = ConvertBankExtractSpecHelpers.test_hashes
       ConvertBankExtract.create_excel_file(ConvertBankExtract.sorted_hashes(hashes))
-      file = SimpleXlsxReader.open(SAVE_FILEPATH)
-      expect(file.sheets[0].name).to eq('output')
-      hashes.each_with_index do |hash, i|
-        row_index = hashes.count - 1 - i
-        expect(file.sheets[0].rows[row_index][0]).to eq(hash[:date])
-        expect(file.sheets[0].rows[row_index][1]).to eq(hash[:debit])
-        expect(file.sheets[0].rows[row_index][2]).to eq(hash[:credit])
-        expect(file.sheets[0].rows[row_index][3]).to be_nil
-        expect(file.sheets[0].rows[row_index][4]).to eq(hash[:subcat])
-        expect(file.sheets[0].rows[row_index][5]).to eq(hash[:description])
-      end
+      expect(File.exist?(SAVE_FILEPATH)).to be(true)
     end
 
   end

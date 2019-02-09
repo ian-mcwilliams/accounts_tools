@@ -1,5 +1,4 @@
 require 'csv'
-require 'axlsx'
 require 'yaml'
 
 module ConvertBankExtract
@@ -33,22 +32,33 @@ module ConvertBankExtract
   end
 
   def self.create_excel_file(hashes)
-    file = Axlsx::Package.new
-    workbook = file.workbook
-    workbook.add_worksheet(name: 'output') do |sheet|
-      hashes.each do |hash|
-        row = [
-          hash[:date],
-          hash[:debit],
-          hash[:credit],
-          nil,
-          hash[:subcat],
-          hash[:description]
-        ]
-        sheet.add_row(row)
+    order = %i[date debit credit blank_col subcat description]
+    output = hashes_to_rxl_worksheet(hashes, order, write_headers: false)
+    Rxl.write_file(ENV['CONVERT_BANK_EXTRACT_SAVE_FILEPATH'], { 'output' => output })
+  end
+
+  def self.hashes_to_rxl_worksheet(hashes, order, write_headers: true)
+    rows = hashes.map do |hash|
+      order.map { |item| hash[item] }
+    end
+    rows.unshift(order.map { |item| "#{item}" }) if write_headers
+    rows_to_rxl_worksheet(rows)
+  end
+
+  def self.rows_to_rxl_worksheet(rows)
+    rxl_worksheet = {}
+    rows.count.times do |i|
+      rows[i].each_with_index do |cell_value, index|
+        rxl_worksheet["#{column_name(index)}#{i + 1}"] = { value: cell_value }
       end
     end
-    file.serialize(ENV['CONVERT_BANK_EXTRACT_SAVE_FILEPATH'])
+    rxl_worksheet
+  end
+
+  def self.column_name(int)
+    name = 'A'
+    int.times { name.succ! }
+    name
   end
 
 end

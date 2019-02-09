@@ -4,6 +4,7 @@ ENV['TOOL_ROOT'] = 'contract_management/'
 require_relative '../../env'
 
 require 'rspec'
+require 'rxl'
 
 # RSpec.configure do |config|
 #   config.treat_symbols_as_metadata_keys_with_true_values = true

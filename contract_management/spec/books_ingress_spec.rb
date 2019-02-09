@@ -1,5 +1,4 @@
 require_relative 'spec_helper'
-require 'rxl'
 require_relative '../lib/books_ingress'
 
 describe 'BooksIngress' do

@@ -9,10 +9,10 @@ The end to end process is described here.
 
 ## Before running this tool
 
-1. download the bank statement and save it in records/bank_statements
-2. the statement filename is based on the **opening and closing transaction dates** on the statement
-3. when you download from Barclays the extract **MUST** match the opening and closing transaction dates from the statement
-4. save the target file to the source_file directory as data.csv (*this is the default filename but watch out for duplicate naming avoidance like "data (1).csv"*)
+1. download the PDF bank statement and save it in records/bank_statements
+2. the PDF statement filename is based on the **opening and closing transaction dates** on the statement (the first and last transaction in the list of transactions, not the opening and closing balance )
+3. when you then download the CSV from Barclays the extract **MUST** match the opening and closing transaction dates from the PDF statement
+4. save the CSV file to the accounts_tools/source_file directory as data.csv (*this is the default filename but watch out for duplicate naming avoidance like "data (1).csv"*)
 5. ensure the sheet's tab name is "data" (*this is the current default so no change should be needed*)
 
 ## Running this tool

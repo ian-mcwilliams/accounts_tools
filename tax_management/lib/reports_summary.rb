@@ -3,19 +3,15 @@ require_relative 'summary_calculations'
 require 'json'
 
 module ReportsSummary
-  include AccountsIngress
-  include SummaryCalculations
 
-  def self.reports_summary(period)
-    accounts_summaries = AccountsIngress.accounts_summaries_ingress(period)
+  def self.reports_summary(accounts_summaries, inputs)
     accounts_summaries.each_with_object({}) do |(key, value), h|
       accounts_summary_validation(value)
       accounts_balances = accounts_balances_hash(value)
       accounts_balances_validation(key, accounts_balances)
       h[key] = {
-        accounts_summary: value,
-        balances: accounts_balances,
-        calculations: SummaryCalculations.report_calculations(key, value, calculation_inputs(period))
+        accounts: value + SummaryCalculations.report_calculations(key, value, inputs),
+        balances: accounts_balances
       }
     end
   end
@@ -73,11 +69,6 @@ module ReportsSummary
       a << account_hash[:balance] if specified_accounts.include?(account_hash[:account_code])
     end
     assets_balances.inject(0, :+)
-  end
-
-  def self.calculation_inputs(period = nil)
-    all_periods = JSON.parse(File.read('tax_management/calculation_inputs.json'))['calculation_inputs']
-    period ? all_periods[period] : all_periods
   end
 
 end

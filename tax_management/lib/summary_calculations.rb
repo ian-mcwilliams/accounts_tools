@@ -1,10 +1,11 @@
+require_relative 'accounts_helpers'
+
 module SummaryCalculations
 
   def self.report_calculations(period, summary, inputs)
-    accounts = [].concat(summary)
-    accounts.concat(initial_calculations(accounts))
+    accounts = initial_calculations(summary)
     accounts.concat(input_calculations(period, inputs))
-    accounts.concat(composite_calculations(period, accounts))
+    accounts.concat(composite_calculations(period, summary + accounts))
     accounts
   end
 
@@ -25,17 +26,18 @@ module SummaryCalculations
   end
 
   def self.input_calculations(period, inputs)
+    share_capital = inputs[period]['no_of_shares'] * inputs[period]['share_value']
     accounts = [
-      { account_code: 'S5', account_name: 'B/F Capital', balance_type: :cr, dr: 0, cr: inputs['S5C'],
-        balance: inputs['S5C'] },
-      { account_code: 'S7', account_name: 'Share Capital', balance_type: :cr, dr: 0, cr: inputs['S7C'],
-        balance: inputs['S5C'] },
-      { account_code: 'S22', account_name: 'Creditors > 1 year', balance_type: :cr, dr: 0, cr: inputs['S22C'],
-        balance: inputs['S22C'] }
+      { account_code: 'S5', account_name: 'B/F Capital', balance_type: :cr, dr: 0, cr: inputs[period]['S5B'],
+        balance: inputs[period]['S5B'] },
+      { account_code: 'S7', account_name: 'Share Capital', balance_type: :cr, dr: 0, cr: share_capital,
+        balance: share_capital },
+      { account_code: 'S22', account_name: 'Creditors > 1 year', balance_type: :cr, dr: 0, cr: inputs[period]['S22B'],
+        balance: inputs[period]['S22B'] }
     ]
     if period == :previous
-      ct_account = { account_code: 'S12', account_name: 'CT Payable', balance_type: :dr, dr: inputs['S12D'], cr: 0,
-                     balance: inputs['S12D'] }
+      ct_account = { account_code: 'S12', account_name: 'CT Payable', balance_type: :dr, dr: inputs[:current]['PS12D'],
+                     cr: 0, balance: inputs[:current]['PS12D'] }
       accounts.concat([ct_account])
     end
     accounts
@@ -63,20 +65,14 @@ module SummaryCalculations
 
   def self.calculation(summary, accounts, balance_type)
     dr_cr = accounts.each_with_object({ dr: 0, cr: 0 }) do |account, h|
-      h[:dr] += account_balance(summary, account, :dr)
-      h[:cr] += account_balance(summary, account, :cr)
+      h[:dr] += AccountsHelpers.account_balance(summary, account, :dr)
+      h[:cr] += AccountsHelpers.account_balance(summary, account, :cr)
     end
     balance = {
       dr: dr_cr[:dr] - dr_cr[:cr],
       cr: dr_cr[:cr] - dr_cr[:dr]
     }[balance_type]
     dr_cr.merge(balance: balance)
-  end
-
-  def self.account_balance(summary, account, key)
-    account_hash = summary.find { |item| item[:account_code] == account.gsub('-', '') }
-    raise("no account found for #{account}") unless account_hash
-    account[0] == '-' ? account_hash[key] - (account_hash[key] * 2) : account_hash[key]
   end
 
   def self.initial_calculation_data

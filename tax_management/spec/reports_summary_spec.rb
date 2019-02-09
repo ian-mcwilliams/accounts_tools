@@ -1,7 +1,25 @@
 require_relative 'spec_helper'
-require_relative '../tax_management/reports_summary'
+require_relative '../lib/reports_summary'
+require_relative 'support/reports_summary_spec_helpers'
 
 describe ReportsSummary do
+
+  context 'reports_summary' do
+
+    it 'returns all accounts, balances and summary accounts for the current and previous period' do
+      inputs = { current: TaxCheckerSpecHelpers.inputs_hash, previous: TaxCheckerSpecHelpers.inputs_hash }
+      accounts_hash = {
+        current: TaxCheckerSpecHelpers.non_zero_account_array,
+        previous: TaxCheckerSpecHelpers.non_zero_account_array
+      }
+      actual = ReportsSummary.reports_summary(accounts_hash, inputs)
+      expected = ReportsSummarySpecHelpers.full_reports_summary_balanced_output
+      expect(actual).to be_a(Hash)
+      expect(actual.keys.sort).to eq(expected.keys.sort)
+      TaxCheckerSpecHelpers.verify_reports_summary(self, actual, expected)
+    end
+
+  end
 
   context 'validate account' do
 
@@ -63,21 +81,6 @@ describe ReportsSummary do
     it 'does not raise an exception when the accounting equation passes' do
       sample_hash = { assets: 0, liabilities: 1, equity: 1 }
       expect { ReportsSummary.accounts_balances_validation('test_period', sample_hash) }.not_to raise_error
-    end
-
-  end
-
-  context 'draw in inputs from file' do
-
-    it 'reads input figures for calculations' do
-      result = ReportsSummary.calculation_inputs
-      expect(result).to be_a(Array)
-      result.each_with_index do |item, i|
-        expect(item).to be_a(Hash)
-        expect(item.keys.sort).to eq(%w[period no_of_shares share_value PS12D S5B S22B].sort)
-        item.values.each { |value| expect(value).to be_a(Fixnum) }
-        expect(item['period']).to eq(i + 1)
-      end
     end
 
   end

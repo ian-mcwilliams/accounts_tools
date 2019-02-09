@@ -1,11 +1,20 @@
 module TaxCheckerSpecHelpers
-  include RSpec::Matchers
 
   def self.verify_accounts_array(r, actual, expected)
     r.expect(actual).to r.be_a(Array)
     r.expect(actual.map { |item| item[:account_code] }.sort).to r.eq(expected.map { |item| item[:account_code] }.sort)
     expected.each do |account|
       r.expect(actual.select { |item| item[:account_code] == account[:account_code] }[0]).to r.eq(account)
+    end
+  end
+
+  def self.verify_reports_summary(r, actual, expected)
+    %i[current previous].each do |period|
+      r.expect(actual[period]).to r.be_a(Hash)
+      r.expect(actual[period].keys.sort).to r.eq(expected[period].keys.sort)
+      r.expect(actual[period][:accounts]).to r.be_a(Array)
+      verify_accounts_array(r, actual[period][:accounts], expected[period][:accounts])
+      r.expect(actual[period][:balances]).to r.eq(expected[period][:balances])
     end
   end
 
@@ -24,10 +33,6 @@ module TaxCheckerSpecHelpers
       cr += 100
       balance += 100
     end
-  end
-
-  def self.unbalanced_actual_account_array(start_val)
-    test_unbalanced_hash_array_generator(test_actual_account_array, start_val)
   end
 
   def self.zero_actual_account_array
@@ -52,10 +57,11 @@ module TaxCheckerSpecHelpers
     { dr: 0, cr: 1, balance: 1 }
   end
 
-  def self.all_calculations_non_zero_array(period)
-    initial_calculation_non_zero_array +
-      input_calculation_non_zero_array(period) +
-      composite_calculation_non_zero_array(period)
+  def self.inputs_hash(zero = false)
+    keys = %w[S5B PS12D S22B]
+    value = zero ? 0 : 1
+    inputs = keys.each_with_object({}) { |key, h| h[key] = value }
+    inputs.merge('no_of_shares' => value, 'share_value' => value)
   end
 
   def self.initial_calculation_zero_array
@@ -180,6 +186,62 @@ module TaxCheckerSpecHelpers
         balance: 380 },
       { account_code: 'E2', account_name: 'test_equity_credit_account', account_balance: :cr, dr: 60, cr: 500,
         balance: 440 }
+    ]
+  end
+
+  def self.abbreviated_accounts_hash
+    {
+      current: {
+        debtors: 1,
+        cash_in_bank_and_at_hand: 1,
+        creditors_within_one_year: -13,
+        creditors_after_one_year: -1,
+        called_up_share_capital: 1,
+        profit_and_loss_account: -10
+      },
+      previous: {
+        debtors: 1,
+        cash_in_bank_and_at_hand: 1,
+        creditors_within_one_year: -13,
+        creditors_after_one_year: -1,
+        called_up_share_capital: 1,
+        profit_and_loss_account: -9
+      }
+    }
+  end
+
+  def self.ct_return_inputs_array
+    [
+      { box: 'AC12', value: 2 },
+      { box: 'AC13', value: 2 },
+      { box: 'AC20', value: 13 },
+      { box: 'AC21', value: 13 },
+      { box: 'AC35', value: 1 },
+      { box: 'AC38', value: 1 },
+      { box: 'AC39', value: 1 },
+      { box: 'AC52', value: 1 },
+      { box: 'AC53', value: 1 },
+      { box: 'AC54', value: 1 },
+      { box: 'AC55', value: 1 },
+      { box: 'AC58', value: 13 },
+      { box: 'AC59', value: 13 },
+      { box: 'AC64', value: 1 },
+      { box: 'AC65', value: 1 },
+      { box: 'AC67', value: 1 },
+      { box: 'AC273', value: 1 },
+      { box: 'AC274', value: 1 },
+      { box: 'AC280', value: 1 },
+      { box: 'AC281', value: 1 },
+      { box: 'AC215', value: 0 },
+      { box: 'CP7', value: 2 },
+      { box: 'CP17', value: 3 },
+      { box: 'CP22', value: 1 },
+      { box: 'CP23', value: 1 },
+      { box: 'CP27', value: 1 },
+      { box: 'CP34', value: 1 },
+      { box: 'CP36', value: 4 },
+      { box: 'CP37', value: 2 },
+      { box: '1', value: 2 }
     ]
   end
 

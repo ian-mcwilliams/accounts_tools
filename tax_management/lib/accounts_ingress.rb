@@ -1,4 +1,4 @@
-require 'simple_xlsx_reader'
+require 'rxl'
 require_relative '../../config'
 
 module AccountsIngress
@@ -19,24 +19,22 @@ module AccountsIngress
   end
 
   def self.accounts_summary_rows(period)
-    file = SimpleXlsxReader.open(CONFIG['accounting_period_filepaths'][period - 1].to_s)
-    file.sheets.each do |sheet|
-      return sheet.rows if sheet.name == 'Accounts Summary'
-    end
+    file = Rxl.read_file(CONFIG['accounting_period_filepaths'][period - 1].to_s)
+    file['Accounts Summary']
   end
 
   def self.accounts_summary_array(period)
-    rows = accounts_summary_rows(period)
-    (1..27).each_with_object([]) do |i, a|
-      account_code = rows[i][1][/^\D\d+/]
-      account_name = rows[i][1].gsub("#{account_code}. ", '')
+    cells = accounts_summary_rows(period)
+    (2..28).each_with_object([]) do |i, a|
+      account_code = cells["B#{i}"][:value][/^\D\d+/]
+      account_name = cells["B#{i}"][:value].gsub("#{account_code}. ", '')
       a << {
         account_code: account_code,
         account_name: account_name,
-        account_balance: { debit: :dr, credit: :cr }[rows[i][2].downcase.to_sym],
-        dr: (rows[i][3] * 100).round.to_i,
-        cr: (rows[i][4] * 100).round.to_i,
-        balance: (rows[i][5] * 100).round.to_i
+        account_balance: { debit: :dr, credit: :cr }[cells["C#{i}"][:value].downcase.to_sym],
+        dr: (cells["D#{i}"][:value] * 100).round.to_i,
+        cr: (cells["E#{i}"][:value] * 100).round.to_i,
+        balance: (cells["F#{i}"][:value] * 100).round.to_i
       }
     end
   end

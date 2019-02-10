@@ -19,8 +19,6 @@ The end to end process is described here.
 **IN TERMINAL:** `ruby run_tool.rb convert_bank_extract`
 
 ## After running this tool
-1. find the result in the `run_results/convert_bank_extract` directory (*NB old results are overwritten*)
-2. copy the row and paste **(VALUES ONLY)** into the bank.xlsx spreadsheet (*NB the empty column D is there... honest! just paste as is*)
-3. copy/drag down the balance column and id column and add the statement filename and period id
 
-**FINALLY:** Verify that the balance on the last row matches the balance on the final transaction on the bank statement to confirm success
+1. Verify that the balance on the last row matches the balance on the final transaction on the bank statement to confirm success
+2. Confirm that the previous version of bank.xlsx is found in bookkeeping/archive named with a timestamped suffix (eg bank_archive_190101180000.xlsx)

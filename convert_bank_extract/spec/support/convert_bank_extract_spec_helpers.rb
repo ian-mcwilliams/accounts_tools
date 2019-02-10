@@ -3,50 +3,57 @@ module ConvertBankExtractSpecHelpers
   def self.test_hashes
     [
       {
+        id: 1,
+        period: '1-1',
+        statement: '12345_123456-123456',
         date: '10/01/2016',
-        debit: 100,
-        credit: nil,
+        debit: nil,
+        credit: '100.00',
+        balance: '100.00',
         subcat: 'ABC',
         description: 'XYZ'
       },
       {
+        id: 2,
+        period: '1-1',
+        statement: '12345_123456-123456',
         date: '05/01/2016',
         debit: nil,
-        credit: 200,
+        credit: '200.00',
+        balance: '300.00',
         subcat: 'DEF',
         description: 'UVW'
       },
       {
+        id: 3,
+        period: '1-1',
+        statement: '12345_123456-123456',
         date: '01/01/2016',
-        debit: 50,
+        debit: '50.00',
         credit: nil,
+        balance: '250.00',
         subcat: 'GHI',
         description: 'RST'
       }
     ]
   end
 
-  def self.integration_test_hashes
-    {
-      'A1' => { value:  '01/01/2017' },
-      'B1' => { value:  '2.30' },
-      'C1' => { value:  nil },
-      'D1' => { value:  nil },
-      'E1' => { value:  'PAYMENT' },
-      'F1' => { value:  'Town Borough     ON 12 JAN          CLP' },
-      'A2' => { value:  '05/01/2017' },
-      'B2' => { value:  nil },
-      'C2' => { value:  '3300.00' },
-      'D2' => { value:  nil },
-      'E2' => { value:  'DIRECTDEP' },
-      'F2' => { value:  'SOME RECRU    00000/00000        BGC' },
-      'A3' => { value: '10/01/2017' },
-      'B3' => { value: '5.65' },
-      'C3' => { value:  nil },
-      'D3' => { value:  nil },
-      'E3' => { value:  'PAYMENT' },
-      'F3' => { value:  'SOME STORE 3213      ON 12 JAN          CLP' }
-    }
+  def self.restore_test_state(state: :clear)
+    bookkeeping_path = CONFIG['bookkeeping_path']
+    archive_path = CONFIG['bookkeeping_archive_path']
+    filepaths = dir_filenames(bookkeeping_path).map { |item| "#{bookkeeping_path}#{item}" }
+    filepaths.concat(dir_filenames(archive_path).map { |item| "#{archive_path}#{item}" })
+    filepaths.each { |filepath| File.delete(filepath) }
+    bank_source = 'convert_bank_extract/spec/support/test_files/bank.xlsx'
+    FileUtils.cp(bank_source, CONFIG['bookkeeping_path']) if state == :setup
+  end
+
+  def self.dir_filenames(path)
+    filenames = Dir.entries(path)
+    filenames.delete('.')
+    filenames.delete('..')
+    filenames.delete('archive')
+    filenames
   end
 
 end

@@ -9,6 +9,8 @@ The end to end process is described here.
 
 ## Before running this tool
 
+NB For a cleaner way to complete step 3, go to the 'view statements' section of the Barclays site, same place as to download the PDF - in the relevant row, the 'view transactions' link opens the transactions for the relevant period which can then be exported as usual
+
 1. download the PDF bank statement and save it in records/bank_statements
 2. the PDF statement filename is based on the **opening and closing transaction dates** on the statement (the first and last transaction in the list of transactions, not the opening and closing balance )
 3. when you then download the CSV from Barclays the extract **MUST** match the opening and closing transaction dates from the PDF statement

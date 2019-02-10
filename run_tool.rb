@@ -9,7 +9,7 @@ target = args.shift
 
 module RunTool
 
-  def run_tool(target, args)
+  def self.run_tool(target, _)
     store_target = ENV['ACCOUNT_TOOL']
     ENV['ACCOUNT_TOOL'] = target
 

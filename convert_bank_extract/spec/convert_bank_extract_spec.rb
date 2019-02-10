@@ -17,10 +17,13 @@ describe 'ConvertBankExtract' do
       ConvertBankExtract.convert_bank_extract
       workbook = Rxl.read_file_as_tables(CONFIG['bank_book_filepath'])
       expect(workbook.keys).to eq(['bank'])
+      expect(workbook['bank'].count).to eq(16)
+      expect(workbook['bank'][0]['id']).to eq(1)
       expect(workbook['bank'][-1]['id']).to eq('16')
       archive_filename = ConvertBankExtractSpecHelpers.dir_filenames(CONFIG['bookkeeping_archive_path'])[0]
       archive = Rxl.read_file_as_tables("#{CONFIG['bookkeeping_archive_path']}#{archive_filename}")
       expect(archive.keys).to eq(['bank'])
+      expect(archive['bank'].count).to eq(13)
       expect(archive['bank'][-1]['id']).to eq(13)
     end
 

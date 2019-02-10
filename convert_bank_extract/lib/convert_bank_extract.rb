@@ -16,7 +16,7 @@ module ConvertBankExtract
     filepath = CONFIG['bank_book_filepath']
     archive_filename = "bank_archive_#{DateTime.now.strftime('%y%m%d%H%M%S')}.xlsx"
     archive_current_bank_book(archive_filename)
-    create_excel_file(filepath, hashes)
+    create_excel_file(filepath, bank_book + hashes)
   end
 
   def self.load_file(file_key)
@@ -39,17 +39,17 @@ module ConvertBankExtract
 
   def self.build_hashes(arrays, first_id, period, opening_balance)
     hashes = build_initial_hashes(arrays)
-    hashes.sort_by! { |hash| DateTime.parse(hash[:date]) }
-    opening_date = DateTime.parse(hashes[0][:date]).strftime('%y%m%d')
-    closing_date = DateTime.parse(hashes[-1][:date]).strftime('%y%m%d')
+    hashes.sort_by! { |hash| DateTime.parse(hash['date']) }
+    opening_date = DateTime.parse(hashes[0]['date']).strftime('%y%m%d')
+    closing_date = DateTime.parse(hashes[-1]['date']).strftime('%y%m%d')
     statement = "08046_#{opening_date}-#{closing_date}"
     current_balance = opening_balance.to_s
     hashes.each_with_index do |hash, i|
-      hash[:id] = (first_id.to_i + i).to_s
-      hash[:period] = period
-      hash[:statement] = statement
-      current_balance = new_balance(current_balance, hash[:debit], hash[:credit])
-      hash[:balance] = current_balance.dup
+      hash['id'] = (first_id.to_i + i).to_s
+      hash['period'] = period
+      hash['statement'] = statement
+      current_balance = new_balance(current_balance, hash['debit'], hash['credit'])
+      hash['balance'] = current_balance.dup
     end
   end
 
@@ -64,11 +64,11 @@ module ConvertBankExtract
   def self.build_initial_hashes(arrays)
     arrays.map do |array|
       {
-        date: array[1],
-        debit: array[3][0] == '-' ? array[3].gsub('-', '') : nil,
-        credit: array[3][0] == '-' ? nil : array[3].gsub('-', ''),
-        subcat: array[4],
-        description: array[5]
+        'date' => array[1],
+        'debit' => array[3][0] == '-' ? array[3].gsub('-', '') : nil,
+        'credit' => array[3][0] == '-' ? nil : array[3].gsub('-', ''),
+        'subcat' => array[4],
+        'description' => array[5]
       }
     end
   end
@@ -82,7 +82,7 @@ module ConvertBankExtract
   end
 
   def self.create_excel_file(filepath, hashes)
-    order = %i[id period statement date debit credit balance subcat description]
+    order = %w[id period statement date debit credit balance subcat description]
     Rxl.write_file_as_tables(filepath, { 'bank' => hashes }, order)
   end
 

@@ -1,4 +1,5 @@
 require 'csv'
+require 'rxl'
 require 'yaml'
 require_relative '../../config'
 
@@ -13,7 +14,7 @@ module ConvertBankExtract
     opening_balance = bank_book[-1]['balance']
     hashes = build_hashes(extract, first_id, period, opening_balance)
     filepath = CONFIG['bank_book_filepath']
-    archive_filename = "bank_archive_#{DateTime.now.strftime('%y%m%d%H%M%S')}"
+    archive_filename = "bank_archive_#{DateTime.now.strftime('%y%m%d%H%M%S')}.xlsx"
     archive_current_bank_book(archive_filename)
     create_excel_file(filepath, hashes)
   end

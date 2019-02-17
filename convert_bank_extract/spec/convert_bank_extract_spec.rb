@@ -13,13 +13,21 @@ describe 'ConvertBankExtract' do
 
   context 'integration tests' do
 
-    it 'saves an excel file built from csv data' do
+    it 'builds a write hash' do
+      write_hash = ConvertBankExtract.build_write_hash
+      expect(write_hash.keys).to eq(['bank', :formats])
+      expect(write_hash['bank']).to be_a(Array)
+      expect(write_hash[:formats].keys).to eq(['bank'])
+      expect(write_hash[:formats]['bank'].keys).to eq([:headers, 'A', 'D', 'E', 'F', 'G'])
+    end
+
+    it 'saves an excel file built from csv data', :focus do
       ConvertBankExtract.convert_bank_extract
       workbook = Rxl.read_file_as_tables(CONFIG['bank_book_filepath'])
       expect(workbook.keys).to eq(['bank'])
       expect(workbook['bank'].count).to eq(16)
       expect(workbook['bank'][0]['id']).to eq(1)
-      expect(workbook['bank'][-1]['id']).to eq('16')
+      expect(workbook['bank'][-1]['id']).to eq(16)
       archive_filename = ConvertBankExtractSpecHelpers.dir_filenames(CONFIG['bookkeeping_archive_path'])[0]
       archive = Rxl.read_file_as_tables("#{CONFIG['bookkeeping_archive_path']}#{archive_filename}")
       expect(archive.keys).to eq(['bank'])
@@ -37,6 +45,7 @@ describe 'ConvertBankExtract' do
         file = ConvertBankExtract.load_file(:bank_book)
         expect(file.class).to be(Array)
         expect(file[0].keys).to eq(%w[id period statement date debit credit balance subcat description])
+        expect(file[0]['date']).to be_a(DateTime)
       end
 
       it 'loads the CSV file into memory' do
@@ -63,17 +72,20 @@ describe 'ConvertBankExtract' do
       file = ConvertBankExtract.load_file(:csv)
       hashes = ConvertBankExtract.build_hashes(file, 1, '1-3', '600.00')
       hashes.each do |hash|
-        expect(hash[:id]).to match(/^\d+$/)
-        expect(hash[:period]).to match(/^\d+-\d+$/)
-        expect(hash[:statement]).to match(/^08046_\d{6}-\d{6}$/)
-        expect(hash[:date]).to match(/^\d\d\/\d\d\/\d{4}$/)
-        expect(hash[:debit]).to hash[:credit] ? be_nil : match(/^\d+\.\d\d$/)
-        expect(hash[:credit]).to hash[:debit] ? be_nil : match(/^\d+\.\d\d$/)
-        expect(hash[:balance]).to match(/^\d+\.\d\d$/)
-        expect(hash[:subcat]).to be_a(String)
-        expect(hash[:subcat]).not_to be_empty
-        expect(hash[:description]).to be_a(String)
-        expect(hash[:description]).not_to be_empty
+        expect(hash['id']).to be_a(Fixnum)
+        expect(hash['period']).to match(/^\d+-\d+$/)
+        expect(hash['statement']).to match(/^08046_\d{6}-\d{6}$/)
+        expect(hash['date']).to be_a(DateTime)
+        expect(hash['debit']).to hash[:credit] ? be_nil : be_a(Float)
+        expect(hash['debit'].to_s).to hash[:credit] ? be_nil : match(/^\d+\.\d+$/)
+        expect(hash['credit']).to hash[:debit] ? be_nil : be_a(Float)
+        expect(hash['credit'].to_s).to hash[:debit] ? be_nil : match(/^\d+\.\d+$/)
+        expect(hash['balance']).to be_a(Float)
+        expect(hash['balance'].to_s).to match(/^\d+\.\d+$/)
+        expect(hash['subcat']).to be_a(String)
+        expect(hash['subcat']).not_to be_empty
+        expect(hash['description']).to be_a(String)
+        expect(hash['description']).not_to be_empty
       end
     end
 
@@ -104,7 +116,8 @@ describe 'ConvertBankExtract' do
     it 'creates the new bank book file' do
       hashes = ConvertBankExtractSpecHelpers.test_hashes
       filepath = CONFIG['bank_book_filepath'].gsub('bank.xlsx', 'test_bank.xlsx')
-      ConvertBankExtract.create_excel_file(filepath, hashes)
+      write_hash = { 'bank' => hashes }
+      ConvertBankExtract.create_excel_file(filepath, write_hash)
       expect(File.exist?(filepath)).to be(true)
     end
 

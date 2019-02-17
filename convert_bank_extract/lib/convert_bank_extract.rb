@@ -7,16 +7,21 @@ module ConvertBankExtract
   CONFIG = Config.get_config
 
   def self.convert_bank_extract
+    filepath = CONFIG['bank_book_filepath']
+    write_hash = build_write_hash
+    archive_filename = "bank_archive_#{DateTime.now.strftime('%y%m%d%H%M%S')}.xlsx"
+    archive_current_bank_book(archive_filename)
+    create_excel_file(filepath, write_hash)
+  end
+
+  def self.build_write_hash
     bank_book = load_file(:bank_book)
     extract = load_file(:csv)
     first_id = bank_book[-1]['id'].to_i + 1
     period = next_period_string(bank_book[-1]['period'])
     opening_balance = bank_book[-1]['balance']
     hashes = build_hashes(extract, first_id, period, opening_balance)
-    filepath = CONFIG['bank_book_filepath']
-    archive_filename = "bank_archive_#{DateTime.now.strftime('%y%m%d%H%M%S')}.xlsx"
-    archive_current_bank_book(archive_filename)
-    create_excel_file(filepath, bank_book + hashes)
+    { 'bank' => bank_book + hashes, formats: formats_hash }
   end
 
   def self.load_file(file_key)
@@ -45,11 +50,14 @@ module ConvertBankExtract
     statement = "08046_#{opening_date}-#{closing_date}"
     current_balance = opening_balance.to_s
     hashes.each_with_index do |hash, i|
-      hash['id'] = (first_id.to_i + i).to_s
+      hash['id'] = (first_id.to_i + i)
       hash['period'] = period
       hash['statement'] = statement
+      hash['date'] = DateTime.parse(hash['date'])
       current_balance = new_balance(current_balance, hash['debit'], hash['credit'])
-      hash['balance'] = current_balance.dup
+      hash['balance'] = current_balance.to_f
+      hash['debit'] = hash['debit'].to_f
+      hash['credit'] = hash['credit'].to_f
     end
   end
 
@@ -73,6 +81,23 @@ module ConvertBankExtract
     end
   end
 
+  def self.formats_hash
+    {
+      'bank' => {
+        headers: {
+          bold: true,
+          h_align: 'center',
+          fill: '999999'
+        },
+        'A' => { format: :number },
+        'D' => { format: :date },
+        'E' => { format: :number, decimals: 2 },
+        'F' => { format: :number, decimals: 2 },
+        'G' => { format: :number, decimals: 2 },
+      }
+    }
+  end
+
   def self.archive_current_bank_book(archive_filename)
     bookkeeping_path = CONFIG['bookkeeping_path']
     bookkeeping_archive_path = CONFIG['bookkeeping_archive_path']
@@ -81,33 +106,9 @@ module ConvertBankExtract
     FileUtils.mv("#{bookkeeping_path}#{archive_filename}", archive_bank_book_filepath)
   end
 
-  def self.create_excel_file(filepath, hashes)
+  def self.create_excel_file(filepath, write_hash)
     order = %w[id period statement date debit credit balance subcat description]
-    Rxl.write_file_as_tables(filepath, { 'bank' => hashes }, order)
-  end
-
-  def self.hashes_to_rxl_worksheet(hashes, order, write_headers: true)
-    rows = hashes.map do |hash|
-      order.map { |item| hash[item] }
-    end
-    rows.unshift(order.map { |item| "#{item}" }) if write_headers
-    rows_to_rxl_worksheet(rows)
-  end
-
-  def self.rows_to_rxl_worksheet(rows)
-    rxl_worksheet = {}
-    rows.count.times do |i|
-      rows[i].each_with_index do |cell_value, index|
-        rxl_worksheet["#{column_name(index)}#{i + 1}"] = { value: cell_value }
-      end
-    end
-    rxl_worksheet
-  end
-
-  def self.column_name(int)
-    name = 'A'
-    int.times { name.succ! }
-    name
+    Rxl.write_file_as_tables(filepath, write_hash, order)
   end
 
 end

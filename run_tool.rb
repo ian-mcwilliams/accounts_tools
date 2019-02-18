@@ -20,7 +20,7 @@ module RunTool
       ConvertBankExtract.convert_bank_extract
 
     when 'reconcile_sales'
-      require_relative 'contract_management/lib/books_ingress'
+      require_relative 'reconcile_contracts_and_sales/lib/books_ingress'
       BooksIngress.import_books
 
     else

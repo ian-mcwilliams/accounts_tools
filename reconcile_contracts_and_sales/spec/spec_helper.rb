@@ -1,5 +1,5 @@
 ENV['RUN_ENV'] = 'test'
-ENV['TOOL_ROOT'] = 'contract_management/'
+ENV['TOOL_ROOT'] = 'reconcile_contracts_and_sales/'
 
 require_relative '../../env'
 

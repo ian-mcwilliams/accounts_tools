@@ -7,7 +7,8 @@ module BooksIngress
   def self.import_books
     filepaths_hash = {
       contracts: CONFIG['contracts_filepath'],
-      sales_and_vat: CONFIG['sales_and_vat_filepath']
+      sales_and_vat: CONFIG['sales_and_vat_filepath'],
+      timesheets: CONFIG['timesheets_filepath']
     }
     Rxl.read_files(filepaths_hash, :as_tables)
   end

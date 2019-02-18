@@ -4,6 +4,7 @@ default:
     bank_extract: data.csv
     contracts: contracts.xlsx
     sales_and_vat: sales_and_vat.xlsx
+    timesheets: timesheets.xlsx
   rel_paths:
     archive: archive/
     bookkeeping: bookkeeping/

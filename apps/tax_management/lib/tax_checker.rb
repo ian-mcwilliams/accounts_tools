@@ -21,7 +21,7 @@ module TaxChecker
 
   def self.calculation_inputs(period)
     raise("the period must be greater than 0 - got #{period}") unless period > 0
-    all_periods = JSON.parse(File.read('tax_management/lib/calculation_inputs.json'))['calculation_inputs']
+    all_periods = JSON.parse(File.read('apps/tax_management/lib/calculation_inputs.json'))['calculation_inputs']
     inputs_hash = { current: all_periods.find { |item| item['period'] == period } }
     inputs_hash[:previous] = all_periods.find { |item| item['period'] == period - 1 } if period > 1
     inputs_hash

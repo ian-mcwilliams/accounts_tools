@@ -1,7 +1,7 @@
 require 'csv'
 require 'rxl'
 require 'yaml'
-require_relative '../../config'
+require_relative '../../../config'
 
 module ConvertBankExtract
   CONFIG = Config.get_config

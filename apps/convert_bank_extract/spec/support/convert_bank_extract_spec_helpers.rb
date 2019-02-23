@@ -44,7 +44,7 @@ module ConvertBankExtractSpecHelpers
     filepaths = dir_filenames(bookkeeping_path).map { |item| "#{bookkeeping_path}#{item}" }
     filepaths.concat(dir_filenames(archive_path).map { |item| "#{archive_path}#{item}" })
     filepaths.each { |filepath| File.delete(filepath) }
-    bank_source = 'convert_bank_extract/spec/support/test_files/bank.xlsx'
+    bank_source = 'apps/convert_bank_extract/spec/support/test_files/bank.xlsx'
     FileUtils.cp(bank_source, CONFIG['bookkeeping_path']) if state == :setup
   end
 

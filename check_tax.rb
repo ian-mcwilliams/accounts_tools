@@ -1,5 +1,5 @@
 require_relative 'env'
-require_relative 'tax_management/lib/tax_checker'
+require_relative 'apps/tax_management/lib/tax_checker'
 require 'awesome_print'
 
 inputs = TaxChecker.calculation_inputs(7)

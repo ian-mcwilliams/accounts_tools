@@ -16,7 +16,7 @@ module RunTool
     case ENV['ACCOUNT_TOOL']
 
     when 'convert_bank_extract'
-      require_relative 'apps/convert_bank_extract/lib/apps/convert_bank_extract'
+      require_relative 'apps/convert_bank_extract/lib/convert_bank_extract'
       ConvertBankExtract.convert_bank_extract
 
     when 'reconcile_sales'

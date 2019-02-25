@@ -6,13 +6,21 @@ This tool is designed to take a downloaded csv from Barclays containing account 
 
 ## Before running this tool
 
-NB For a cleaner way to complete step 3, go to the 'view statements' section of the Barclays site, same place as to download the PDF - in the relevant row, the 'view transactions' link opens the transactions for the relevant period which can then be exported as usual
+### Download the PDF and CSV
 
-1. download the PDF bank statement and save it in records/bank_statements
-2. the PDF statement filename is based on the **opening and closing transaction dates** on the statement (the first and last transaction in the list of transactions, not the opening and closing balance )
-3. when you then download the CSV from Barclays the extract **MUST** match the opening and closing transaction dates from the PDF statement
-4. save the CSV file to the accounts_tools/source_file directory as data.csv (*this is the default filename but watch out for duplicate naming avoidance like "data (1).csv"*)
-5. ensure the sheet's tab name is "data" (*this is the current default so no change should be needed*)
+1. download the PDF bank statement from barclays
+2. go to the 'view statements' section of the Barclays site, same place as to download the PDF - in the relevant row, the 'view transactions' link opens the transactions for the relevant period which can then be exported as usual
+- NB when you download the CSV from Barclays the extract **MUST** match the opening and closing transaction dates from the PDF statement
+
+### Save the PDF in Dropbox
+
+- save to LiveCorp/records/bank_statements
+- the PDF statement filename is based on the **opening and closing transaction dates** on the statement (the first and last transaction in the list of transactions, not the opening and closing balance )
+
+### Save the CSV in dev/accounts_tools
+
+- save the CSV file to the dev/accounts_tools/source_file directory as data.csv (*this is the default filename but watch out for duplicate naming avoidance like "data (1).csv"*)
+- ensure the sheet's tab name is "data" (*this is the current default so no change should be needed*)
 
 ## Running this tool
 **IN TERMINAL:** `ruby run_tool.rb convert_bank_extract`

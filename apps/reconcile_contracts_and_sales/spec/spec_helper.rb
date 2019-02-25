@@ -1,11 +1,10 @@
 ENV['RUN_ENV'] = 'test'
-ENV['TOOL_ROOT'] = 'tax_management/'
+ENV['TOOL_ROOT'] = 'apps/reconcile_contracts_and_sales/'
 
-require_relative '../../env'
+require_relative '../../../env'
 
-require_relative 'support/tax_checker_spec_helpers'
-require 'awesome_print'
 require 'rspec'
+require 'rxl'
 
 # RSpec.configure do |config|
 #   config.treat_symbols_as_metadata_keys_with_true_values = true

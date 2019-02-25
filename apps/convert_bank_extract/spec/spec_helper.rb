@@ -1,8 +1,8 @@
 ENV['RUN_ENV'] = 'test'
-ENV['TOOL_ROOT'] = 'convert_bank_extract/'
+ENV['TOOL_ROOT'] = 'apps/convert_bank_extract/'
 
-require_relative '../../env'
-require_relative '../../config'
+require_relative '../../../env'
+require_relative '../../../config'
 
 require_relative 'support/convert_bank_extract_spec_helpers'
 require 'rspec'

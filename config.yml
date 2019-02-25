@@ -3,7 +3,8 @@ default:
     bank_book: bank.xlsx
     bank_extract: data.csv
     contracts: contracts.xlsx
-    sales_and_vat: sales_and_vat.xlsx
+    invoices: invoices.xlsx
+    timesheets: timesheets.xlsx
   rel_paths:
     archive: archive/
     bookkeeping: bookkeeping/

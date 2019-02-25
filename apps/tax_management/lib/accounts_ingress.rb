@@ -1,5 +1,5 @@
 require 'rxl'
-require_relative '../../config'
+require_relative '../../../config'
 
 module AccountsIngress
   CONFIG = Config.get_config

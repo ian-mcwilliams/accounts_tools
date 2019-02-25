@@ -35,7 +35,8 @@ module Config
     params['bank_book_filepath'] = "#{params['bookkeeping_path']}#{filenames['bank_book']}"
     params['bank_extract_filepath'] = "#{tool_root}#{rel_paths['source_files']}#{filenames['bank_extract']}"
     params['contracts_filepath'] = "#{params['bookkeeping_path']}#{filenames['contracts']}"
-    params['sales_and_vat_filepath'] = "#{params['bookkeeping_path']}#{filenames['sales_and_vat']}"
+    params['invoices_filepath'] = "#{params['bookkeeping_path']}#{filenames['invoices']}"
+    params['timesheets_filepath'] = "#{params['bookkeeping_path']}#{filenames['timesheets']}"
     params
   end
 end

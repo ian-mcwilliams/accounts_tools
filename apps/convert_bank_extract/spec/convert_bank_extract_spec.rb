@@ -21,7 +21,7 @@ describe 'ConvertBankExtract' do
       expect(write_hash[:formats]['bank'].keys).to eq([:headers, 'A', 'D', 'E', 'F', 'G'])
     end
 
-    it 'saves an excel file built from csv data', :focus do
+    it 'saves an excel file built from csv data' do
       ConvertBankExtract.convert_bank_extract
       workbook = Rxl.read_file_as_tables(CONFIG['bank_book_filepath'])
       expect(workbook.keys).to eq(['bank'])

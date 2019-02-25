@@ -2,10 +2,7 @@
 
 # Convert Bank Extract
 
-This tool is designed to take a downloaded csv from Barclays containing account entries as an input, and it will
-output a console which can be copied directly to the bank.xlsx bookkeeping file.
-
-The end to end process is described here.
+This tool is designed to take a downloaded csv from Barclays containing account entries as an input, on running the process the existing bank book will be archived and the new one with added entries will be saved.
 
 ## Before running this tool
 

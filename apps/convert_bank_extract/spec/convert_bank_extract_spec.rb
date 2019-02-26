@@ -50,7 +50,7 @@ describe 'ConvertBankExtract' do
 
   context 'unit tests' do
 
-    context 'import files to memory' do
+    context 'verify presence of required files' do
 
       it 'throws an error if the bank book is missing' do
         FileUtils.rm(CONFIG['bank_book_filepath'])
@@ -69,6 +69,10 @@ describe 'ConvertBankExtract' do
         expected = "bank statement pdf not found at path: #{CONFIG['bank_statement_filepath']}"
         expect { ConvertBankExtract.verify_file_presence }.to raise_error(expected)
       end
+
+    end
+
+    context 'import files to memory' do
 
       it 'loads the current bank book file into memory' do
         file = ConvertBankExtract.load_file(:bank_book)

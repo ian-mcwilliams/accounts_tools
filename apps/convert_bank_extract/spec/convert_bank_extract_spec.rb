@@ -164,7 +164,14 @@ describe 'ConvertBankExtract' do
       expect(File.exist?(filepath)).to be(true)
     end
 
-    it 'deletes the source file after process complete' do
+    it 'archives the bank statement' do
+      filename = 'bank_statement_filename.pdf'
+      ConvertBankExtract.archive_bank_statement(filename)
+      expect(File.exists?("#{CONFIG['bank_statements_path']}#{filename}")).to be(true)
+      expect(File.exists?("#{CONFIG['bank_statement_filepath']}#{filename}")).to be(false)
+    end
+
+    it 'deletes the source csv file after process complete' do
       ConvertBankExtract.delete_source_file
       expect(File.exist?("#{CONFIG['bank_extract_filepath']}")).to be(false)
     end

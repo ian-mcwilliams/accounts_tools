@@ -133,6 +133,13 @@ module ConvertBankExtract
     Rxl.write_file_as_tables(filepath, write_hash, order)
   end
 
+  def self.archive_bank_statement(archive_filename)
+    FileUtils.mv(CONFIG['bank_statement_filepath'], CONFIG['bank_statements_path'])
+    old_filepath = "#{CONFIG['bank_statements_path']}#{CONFIG['bank_statement_filename']}"
+    new_filepath = "#{CONFIG['bank_statements_path']}#{archive_filename}"
+    File.rename(old_filepath, new_filepath)
+  end
+
   def self.delete_source_file
     FileUtils.rm(CONFIG['bank_extract_filepath'])
   end

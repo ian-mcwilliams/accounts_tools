@@ -36,7 +36,9 @@ module Config
     params['bookkeeping_archive_path'] = "#{livecorp}#{rel_paths['bookkeeping']}#{rel_paths['archive']}"
     params['bank_book_filepath'] = "#{params['bookkeeping_path']}#{filenames['bank_book']}"
     params['bank_extract_filepath'] = "#{tool_root}#{rel_paths['source_files']}#{filenames['bank_extract']}"
+    params['bank_statement_filename'] = filenames['bank_statement']
     params['bank_statement_filepath'] = "#{tool_root}#{rel_paths['source_files']}#{filenames['bank_statement']}"
+    params['bank_statements_path'] = "#{livecorp}#{rel_paths['bank_statements']}"
     params['contracts_filepath'] = "#{params['bookkeeping_path']}#{filenames['contracts']}"
     params['invoices_filepath'] = "#{params['bookkeeping_path']}#{filenames['invoices']}"
     params['timesheets_filepath'] = "#{params['bookkeeping_path']}#{filenames['timesheets']}"

@@ -8,6 +8,7 @@ default:
     timesheets: timesheets.xlsx
   rel_paths:
     archive: archive/
+    bank_statements: records/bank_statements/
     bookkeeping: bookkeeping/
     dropbox:
       ians_macbook_pro_local: ../../../Dropbox/

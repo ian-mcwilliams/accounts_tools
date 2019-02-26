@@ -13,6 +13,12 @@ describe 'ConvertBankExtract' do
 
   context 'integration tests' do
 
+    it 'throws an error if a file is missing' do
+      FileUtils.rm(CONFIG['bank_book_filepath'])
+      expected = "bank book not found at path: #{CONFIG['bank_book_filepath']}"
+      expect { ConvertBankExtract.convert_bank_extract }.to raise_error(expected)
+    end
+
     it 'builds a write hash' do
       write_hash = ConvertBankExtract.build_write_hash
       expect(write_hash.keys).to eq(['bank', :formats])
@@ -45,6 +51,24 @@ describe 'ConvertBankExtract' do
   context 'unit tests' do
 
     context 'import files to memory' do
+
+      it 'throws an error if the bank book is missing' do
+        FileUtils.rm(CONFIG['bank_book_filepath'])
+        expected = "bank book not found at path: #{CONFIG['bank_book_filepath']}"
+        expect { ConvertBankExtract.verify_file_presence }.to raise_error(expected)
+      end
+
+      it 'throws an error if the csv is missing' do
+        FileUtils.rm(CONFIG['bank_extract_filepath'])
+        expected = "bank extract csv not found at path: #{CONFIG['bank_extract_filepath']}"
+        expect { ConvertBankExtract.verify_file_presence }.to raise_error(expected)
+      end
+
+      it 'throws an error if the pdf is missing' do
+        FileUtils.rm(CONFIG['bank_statement_filepath'])
+        expected = "bank statement pdf not found at path: #{CONFIG['bank_statement_filepath']}"
+        expect { ConvertBankExtract.verify_file_presence }.to raise_error(expected)
+      end
 
       it 'loads the current bank book file into memory' do
         file = ConvertBankExtract.load_file(:bank_book)

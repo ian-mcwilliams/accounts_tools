@@ -7,12 +7,25 @@ module ConvertBankExtract
   CONFIG = Config.get_config
 
   def self.convert_bank_extract
+    verify_file_presence
     filepath = CONFIG['bank_book_filepath']
     write_hash = build_write_hash
     archive_filename = "bank_archive_#{DateTime.now.strftime('%y%m%d%H%M%S')}.xlsx"
     archive_current_bank_book(archive_filename)
     create_excel_file(filepath, write_hash)
     delete_source_file
+  end
+
+  def self.verify_file_presence
+    unless File.exists?(CONFIG['bank_book_filepath'])
+      raise("bank book not found at path: #{CONFIG['bank_book_filepath']}")
+    end
+    unless File.exists?(CONFIG['bank_extract_filepath'])
+      raise("bank extract csv not found at path: #{CONFIG['bank_extract_filepath']}")
+    end
+    unless File.exists?(CONFIG['bank_statement_filepath'])
+      raise("bank statement pdf not found at path: #{CONFIG['bank_statement_filepath']}")
+    end
   end
 
   def self.build_write_hash

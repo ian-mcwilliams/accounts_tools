@@ -2,6 +2,7 @@ default:
   filenames:
     bank_book: bank.xlsx
     bank_extract: data.csv
+    bank_statement: E-Statement.pdf
     contracts: contracts.xlsx
     invoices: invoices.xlsx
     timesheets: timesheets.xlsx

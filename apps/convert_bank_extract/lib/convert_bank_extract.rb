@@ -102,6 +102,7 @@ module ConvertBankExtract
     bookkeeping_path = CONFIG['bookkeeping_path']
     bookkeeping_archive_path = CONFIG['bookkeeping_archive_path']
     archive_bank_book_filepath = "#{bookkeeping_archive_path}#{archive_filename}"
+    FileUtils.mkdir_p(bookkeeping_archive_path)
     File.rename("#{bookkeeping_path}bank.xlsx", "#{bookkeeping_path}#{archive_filename}")
     FileUtils.mv("#{bookkeeping_path}#{archive_filename}", archive_bank_book_filepath)
   end

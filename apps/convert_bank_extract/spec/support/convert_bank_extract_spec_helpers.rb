@@ -39,13 +39,13 @@ module ConvertBankExtractSpecHelpers
   end
 
   def self.restore_test_state(state: :clear)
-    bookkeeping_path = CONFIG['bookkeeping_path']
-    archive_path = CONFIG['bookkeeping_archive_path']
-    filepaths = dir_filenames(bookkeeping_path).map { |item| "#{bookkeeping_path}#{item}" }
-    filepaths.concat(dir_filenames(archive_path).map { |item| "#{archive_path}#{item}" })
-    filepaths.each { |filepath| File.delete(filepath) }
+    bookkeeping_path = 'apps/convert_bank_extract/spec/support/test_files/bookkeeping'
     bank_source = 'apps/convert_bank_extract/spec/support/test_files/bank.xlsx'
-    FileUtils.cp(bank_source, CONFIG['bookkeeping_path']) if state == :setup
+    FileUtils.rm_rf(bookkeeping_path)
+    if state == :setup
+      FileUtils.mkdir_p(bookkeeping_path)
+      FileUtils.cp(bank_source, bookkeeping_path)
+    end
   end
 
   def self.dir_filenames(path)

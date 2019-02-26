@@ -35,6 +35,11 @@ describe 'ConvertBankExtract' do
       expect(archive['bank'][-1]['id']).to eq(13)
     end
 
+    it 'deletes the source file after completing the process' do
+      ConvertBankExtract.convert_bank_extract
+      expect(File.exist?("#{CONFIG['bank_extract_filepath']}")).to be(false)
+    end
+
   end
 
   context 'unit tests' do
@@ -119,6 +124,11 @@ describe 'ConvertBankExtract' do
       write_hash = { 'bank' => hashes }
       ConvertBankExtract.create_excel_file(filepath, write_hash)
       expect(File.exist?(filepath)).to be(true)
+    end
+
+    it 'deletes the source file after process complete' do
+      ConvertBankExtract.delete_source_file
+      expect(File.exist?("#{CONFIG['bank_extract_filepath']}")).to be(false)
     end
 
   end

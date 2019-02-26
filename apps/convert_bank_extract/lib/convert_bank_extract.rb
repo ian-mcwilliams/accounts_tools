@@ -12,6 +12,7 @@ module ConvertBankExtract
     archive_filename = "bank_archive_#{DateTime.now.strftime('%y%m%d%H%M%S')}.xlsx"
     archive_current_bank_book(archive_filename)
     create_excel_file(filepath, write_hash)
+    delete_source_file
   end
 
   def self.build_write_hash
@@ -110,6 +111,10 @@ module ConvertBankExtract
   def self.create_excel_file(filepath, write_hash)
     order = %w[id period statement date debit credit balance subcat description]
     Rxl.write_file_as_tables(filepath, write_hash, order)
+  end
+
+  def self.delete_source_file
+    FileUtils.rm(CONFIG['bank_extract_filepath'])
   end
 
 end

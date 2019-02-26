@@ -32,4 +32,4 @@ test:
     dropbox:
     livecorp: spec/support/test_files/
     save_files: spec/support/test_files/
-    source_files: spec/support/test_files/
+    source_files: spec/support/test_files/source_files/

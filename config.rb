@@ -24,12 +24,14 @@ module Config
   def self.build_params(params)
     filenames = params['filenames']
     rel_paths = params['rel_paths']
+    codes = params['codes']
     tool_root = ENV['TOOL_ROOT']
     livecorp = "#{tool_root}#{rel_paths['dropbox']}#{rel_paths['livecorp']}"
     params['accounting_periods'] ||= (0..9).to_a.map { '' }
     params['accounting_period_filepaths'] = params['accounting_periods'].map.with_index(1) do |item, i|
       "#{livecorp}#{item}Accounts#{i}.xlsx"
     end
+    params['bank_prefix'] = codes['bank_prefix']
     params['bookkeeping_path'] = "#{livecorp}#{rel_paths['bookkeeping']}"
     params['bookkeeping_archive_path'] = "#{livecorp}#{rel_paths['bookkeeping']}#{rel_paths['archive']}"
     params['bank_book_filepath'] = "#{params['bookkeeping_path']}#{filenames['bank_book']}"

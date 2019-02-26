@@ -83,6 +83,13 @@ module ConvertBankExtract
     "#{new_pence[0..-3]}.#{new_pence[-2..-1]}"
   end
 
+  def self.bank_statement_filename(hashes)
+    sorted_dates = hashes.map { |h| h['date'] }.sort
+    opening_date_string = sorted_dates[0].strftime('%y%m%d')
+    closing_date_string = sorted_dates[-1].strftime('%y%m%d')
+    "#{CONFIG['bank_prefix']}_#{opening_date_string}-#{closing_date_string}.pdf"
+  end
+
   def self.build_initial_hashes(arrays)
     arrays.map do |array|
       {

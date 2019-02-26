@@ -122,6 +122,16 @@ describe 'ConvertBankExtract' do
       end
     end
 
+    it 'returns the filename for the current bank statement' do
+      hashes = [
+        { 'date' => DateTime.parse('31/01/2019') },
+        { 'date' => DateTime.parse('16/12/2018') },
+        { 'date' => DateTime.parse('15/01/2019') }
+      ]
+      actual = ConvertBankExtract.bank_statement_filename(hashes)
+      expect(actual).to eq("#{CONFIG['bank_prefix']}_181216-190131.pdf")
+    end
+
     context 'returns the next period string' do
       tests = [
         { input: '1-1', expected: '1-2' },

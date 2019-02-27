@@ -119,7 +119,7 @@ describe 'ConvertBankExtract' do
 
     it 'returns hashes for each row' do
       file = ConvertBankExtractSpecHelpers.test_raw_csv_hashes
-      hashes = ConvertBankExtract.build_hashes(file, 1, '1-3', '600.00')
+      hashes = ConvertBankExtract.build_hashes(file, 1, '600.00')
       hashes.each do |hash|
         expect(hash['id']).to be_a(Fixnum)
         expect(hash['period']).to match(/^\d+-\d+$/)
@@ -138,6 +138,31 @@ describe 'ConvertBankExtract' do
       end
     end
 
+    it 'sets the period correctly for each new row' do
+      raw_csv_hashes = ConvertBankExtractSpecHelpers.test_raw_csv_hashes
+      hashes = ConvertBankExtract.build_hashes(raw_csv_hashes, 1, '600.00')
+      actual = hashes.map { |h| h['period'] }
+      expect(actual).to eq(%w[8-1 8-2 8-3])
+    end
+
+    context 'returns the company period when given a full date string' do
+      tests = [
+        { date: '08/09/2010', expected: '1-1' },
+        { date: '01/01/2011', expected: '1-5' },
+        { date: '30/09/2011', expected: '2-1' },
+        { date: '08/11/2011', expected: '3-1' },
+        { date: '01/01/2012', expected: '3-3' },
+        { date: '08/10/2012', expected: '3-12' },
+        { date: '08/11/2012', expected: '4-1' }
+      ]
+      tests.each do |test|
+        it "as #{test[:date]}" do
+          actual = ConvertBankExtract.period_string(test[:date])
+          expect(actual).to eq(test[:expected])
+        end
+      end
+    end
+
     it 'returns the filename for the current bank statement' do
       hashes = [
         { 'date' => DateTime.parse('31/01/2019') },
@@ -146,22 +171,6 @@ describe 'ConvertBankExtract' do
       ]
       actual = ConvertBankExtract.bank_statement_filename(hashes)
       expect(actual).to eq("#{CONFIG['bank_prefix']}_181216-190131.pdf")
-    end
-
-    context 'returns the next period string' do
-      tests = [
-        { input: '1-1', expected: '1-2' },
-        { input: '1-12', expected: '2-1' },
-        { input: '9-12', expected: '10-1' },
-        { input: '50-6', expected: '50-7' },
-        { input: '999-12', expected: '1000-1' }
-      ]
-      tests.each do |test|
-        it "when given #{test[:input]}" do
-          new_period = ConvertBankExtract.next_period_string(test[:input])
-          expect(new_period).to eq(test[:expected])
-        end
-      end
     end
 
     it 'archives the existing bank book' do

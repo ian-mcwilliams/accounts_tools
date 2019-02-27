@@ -34,9 +34,8 @@ module ConvertBankExtract
   def self.csv_hashes(bank_book)
     extract = load_file(:csv)
     first_id = bank_book[-1]['id'].to_i + 1
-    period = next_period_string(bank_book[-1]['period'])
     opening_balance = bank_book[-1]['balance']
-    build_hashes(extract, first_id, period, opening_balance)
+    build_hashes(extract, first_id, opening_balance)
   end
 
   def self.build_write_hash(bank_book, hashes)
@@ -56,12 +55,7 @@ module ConvertBankExtract
     end
   end
 
-  def self.next_period_string(current)
-    year, month = current.split('-')
-    month == '12' ? "#{year.to_i + 1}-1" : "#{year}-#{month.to_i + 1}"
-  end
-
-  def self.build_hashes(arrays, first_id, period, opening_balance)
+  def self.build_hashes(arrays, first_id, opening_balance)
     hashes = build_initial_hashes(arrays)
     hashes.sort_by! { |hash| DateTime.parse(hash['date']) }
     opening_date = DateTime.parse(hashes[0]['date']).strftime('%y%m%d')
@@ -69,19 +63,34 @@ module ConvertBankExtract
     statement = "08046_#{opening_date}-#{closing_date}"
     current_balance = opening_balance.to_s
     hashes.each_with_index do |h, i|
-      apply_dynamic_hash_values(h, i, first_id, period, statement, current_balance)
+      apply_dynamic_hash_values(h, i, first_id, statement, current_balance)
     end
   end
 
-  def self.apply_dynamic_hash_values(h, i, first_id, period, statement, current_balance)
+  def self.apply_dynamic_hash_values(h, i, first_id, statement, current_balance)
     h['id'] = (first_id.to_i + i)
-    h['period'] = period
+    h['period'] = period_string(h['date'])
     h['statement'] = statement
     h['date'] = DateTime.parse(h['date'])
     current_balance = new_balance(current_balance, h['debit'], h['credit'])
     h['balance'] = current_balance.to_f
     h['debit'] = h['debit'].to_f
     h['credit'] = h['credit'].to_f
+  end
+
+  def self.period_string(date)
+    _, month, year = date.split('/')
+    if year == '2010'
+      "1-#{month.to_i - 8}"
+    elsif year == '2011' && month.to_i < 9
+      "1-#{month.to_i + 4}"
+    elsif year == '2011' && %w[09 10].include?(month)
+      "2-#{month.to_i - 8}"
+    elsif month.to_i > 10
+      "#{year.to_i - 2008}-#{month.to_i - 10}"
+    else
+      "#{year.to_i - 2009}-#{month.to_i + 2}"
+    end
   end
 
   def self.new_balance(current, debit, credit)

@@ -38,7 +38,15 @@ module ConvertBankExtractSpecHelpers
     ]
   end
 
-  def self.test_csv_hashes
+  def self.test_raw_csv_hashes
+    [
+      [" ", "31/12/2016", "20-84-17 63908046", "-5.65", "PAYMENT", "SOME STORE 3213      ON 12 JAN          CLP"],
+      [" ", "05/01/2017", "20-84-17 63908046", "3300.00", "DIRECTDEP", "SOME RECRU    00000/00000        BGC"],
+      [" ", "29/11/2016", "20-84-17 63908046", "-2.30", "PAYMENT", "Town Borough     ON 12 JAN          CLP"]
+    ]
+  end
+
+  def self.test_processed_csv_hashes
     [
       {
         "date" => DateTime.parse('2017-01-01T00:00:00+00:00'),

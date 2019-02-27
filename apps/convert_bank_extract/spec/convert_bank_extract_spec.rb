@@ -25,7 +25,7 @@ describe 'ConvertBankExtract' do
 
     it 'builds a write hash' do
       bank_book = ConvertBankExtractSpecHelpers.test_bank_book_hashes
-      hashes = ConvertBankExtractSpecHelpers.test_csv_hashes
+      hashes = ConvertBankExtractSpecHelpers.test_processed_csv_hashes
       write_hash = ConvertBankExtract.build_write_hash(bank_book, hashes)
       expect(write_hash.keys).to eq(['bank', :formats])
       expect(write_hash['bank']).to be_a(Array)
@@ -53,7 +53,7 @@ describe 'ConvertBankExtract' do
       expect(File.exists?("#{CONFIG['bank_statement_filepath']}E-Statements.pdf")).to be(false)
     end
 
-    it 'archives the source file after completing the process', :focus do
+    it 'archives the source file after completing the process' do
       data_csv_archive_path = CONFIG['data_csv_archive_path']
       archive_count = Dir["#{data_csv_archive_path}/*"].length
       ConvertBankExtract.convert_bank_extract
@@ -118,7 +118,7 @@ describe 'ConvertBankExtract' do
     end
 
     it 'returns hashes for each row' do
-      file = ConvertBankExtract.load_file(:csv)
+      file = ConvertBankExtractSpecHelpers.test_raw_csv_hashes
       hashes = ConvertBankExtract.build_hashes(file, 1, '1-3', '600.00')
       hashes.each do |hash|
         expect(hash['id']).to be_a(Fixnum)

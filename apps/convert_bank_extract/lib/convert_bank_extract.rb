@@ -7,16 +7,16 @@ module ConvertBankExtract
   CONFIG = Config.get_config
 
   def self.convert_bank_extract
+    timestamp = DateTime.now.strftime('%y%m%d%H%M%S')
     verify_file_presence
     filepath = CONFIG['bank_book_filepath']
     bank_book = load_file(:bank_book)
     hashes = csv_hashes(bank_book)
     write_hashes = build_write_hash(bank_book, hashes)
-    archive_filename = "bank_archive_#{DateTime.now.strftime('%y%m%d%H%M%S')}.xlsx"
-    archive_current_bank_book(archive_filename)
+    archive_current_bank_book("bank_archive_#{timestamp}.xlsx")
     create_excel_file(filepath, write_hashes)
     archive_bank_statement(bank_statement_filename(hashes))
-    delete_source_file
+    archive_data_csv_file("data_csv_archive_#{timestamp}.csv")
   end
 
   def self.verify_file_presence
@@ -151,8 +151,10 @@ module ConvertBankExtract
     File.rename(old_filepath, new_filepath)
   end
 
-  def self.delete_source_file
-    FileUtils.rm(CONFIG['bank_extract_filepath'])
+  def self.archive_data_csv_file(archive_filename)
+    data_csv_archive_path = CONFIG['data_csv_archive_path']
+    FileUtils.mkdir_p(data_csv_archive_path)
+    FileUtils.mv(CONFIG['bank_extract_filepath'], "#{data_csv_archive_path}#{archive_filename}")
   end
 
 end

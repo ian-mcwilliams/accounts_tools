@@ -53,9 +53,13 @@ describe 'ConvertBankExtract' do
       expect(File.exists?("#{CONFIG['bank_statement_filepath']}E-Statements.pdf")).to be(false)
     end
 
-    it 'deletes the source file after completing the process' do
+    it 'archives the source file after completing the process', :focus do
+      data_csv_archive_path = CONFIG['data_csv_archive_path']
+      archive_count = Dir["#{data_csv_archive_path}/*"].length
       ConvertBankExtract.convert_bank_extract
       expect(File.exist?("#{CONFIG['bank_extract_filepath']}")).to be(false)
+      new_archive_count = Dir["#{data_csv_archive_path}/*"].length
+      expect(new_archive_count).to eq(archive_count + 1)
     end
 
   end
@@ -183,9 +187,11 @@ describe 'ConvertBankExtract' do
       expect(File.exists?("#{CONFIG['bank_statement_filepath']}#{filename}")).to be(false)
     end
 
-    it 'deletes the source csv file after process complete' do
-      ConvertBankExtract.delete_source_file
-      expect(File.exist?("#{CONFIG['bank_extract_filepath']}")).to be(false)
+    it 'archives the source csv file after process complete' do
+      filename = 'data_csv_filename.pdf'
+      ConvertBankExtract.archive_data_csv_file(filename)
+      expect(File.exist?("#{CONFIG['bank_extract_filepath']}#{filename}")).to be(false)
+      expect(File.exist?("#{CONFIG['data_csv_archive_path']}#{filename}")).to be(true)
     end
 
   end

@@ -11,10 +11,11 @@ module ConvertBankExtract
     filepath = CONFIG['bank_book_filepath']
     bank_book = load_file(:bank_book)
     hashes = csv_hashes(bank_book)
-    write_hash = build_write_hash(bank_book, hashes)
+    write_hashes = build_write_hash(bank_book, hashes)
     archive_filename = "bank_archive_#{DateTime.now.strftime('%y%m%d%H%M%S')}.xlsx"
     archive_current_bank_book(archive_filename)
-    create_excel_file(filepath, write_hash)
+    create_excel_file(filepath, write_hashes)
+    archive_bank_statement(bank_statement_filename(hashes))
     delete_source_file
   end
 

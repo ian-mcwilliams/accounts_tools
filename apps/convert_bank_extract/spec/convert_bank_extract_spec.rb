@@ -11,6 +11,10 @@ describe 'ConvertBankExtract' do
     ConvertBankExtractSpecHelpers.restore_test_state
   end
 
+  at_exit do
+    ConvertBankExtractSpecHelpers.restore_test_state
+  end
+
   context 'integration tests' do
 
     it 'throws an error if a file is missing' do
@@ -41,6 +45,12 @@ describe 'ConvertBankExtract' do
       expect(archive.keys).to eq(['bank'])
       expect(archive['bank'].count).to eq(13)
       expect(archive['bank'][-1]['id']).to eq(13)
+    end
+
+    it 'archives the bank statement as part of the process' do
+      ConvertBankExtract.convert_bank_extract
+      expect(File.exists?("#{CONFIG['bank_statements_path']}08046_170101-170110.pdf")).to be(true)
+      expect(File.exists?("#{CONFIG['bank_statement_filepath']}E-Statements.pdf")).to be(false)
     end
 
     it 'deletes the source file after completing the process' do

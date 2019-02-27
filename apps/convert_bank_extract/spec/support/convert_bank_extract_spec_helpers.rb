@@ -67,7 +67,6 @@ module ConvertBankExtractSpecHelpers
 
   def self.restore_test_state(state: :clear)
     test_files_path = 'apps/convert_bank_extract/spec/support/test_files/'
-    bank_statements_filepath = "#{test_files_path}records/bank_statements"
     bookkeeping_path = "#{test_files_path}bookkeeping"
     source_files_path = "#{test_files_path}source_files"
     records_path = "#{test_files_path}records"
@@ -77,7 +76,6 @@ module ConvertBankExtractSpecHelpers
     if state == :setup
       FileUtils.mkdir_p(bookkeeping_path)
       FileUtils.mkdir_p(source_files_path)
-      FileUtils.mkdir_p(bank_statements_filepath)
       FileUtils.cp("#{test_files_path}bank.xlsx", bookkeeping_path)
       FileUtils.cp("#{test_files_path}data.csv", source_files_path)
       FileUtils.cp("#{test_files_path}E-Statement.pdf", source_files_path)

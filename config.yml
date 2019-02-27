@@ -7,7 +7,7 @@ default:
     invoices: invoices.xlsx
     timesheets: timesheets.xlsx
   rel_paths:
-    archive: archive/
+    bank_book_archive: archive/bank_book/
     bank_statements: records/bank_statements/
     bookkeeping: bookkeeping/
     dropbox:

@@ -40,8 +40,8 @@ describe 'ConvertBankExtract' do
       expect(workbook['bank'].count).to eq(16)
       expect(workbook['bank'][0]['id']).to eq(1)
       expect(workbook['bank'][-1]['id']).to eq(16)
-      archive_filename = ConvertBankExtractSpecHelpers.dir_filenames(CONFIG['bookkeeping_archive_path'])[0]
-      archive = Rxl.read_file_as_tables("#{CONFIG['bookkeeping_archive_path']}#{archive_filename}")
+      archive_filename = ConvertBankExtractSpecHelpers.dir_filenames(CONFIG['bank_book_archive_path'])[0]
+      archive = Rxl.read_file_as_tables("#{CONFIG['bank_book_archive_path']}#{archive_filename}")
       expect(archive.keys).to eq(['bank'])
       expect(archive['bank'].count).to eq(13)
       expect(archive['bank'][-1]['id']).to eq(13)
@@ -162,7 +162,7 @@ describe 'ConvertBankExtract' do
 
     it 'archives the existing bank book' do
       archive_filename = "bank_archive_#{DateTime.now.strftime('%y%m%d%H%M%S')}.xlsx"
-      archive_bank_book_filepath = "#{CONFIG['bookkeeping_archive_path']}#{archive_filename}"
+      archive_bank_book_filepath = "#{CONFIG['bank_book_archive_path']}#{archive_filename}"
       ConvertBankExtract.archive_current_bank_book(archive_filename)
       expect(File.exist?(CONFIG['bank_book_filepath'])).to be(false)
       expect(File.exist?(archive_bank_book_filepath)).to be(true)

@@ -33,7 +33,7 @@ module Config
     end
     params['bank_prefix'] = codes['bank_prefix']
     params['bookkeeping_path'] = "#{livecorp}#{rel_paths['bookkeeping']}"
-    params['bookkeeping_archive_path'] = "#{livecorp}#{rel_paths['bookkeeping']}#{rel_paths['archive']}"
+    params['bank_book_archive_path'] = "#{livecorp}#{rel_paths['bookkeeping']}#{rel_paths['bank_book_archive']}"
     params['bank_book_filepath'] = "#{params['bookkeeping_path']}#{filenames['bank_book']}"
     params['bank_extract_filepath'] = "#{tool_root}#{rel_paths['source_files']}#{filenames['bank_extract']}"
     params['bank_statement_filename'] = filenames['bank_statement']

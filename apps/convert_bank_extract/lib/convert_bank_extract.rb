@@ -130,9 +130,9 @@ module ConvertBankExtract
 
   def self.archive_current_bank_book(archive_filename)
     bookkeeping_path = CONFIG['bookkeeping_path']
-    bookkeeping_archive_path = CONFIG['bookkeeping_archive_path']
-    archive_bank_book_filepath = "#{bookkeeping_archive_path}#{archive_filename}"
-    FileUtils.mkdir_p(bookkeeping_archive_path)
+    bank_book_archive_path = CONFIG['bank_book_archive_path']
+    archive_bank_book_filepath = "#{bank_book_archive_path}#{archive_filename}"
+    FileUtils.mkdir_p(bank_book_archive_path)
     File.rename("#{bookkeeping_path}bank.xlsx", "#{bookkeeping_path}#{archive_filename}")
     FileUtils.mv("#{bookkeeping_path}#{archive_filename}", archive_bank_book_filepath)
   end
@@ -143,7 +143,9 @@ module ConvertBankExtract
   end
 
   def self.archive_bank_statement(archive_filename)
-    FileUtils.mv(CONFIG['bank_statement_filepath'], CONFIG['bank_statements_path'])
+    bank_statements_path = CONFIG['bank_statements_path']
+    FileUtils.mkdir_p(bank_statements_path)
+    FileUtils.mv(CONFIG['bank_statement_filepath'], bank_statements_path)
     old_filepath = "#{CONFIG['bank_statements_path']}#{CONFIG['bank_statement_filename']}"
     new_filepath = "#{CONFIG['bank_statements_path']}#{archive_filename}"
     File.rename(old_filepath, new_filepath)

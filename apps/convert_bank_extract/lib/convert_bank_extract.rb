@@ -9,7 +9,9 @@ module ConvertBankExtract
   def self.convert_bank_extract
     verify_file_presence
     filepath = CONFIG['bank_book_filepath']
-    write_hash = build_write_hash
+    bank_book = load_file(:bank_book)
+    hashes = csv_hashes(bank_book)
+    write_hash = build_write_hash(bank_book, hashes)
     archive_filename = "bank_archive_#{DateTime.now.strftime('%y%m%d%H%M%S')}.xlsx"
     archive_current_bank_book(archive_filename)
     create_excel_file(filepath, write_hash)
@@ -28,13 +30,15 @@ module ConvertBankExtract
     end
   end
 
-  def self.build_write_hash
-    bank_book = load_file(:bank_book)
+  def self.csv_hashes(bank_book)
     extract = load_file(:csv)
     first_id = bank_book[-1]['id'].to_i + 1
     period = next_period_string(bank_book[-1]['period'])
     opening_balance = bank_book[-1]['balance']
-    hashes = build_hashes(extract, first_id, period, opening_balance)
+    build_hashes(extract, first_id, period, opening_balance)
+  end
+
+  def self.build_write_hash(bank_book, hashes)
     { 'bank' => bank_book + hashes, formats: formats_hash }
   end
 
@@ -63,16 +67,20 @@ module ConvertBankExtract
     closing_date = DateTime.parse(hashes[-1]['date']).strftime('%y%m%d')
     statement = "08046_#{opening_date}-#{closing_date}"
     current_balance = opening_balance.to_s
-    hashes.each_with_index do |hash, i|
-      hash['id'] = (first_id.to_i + i)
-      hash['period'] = period
-      hash['statement'] = statement
-      hash['date'] = DateTime.parse(hash['date'])
-      current_balance = new_balance(current_balance, hash['debit'], hash['credit'])
-      hash['balance'] = current_balance.to_f
-      hash['debit'] = hash['debit'].to_f
-      hash['credit'] = hash['credit'].to_f
+    hashes.each_with_index do |h, i|
+      apply_dynamic_hash_values(h, i, first_id, period, statement, current_balance)
     end
+  end
+
+  def self.apply_dynamic_hash_values(h, i, first_id, period, statement, current_balance)
+    h['id'] = (first_id.to_i + i)
+    h['period'] = period
+    h['statement'] = statement
+    h['date'] = DateTime.parse(h['date'])
+    current_balance = new_balance(current_balance, h['debit'], h['credit'])
+    h['balance'] = current_balance.to_f
+    h['debit'] = h['debit'].to_f
+    h['credit'] = h['credit'].to_f
   end
 
   def self.new_balance(current, debit, credit)

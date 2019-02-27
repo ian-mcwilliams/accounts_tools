@@ -20,7 +20,9 @@ describe 'ConvertBankExtract' do
     end
 
     it 'builds a write hash' do
-      write_hash = ConvertBankExtract.build_write_hash
+      bank_book = ConvertBankExtractSpecHelpers.test_bank_book_hashes
+      hashes = ConvertBankExtractSpecHelpers.test_csv_hashes
+      write_hash = ConvertBankExtract.build_write_hash(bank_book, hashes)
       expect(write_hash.keys).to eq(['bank', :formats])
       expect(write_hash['bank']).to be_a(Array)
       expect(write_hash[:formats].keys).to eq(['bank'])
@@ -157,7 +159,7 @@ describe 'ConvertBankExtract' do
     end
 
     it 'creates the new bank book file' do
-      hashes = ConvertBankExtractSpecHelpers.test_hashes
+      hashes = ConvertBankExtractSpecHelpers.test_bank_book_hashes
       filepath = CONFIG['bank_book_filepath'].gsub('bank.xlsx', 'test_bank.xlsx')
       write_hash = { 'bank' => hashes }
       ConvertBankExtract.create_excel_file(filepath, write_hash)

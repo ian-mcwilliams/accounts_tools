@@ -1,6 +1,6 @@
 module ConvertBankExtractSpecHelpers
 
-  def self.test_hashes
+  def self.test_bank_book_hashes
     [
       {
         id: 1,
@@ -34,6 +34,33 @@ module ConvertBankExtractSpecHelpers
         balance: '250.00',
         subcat: 'GHI',
         description: 'RST'
+      }
+    ]
+  end
+
+  def self.test_csv_hashes
+    [
+      {
+        "date" => DateTime.parse('2017-01-01T00:00:00+00:00'),
+        "debit" => 2.3,
+        "credit" => 0.0,
+        "subcat" => "PAYMENT",
+        "description" => "Town Borough     ON 12 JAN          CLP",
+        "id" => 4,
+        "period" => "1-2",
+        "statement" => "08046_170101-170110",
+        "balance" => 7.7
+      },
+      {
+        "date" => DateTime.parse('2017-01-05T00:00:00+00:00'),
+        "debit" => 0.0,
+        "credit" => 3300.0,
+        "subcat" => "DIRECTDEP",
+        "description" => "SOME RECRU    00000/00000        BGC",
+        "id" => 5,
+        "period" => "1-2",
+        "statement" => "08046_170101-170110",
+        "balance" => 3310.0
       }
     ]
   end

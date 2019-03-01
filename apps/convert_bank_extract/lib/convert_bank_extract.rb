@@ -1,3 +1,4 @@
+require 'colorize'
 require 'csv'
 require 'rxl'
 require 'yaml'
@@ -7,28 +8,48 @@ module ConvertBankExtract
   CONFIG = Config.get_config
 
   def self.convert_bank_extract
+    print "converting bank extract\n"
     timestamp = DateTime.now.strftime('%y%m%d%H%M%S')
     verify_file_presence
     filepath = CONFIG['bank_book_filepath']
+    print "loading bank book... #{"loading".red}\r"
     bank_book = load_file(:bank_book)
+    print "loading bank book... #{"done".green}\n"
+    print "loading data.csv... #{"loading".red}\r"
     hashes = csv_hashes(bank_book)
-    write_hashes = build_write_hash(bank_book, hashes)
+    print "loading data.csv... #{"done".green}\n"
+    print "archiving current bank book... #{"archiving".red}\r"
     archive_current_bank_book("bank_archive_#{timestamp}.xlsx")
+    print "archiving current bank book... #{"done".green} //bank_archive_#{timestamp}.xlsx\n"
+    print "creating updated bank book... #{"building".red}\r"
+    write_hashes = build_write_hash(bank_book, hashes)
     create_excel_file(filepath, write_hashes)
-    archive_bank_statement(bank_statement_filename(hashes))
+    print "creating updated bank book... #{"done".green}\n"
+    print "storing bank statement... #{"storing".red}\r"
+    filename = bank_statement_filename(hashes)
+    archive_bank_statement(filename)
+    print "storing bank statement... #{"done".green} //#{filename}\n"
+    print "archiving data.csv... #{"archiving".red}\r"
     archive_data_csv_file("data_csv_archive_#{timestamp}.csv")
+    print "archiving data.csv... #{"done".green} //data_csv_archive_#{timestamp}.csv\n"
   end
 
   def self.verify_file_presence
+    print "verify bank book found... #{"checking".red}\r"
     unless File.exists?(CONFIG['bank_book_filepath'])
       raise("bank book not found at path: #{CONFIG['bank_book_filepath']}")
     end
+    print "verify bank book found... #{"done".green}\n"
+    print "verify data.csv found... #{"checking".red}\r"
     unless File.exists?(CONFIG['bank_extract_filepath'])
       raise("bank extract csv not found at path: #{CONFIG['bank_extract_filepath']}")
     end
+    print "verify data.csv found... #{"done".green}\n"
+    print "verify E-Statement.pdf found... #{"checking".red}\r"
     unless File.exists?(CONFIG['bank_statement_filepath'])
       raise("bank statement pdf not found at path: #{CONFIG['bank_statement_filepath']}")
     end
+    print "verify E-Statement.pdf found... #{"done".green}\n"
   end
 
   def self.csv_hashes(bank_book)

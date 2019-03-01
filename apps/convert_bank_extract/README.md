@@ -8,24 +8,34 @@ This tool is designed to take a downloaded csv from Barclays containing account 
 
 ### Download the PDF and CSV
 
-1. download the PDF bank statement from barclays
-2. go to the 'view statements' section of the Barclays site, same place as to download the PDF - in the relevant row, the 'view transactions' link opens the transactions for the relevant period which can then be exported as usual
-- NB when you download the CSV from Barclays the extract **MUST** match the opening and closing transaction dates from the PDF statement
-
-### Save the PDF in Dropbox
-
-- save to LiveCorp/records/bank_statements
-- the PDF statement filename is based on the **opening and closing transaction dates** on the statement (the first and last transaction in the list of transactions, not the opening and closing balance )
-
-### Save the CSV in dev/accounts_tools
-
-- save the CSV file to the dev/accounts_tools/source_file directory as data.csv (*this is the default filename but watch out for duplicate naming avoidance like "data (1).csv"*)
-- ensure the sheet's tab name is "data" (*this is the current default so no change should be needed*)
+1. Log in to Barclays and go to the view statements page
+2. Identify the new statement row and click the pdf icon (opens in a new tab)
+3. Download the PDF as follows:
+   * Click the print icon in the top right hand corner of the new tab (in the menu that appears when you move the cursor around the page)
+   * If the destination is not "Save as PDF" use the Change button to set it to that value
+   * Click Save and select the location as `accounts_tools/source_files`
+4. Download the CSV as follows:
+   * Close the new tab and click the "View transactions" link next to the PDF icon you originally clicked
+   * Click the "Export All" link at the top of the list of transactions and select "Spreadsheet eg Excel" from the list
+   * Move the downloaded csv file to `accounts_tools/source_files` and ensure it is named `data.csv`
 
 ## Running this tool
 **IN TERMINAL:** `ruby run_tool.rb convert_bank_extract`
 
-## After running this tool
+### Results
 
-1. Verify that the balance on the last row matches the balance on the final transaction on the bank statement to confirm success
-2. Confirm that the previous version of bank.xlsx is found in bookkeeping/archive named with a timestamped suffix (eg bank_archive_190101180000.xlsx)
+The current bank book is archived with a timestamp filename to:
+
+`bookkeeping/archive/bank_book`
+
+The data.csv records are reformatted to become new rows in the new bank book with the period derived from the transaction dates, and the updated book is saved as:
+
+`bookkeeping/bank.xlsx` 
+
+The data.csv file is archived with the same timestamp to:
+
+`bookkeeping/archive/data_csv`
+
+The bank statement is renamed using the first and last transaction dates from the csv and saved to:
+
+`bookkeeping/records/bank_statements`

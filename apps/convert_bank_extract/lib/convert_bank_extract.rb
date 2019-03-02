@@ -20,20 +20,23 @@ module ConvertBankExtract
     print "loading data.csv...                 #{"loading".red}\r"
     hashes = csv_hashes(bank_book)
     print "loading data.csv...                 #{"done".green}   \n"
+    period_string = generate_period_string(hashes)
+    archive_bank_book_filename = "bank_archive_#{period_string}_#{timestamp}.xlsx"
     print "archiving current bank book...      #{"archiving".red}\r"
-    archive_current_bank_book("bank_archive_#{timestamp}.xlsx")
-    print "archiving current bank book...      #{"done".green} (saved as bank_archive_#{timestamp}.xlsx)\n"
+    archive_current_bank_book(archive_bank_book_filename)
+    print "archiving current bank book...      #{"done".green} (saved as #{archive_bank_book_filename})\n"
     print "creating updated bank book...       #{"building".red}\r"
     write_hashes = build_write_hash(bank_book, hashes)
     create_excel_file(filepath, write_hashes)
     print "creating updated bank book...       #{"done".green}    \n"
+    bank_statement_filename = "#{CONFIG['bank_prefix']}_#{period_string}.pdf"
     print "storing bank statement...           #{"storing".red}\r"
-    filename = bank_statement_filename(hashes)
-    archive_bank_statement(filename)
-    print "storing bank statement...           #{"done".green} (saved as #{filename})\n"
+    archive_bank_statement(bank_statement_filename)
+    print "storing bank statement...           #{"done".green} (saved as #{bank_statement_filename})\n"
+    data_csv_filename = "data_csv_archive_#{period_string}_#{timestamp}.csv"
     print "archiving data.csv...               #{"archiving".red}\r"
-    archive_data_csv_file("data_csv_archive_#{timestamp}.csv")
-    print "archiving data.csv...               #{"done".green} (saved as data_csv_archive_#{timestamp}.csv)\n"
+    archive_data_csv_file(data_csv_filename)
+    print "archiving data.csv...               #{"done".green} (saved as #{data_csv_filename})\n"
   end
 
   def self.verify_file_presence
@@ -118,11 +121,11 @@ module ConvertBankExtract
     "#{new_pence[0..-3]}.#{new_pence[-2..-1]}"
   end
 
-  def self.bank_statement_filename(hashes)
+  def self.generate_period_string(hashes)
     sorted_dates = hashes.map { |h| h['date'] }.sort
     opening_date_string = sorted_dates[0].strftime('%y%m%d')
     closing_date_string = sorted_dates[-1].strftime('%y%m%d')
-    "#{CONFIG['bank_prefix']}_#{opening_date_string}-#{closing_date_string}.pdf"
+    "#{opening_date_string}-#{closing_date_string}"
   end
 
   def self.build_initial_hashes(arrays)

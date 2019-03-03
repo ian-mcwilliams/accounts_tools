@@ -19,6 +19,10 @@ module RunTool
       require_relative 'apps/convert_bank_extract/lib/convert_bank_extract'
       ConvertBankExtract.convert_bank_extract
 
+    when 'manage_office_space_costs'
+      require_relative 'apps/manage_office_space_costs/lib/manage_office_space_costs'
+      ManageOfficeSpaceCosts.manage_office_space_costs
+
     when 'reconcile_sales'
       require_relative 'apps/reconcile_contracts_and_sales/lib/books_ingress'
       BooksIngress.import_books

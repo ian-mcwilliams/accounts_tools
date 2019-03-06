@@ -40,7 +40,7 @@ describe 'ConvertBankExtract' do
       expect(workbook['bank'].count).to eq(16)
       expect(workbook['bank'][0]['id']).to eq(1)
       expect(workbook['bank'][-1]['id']).to eq(16)
-      expect(workbook['bank'][-1]['balance']).to eq(3792.05)
+      expect(workbook['bank'][-1]['balance']).to eq(3892.05)
       archive_filename = ConvertBankExtractSpecHelpers.dir_filenames(CONFIG['bank_book_archive_path'])[0]
       archive = Rxl.read_file_as_tables("#{CONFIG['bank_book_archive_path']}#{archive_filename}")
       expect(archive.keys).to eq(['bank'])
@@ -50,7 +50,7 @@ describe 'ConvertBankExtract' do
 
     it 'archives the bank statement as part of the process' do
       ConvertBankExtract.convert_bank_extract
-      expect(File.exists?("#{CONFIG['bank_statements_path']}08046_170101-170110.pdf")).to be(true)
+      expect(File.exists?("#{CONFIG['bank_statements_path']}08046_8-3_170101-170110.pdf")).to be(true)
       expect(File.exists?("#{CONFIG['bank_statement_filepath']}E-Statements.pdf")).to be(false)
     end
 
@@ -170,16 +170,6 @@ describe 'ConvertBankExtract' do
           expect(actual).to eq(test[:expected])
         end
       end
-    end
-
-    it 'returns the filename for the current bank statement' do
-      hashes = [
-        { 'date' => DateTime.parse('31/01/2019') },
-        { 'date' => DateTime.parse('16/12/2018') },
-        { 'date' => DateTime.parse('15/01/2019') }
-      ]
-      actual = ConvertBankExtract.bank_statement_filename(hashes)
-      expect(actual).to eq("#{CONFIG['bank_prefix']}_181216-190131.pdf")
     end
 
     it 'archives the existing bank book' do

@@ -20,7 +20,7 @@ module ConvertBankExtract
     print "loading data.csv...                 #{"loading".red}\r"
     hashes = csv_hashes(bank_book)
     print "loading data.csv...                 #{"done".green}   \n"
-    period_string = generate_period_string(hashes)
+    period_string = period_string(hashes[0]['date'].strftime('%d/%m/%Y'))
     archive_bank_book_filename = "bank_archive_#{period_string}_#{timestamp}.xlsx"
     print "archiving current bank book...      #{"archiving".red}\r"
     archive_current_bank_book(archive_bank_book_filename)
@@ -29,7 +29,7 @@ module ConvertBankExtract
     write_hashes = build_write_hash(bank_book, hashes)
     create_excel_file(filepath, write_hashes)
     print "creating updated bank book...       #{"done".green}    \n"
-    bank_statement_filename = "#{CONFIG['bank_prefix']}_#{period_string}.pdf"
+    bank_statement_filename = "#{CONFIG['bank_prefix']}_#{period_string}_#{hashes[0]['date'].strftime('%y%m%d')}-#{hashes[-1]['date'].strftime('%y%m%d')}.pdf"
     print "storing bank statement...           #{"storing".red}\r"
     archive_bank_statement(bank_statement_filename)
     print "storing bank statement...           #{"done".green} (saved as #{bank_statement_filename})\n"
@@ -83,7 +83,7 @@ module ConvertBankExtract
     statement = "08046_#{opening_date}-#{closing_date}"
     current_balance = opening_balance.to_s
     hashes.each_with_index do |h, i|
-      apply_dynamic_hash_values(h, i, first_id, statement, current_balance)
+      current_balance = apply_dynamic_hash_values(h, i, first_id, statement, current_balance)
     end
   end
 
@@ -96,6 +96,7 @@ module ConvertBankExtract
     h['balance'] = current_balance.to_f
     h['debit'] = h['debit'].to_f unless h['debit'].nil?
     h['credit'] = h['credit'].to_f unless h['credit'].nil?
+    current_balance
   end
 
   def self.period_string(date)
@@ -139,13 +140,6 @@ module ConvertBankExtract
     else
       raise("class not valid: #{input.class}")
     end
-  end
-
-  def self.generate_period_string(hashes)
-    sorted_dates = hashes.map { |h| h['date'] }.sort
-    opening_date_string = sorted_dates[0].strftime('%y%m%d')
-    closing_date_string = sorted_dates[-1].strftime('%y%m%d')
-    "#{opening_date_string}-#{closing_date_string}"
   end
 
   def self.build_initial_hashes(arrays)

@@ -120,21 +120,29 @@ describe 'ConvertBankExtract' do
     it 'returns hashes for each row' do
       file = ConvertBankExtractSpecHelpers.test_raw_csv_hashes
       hashes = ConvertBankExtract.build_hashes(file, 1, '600.00')
-      hashes.each do |hash|
-        expect(hash['id']).to be_a(Fixnum)
-        expect(hash['period']).to match(/^\d+-\d+$/)
-        expect(hash['statement']).to match(/^08046_\d{6}-\d{6}$/)
-        expect(hash['date']).to be_a(DateTime)
-        expect(hash['debit']).to hash[:credit] ? be_nil : be_a(Float)
-        expect(hash['debit'].to_s).to hash[:credit] ? be_nil : match(/^\d+\.\d+$/)
-        expect(hash['credit']).to hash[:debit] ? be_nil : be_a(Float)
-        expect(hash['credit'].to_s).to hash[:debit] ? be_nil : match(/^\d+\.\d+$/)
-        expect(hash['balance']).to be_a(Float)
-        expect(hash['balance'].to_s).to match(/^\d+\.\d+$/)
-        expect(hash['subcat']).to be_a(String)
-        expect(hash['subcat']).not_to be_empty
-        expect(hash['description']).to be_a(String)
-        expect(hash['description']).not_to be_empty
+      hashes.each do |h|
+        expect(h['id']).to be_a(Fixnum)
+        expect(h['period']).to match(/^\d+-\d+$/)
+        expect(h['statement']).to match(/^08046_\d{6}-\d{6}$/)
+        expect(h['date']).to be_a(DateTime)
+        if h['credit']
+          expect(h['debit']).to be_nil
+        else
+          expect(h['debit']).to be_a(Float)
+          expect(h['debit'].to_s).to match(/^\d+\.\d+$/)
+        end
+        if h['debit']
+          expect(h['credit']).to be_nil
+        else
+          expect(h['credit']).to be_a(Float)
+          expect(h['credit'].to_s).to match(/^\d+\.\d+$/)
+        end
+        expect(h['balance']).to be_a(Float)
+        expect(h['balance'].to_s).to match(/^\d+\.\d+$/)
+        expect(h['subcat']).to be_a(String)
+        expect(h['subcat']).not_to be_empty
+        expect(h['description']).to be_a(String)
+        expect(h['description']).not_to be_empty
       end
     end
 

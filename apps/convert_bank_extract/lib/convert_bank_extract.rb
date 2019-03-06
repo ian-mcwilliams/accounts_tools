@@ -94,8 +94,8 @@ module ConvertBankExtract
     h['date'] = DateTime.parse(h['date'])
     current_balance = new_balance(current_balance, h['debit'], h['credit'])
     h['balance'] = current_balance.to_f
-    h['debit'] = h['debit'].to_f
-    h['credit'] = h['credit'].to_f
+    h['debit'] = h['debit'].to_f unless h['debit'].nil?
+    h['credit'] = h['credit'].to_f unless h['credit'].nil?
   end
 
   def self.period_string(date)

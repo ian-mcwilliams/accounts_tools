@@ -7,6 +7,26 @@ require_relative '../lib/accounts_helpers'
 
 describe 'AccountsHelpers' do
 
+  context 'generate_period_string' do
+
+    tests = [
+      { date: '08/09/2010', expected: '1-1' },
+      { date: '01/01/2011', expected: '1-5' },
+      { date: '30/09/2011', expected: '2-1' },
+      { date: '08/11/2011', expected: '3-1' },
+      { date: '01/01/2012', expected: '3-3' },
+      { date: '08/10/2012', expected: '3-12' },
+      { date: '08/11/2012', expected: '4-1' }
+    ]
+    tests.each do |test|
+      it "returns the company period when given a full date string as #{test[:date]}" do
+        actual = AccountsHelpers.generate_period_string(test[:date])
+        expect(actual).to eq(test[:expected])
+      end
+    end
+
+  end
+
   context 'pounds_to_pence' do
 
     context 'runs successfully' do

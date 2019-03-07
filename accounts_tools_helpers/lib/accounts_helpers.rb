@@ -1,5 +1,20 @@
 module AccountsHelpers
 
+  def self.generate_period_string(date)
+    _, month, year = date.split('/')
+    if year == '2010'
+      "1-#{month.to_i - 8}"
+    elsif year == '2011' && month.to_i < 9
+      "1-#{month.to_i + 4}"
+    elsif year == '2011' && %w[09 10].include?(month)
+      "2-#{month.to_i - 8}"
+    elsif month.to_i > 10
+      "#{year.to_i - 2008}-#{month.to_i - 10}"
+    else
+      "#{year.to_i - 2009}-#{month.to_i + 2}"
+    end
+  end
+
   def self.pounds_to_pence(input)
     if input.is_a?(String) && !input.empty? && input[/^(-)?(\d+)?(\.)?(\d+)?$/].nil?
       raise("string must be a valid number or float format, got: #{input}")

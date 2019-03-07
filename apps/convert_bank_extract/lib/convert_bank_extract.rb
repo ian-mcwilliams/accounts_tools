@@ -39,7 +39,7 @@ module ConvertBankExtract
 
   def self.generate_archive_filenames(hashes)
     timestamp = DateTime.now.strftime('%y%m%d%H%M%S')
-    period_string = generate_period_string(hashes[0]['date'].strftime('%d/%m/%Y'))
+    period_string = AccountsHelpers.generate_period_string(hashes[0]['date'].strftime('%d/%m/%Y'))
     statement_from = hashes[0]['date'].strftime('%y%m%d')
     statement_to = hashes[-1]['date'].strftime('%y%m%d')
     {
@@ -99,7 +99,7 @@ module ConvertBankExtract
 
   def self.apply_dynamic_hash_values(h, i, first_id, statement, current_balance)
     h['id'] = (first_id.to_i + i)
-    h['period'] = generate_period_string(h['date'])
+    h['period'] = AccountsHelpers.generate_period_string(h['date'])
     h['statement'] = statement
     h['date'] = DateTime.parse(h['date'])
     current_balance = new_balance(current_balance, h['debit'], h['credit'])
@@ -107,21 +107,6 @@ module ConvertBankExtract
     h['debit'] = h['debit'].to_f unless h['debit'].nil?
     h['credit'] = h['credit'].to_f unless h['credit'].nil?
     current_balance
-  end
-
-  def self.generate_period_string(date)
-    _, month, year = date.split('/')
-    if year == '2010'
-      "1-#{month.to_i - 8}"
-    elsif year == '2011' && month.to_i < 9
-      "1-#{month.to_i + 4}"
-    elsif year == '2011' && %w[09 10].include?(month)
-      "2-#{month.to_i - 8}"
-    elsif month.to_i > 10
-      "#{year.to_i - 2008}-#{month.to_i - 10}"
-    else
-      "#{year.to_i - 2009}-#{month.to_i + 2}"
-    end
   end
 
   def self.new_balance(current, debit, credit)

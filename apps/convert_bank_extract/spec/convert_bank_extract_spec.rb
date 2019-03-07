@@ -154,24 +154,6 @@ describe 'ConvertBankExtract' do
       expect(actual).to eq(%w[8-1 8-2 8-3])
     end
 
-    context 'returns the company period when given a full date string' do
-      tests = [
-        { date: '08/09/2010', expected: '1-1' },
-        { date: '01/01/2011', expected: '1-5' },
-        { date: '30/09/2011', expected: '2-1' },
-        { date: '08/11/2011', expected: '3-1' },
-        { date: '01/01/2012', expected: '3-3' },
-        { date: '08/10/2012', expected: '3-12' },
-        { date: '08/11/2012', expected: '4-1' }
-      ]
-      tests.each do |test|
-        it "as #{test[:date]}" do
-          actual = ConvertBankExtract.generate_period_string(test[:date])
-          expect(actual).to eq(test[:expected])
-        end
-      end
-    end
-
     it 'archives the existing bank book' do
       archive_filename = "bank_archive_#{DateTime.now.strftime('%y%m%d%H%M%S')}.xlsx"
       archive_bank_book_filepath = "#{CONFIG['bank_book_archive_path']}#{archive_filename}"

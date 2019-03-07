@@ -20,7 +20,7 @@ module ConvertBankExtract
     print "loading data.csv...                 #{"loading".red}\r"
     hashes = csv_hashes(bank_book)
     print "loading data.csv...                 #{"done".green}   \n"
-    period_string = period_string(hashes[0]['date'].strftime('%d/%m/%Y'))
+    period_string = generate_period_string(hashes[0]['date'].strftime('%d/%m/%Y'))
     archive_bank_book_filename = "bank_archive_#{period_string}_#{timestamp}.xlsx"
     print "archiving current bank book...      #{"archiving".red}\r"
     archive_current_bank_book(archive_bank_book_filename)
@@ -89,7 +89,7 @@ module ConvertBankExtract
 
   def self.apply_dynamic_hash_values(h, i, first_id, statement, current_balance)
     h['id'] = (first_id.to_i + i)
-    h['period'] = period_string(h['date'])
+    h['period'] = generate_period_string(h['date'])
     h['statement'] = statement
     h['date'] = DateTime.parse(h['date'])
     current_balance = new_balance(current_balance, h['debit'], h['credit'])
@@ -99,7 +99,7 @@ module ConvertBankExtract
     current_balance
   end
 
-  def self.period_string(date)
+  def self.generate_period_string(date)
     _, month, year = date.split('/')
     if year == '2010'
       "1-#{month.to_i - 8}"

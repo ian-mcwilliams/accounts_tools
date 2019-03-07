@@ -166,7 +166,7 @@ describe 'ConvertBankExtract' do
       ]
       tests.each do |test|
         it "as #{test[:date]}" do
-          actual = ConvertBankExtract.period_string(test[:date])
+          actual = ConvertBankExtract.generate_period_string(test[:date])
           expect(actual).to eq(test[:expected])
         end
       end

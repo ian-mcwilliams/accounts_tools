@@ -50,7 +50,7 @@ describe 'ConvertBankExtract' do
 
     it 'archives the bank statement as part of the process' do
       ConvertBankExtract.convert_bank_extract
-      expect(File.exists?("#{CONFIG['bank_statements_path']}08046_8-3_170101-170110.pdf")).to be(true)
+      expect(File.exists?("#{CONFIG['bank_statements_path']}08046_170101-170110_8-3.pdf")).to be(true)
       expect(File.exists?("#{CONFIG['bank_statement_filepath']}E-Statements.pdf")).to be(false)
     end
 
@@ -211,7 +211,7 @@ describe 'ConvertBankExtract' do
       actual = ConvertBankExtract.generate_archive_filenames(hashes)
       expect(actual.keys.sort).to eq(%i[bank data_csv statement])
       expect(actual[:bank]).to match(/^bank_archive_8-7_\d{12}.xlsx$/)
-      expect(actual[:statement]).to eq("#{CONFIG['bank_prefix']}_8-7_170513-190725.pdf")
+      expect(actual[:statement]).to eq("#{CONFIG['bank_prefix']}_170513-190725_8-7.pdf")
       expect(actual[:data_csv]).to match(/^data_csv_archive_8-7_\d{12}.csv$/)
     end
 

@@ -38,9 +38,11 @@ module ConvertBankExtract
   def self.generate_archive_filenames(hashes)
     timestamp = DateTime.now.strftime('%y%m%d%H%M%S')
     period_string = generate_period_string(hashes[0]['date'].strftime('%d/%m/%Y'))
+    statement_from = hashes[0]['date'].strftime('%y%m%d')
+    statement_to = hashes[-1]['date'].strftime('%y%m%d')
     {
       bank: "bank_archive_#{period_string}_#{timestamp}.xlsx",
-      statement: "#{CONFIG['bank_prefix']}_#{period_string}_#{hashes[0]['date'].strftime('%y%m%d')}-#{hashes[-1]['date'].strftime('%y%m%d')}.pdf",
+      statement: "#{CONFIG['bank_prefix']}_#{statement_from}-#{statement_to}_#{period_string}.pdf",
       data_csv: "data_csv_archive_#{period_string}_#{timestamp}.csv"
     }
   end

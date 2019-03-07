@@ -202,6 +202,19 @@ describe 'ConvertBankExtract' do
       expect(File.exist?("#{CONFIG['data_csv_archive_path']}#{filename}")).to be(true)
     end
 
+    it 'returns a hash of archive filenames' do
+      hashes = [
+        { 'date' => DateTime.parse('13/05/2017') },
+        { 'date' => DateTime.parse('01/01/2014') },
+        { 'date' => DateTime.parse('25/07/2019') }
+      ]
+      actual = ConvertBankExtract.generate_archive_filenames(hashes)
+      expect(actual.keys.sort).to eq(%i[bank data_csv statement])
+      expect(actual[:bank]).to match(/^bank_archive_8-7_\d{12}.xlsx$/)
+      expect(actual[:statement]).to eq("#{CONFIG['bank_prefix']}_8-7_170513-190725.pdf")
+      expect(actual[:data_csv]).to match(/^data_csv_archive_8-7_\d{12}.csv$/)
+    end
+
     context 'pounds to pence' do
       tests = [
         { input: nil, expected: 0 },

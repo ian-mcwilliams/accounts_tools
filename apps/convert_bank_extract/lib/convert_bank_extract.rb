@@ -9,7 +9,6 @@ module ConvertBankExtract
 
   def self.convert_bank_extract
     print "converting bank extract\n"
-    timestamp = DateTime.now.strftime('%y%m%d%H%M%S')
     print "verifying required files present... #{"checking".red}\r"
     verify_file_presence
     print "verifying required files present... #{"done".green}    \n"
@@ -20,23 +19,30 @@ module ConvertBankExtract
     print "loading data.csv...                 #{"loading".red}\r"
     hashes = csv_hashes(bank_book)
     print "loading data.csv...                 #{"done".green}   \n"
-    period_string = generate_period_string(hashes[0]['date'].strftime('%d/%m/%Y'))
-    archive_bank_book_filename = "bank_archive_#{period_string}_#{timestamp}.xlsx"
+    filenames = generate_archive_filenames(hashes)
     print "archiving current bank book...      #{"archiving".red}\r"
-    archive_current_bank_book(archive_bank_book_filename)
-    print "archiving current bank book...      #{"done".green} (saved as #{archive_bank_book_filename})\n"
+    archive_current_bank_book(filenames[:bank])
+    print "archiving current bank book...      #{"done".green} (saved as #{filenames[:bank]})\n"
     print "creating updated bank book...       #{"building".red}\r"
     write_hashes = build_write_hash(bank_book, hashes)
     create_excel_file(filepath, write_hashes)
     print "creating updated bank book...       #{"done".green}    \n"
-    bank_statement_filename = "#{CONFIG['bank_prefix']}_#{period_string}_#{hashes[0]['date'].strftime('%y%m%d')}-#{hashes[-1]['date'].strftime('%y%m%d')}.pdf"
     print "storing bank statement...           #{"storing".red}\r"
-    archive_bank_statement(bank_statement_filename)
-    print "storing bank statement...           #{"done".green} (saved as #{bank_statement_filename})\n"
-    data_csv_filename = "data_csv_archive_#{period_string}_#{timestamp}.csv"
+    archive_bank_statement(filenames[:statement])
+    print "storing bank statement...           #{"done".green} (saved as #{filenames[:statement]})\n"
     print "archiving data.csv...               #{"archiving".red}\r"
-    archive_data_csv_file(data_csv_filename)
-    print "archiving data.csv...               #{"done".green} (saved as #{data_csv_filename})\n"
+    archive_data_csv_file(filenames[:data_csv])
+    print "archiving data.csv...               #{"done".green} (saved as #{filenames[:data_csv]})\n"
+  end
+
+  def self.generate_archive_filenames(hashes)
+    timestamp = DateTime.now.strftime('%y%m%d%H%M%S')
+    period_string = generate_period_string(hashes[0]['date'].strftime('%d/%m/%Y'))
+    {
+      bank: "bank_archive_#{period_string}_#{timestamp}.xlsx",
+      statement: "#{CONFIG['bank_prefix']}_#{period_string}_#{hashes[0]['date'].strftime('%y%m%d')}-#{hashes[-1]['date'].strftime('%y%m%d')}.pdf",
+      data_csv: "data_csv_archive_#{period_string}_#{timestamp}.csv"
+    }
   end
 
   def self.verify_file_presence

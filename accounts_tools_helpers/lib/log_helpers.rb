@@ -1,5 +1,10 @@
 module LogHelpers
 
+  def self.completion_log(log_hash, &block)
+    validate_log_hash(log_hash)
+    yield
+  end
+
   def self.validate_log_hash(log_hash)
     raise("log_hash must be a Hash, got: #{log_hash.class}") unless log_hash.is_a?(Hash)
     raise('log_hash must contain a :static_text key') unless log_hash.has_key?(:static_text)

@@ -8,16 +8,16 @@ This tool is designed to take a downloaded csv from Barclays containing account 
 
 ### Download the PDF and CSV
 
-1. Log in to Barclays and go to the view statements page
+1. Log in to Barclays and go to the view statements page (in Quick Links)
 2. Identify the new statement row and click the pdf icon (opens in a new tab)
 3. Download the PDF as follows:
    * Click the print icon in the top right hand corner of the new tab (in the menu that appears when you move the cursor around the page)
    * If the destination is not "Save as PDF" use the Change button to set it to that value
-   * Click Save and select the location as `accounts_tools/source_files`
+   * Click Save and select the location as `accounts_tools/source_files` (in dev folder)
 4. Download the CSV as follows:
-   * Close the new tab and click the "View transactions" link next to the PDF icon you originally clicked
+   * Close the E-Statement tab and click the "View transactions" link next to the PDF icon you originally clicked
    * Click the "Export All" link at the top of the list of transactions and select "Spreadsheet eg Excel" from the list
-   * Move the downloaded csv file to `accounts_tools/source_files` and ensure it is named `data.csv`
+   * If the downloaded csv file was not saved to `accounts_tools/source_files` then move it there, and ensure it is named `data.csv`
 
 ## Running this tool
 **IN TERMINAL:** `ruby run_tool.rb convert_bank_extract`

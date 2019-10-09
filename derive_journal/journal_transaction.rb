@@ -133,6 +133,10 @@ class JournalTransaction
             rent_office_expenses:           :dr,
             cash:                           :cr
         },
+        direct_refund_rent_office_expenses: {
+            cash:                           :dr,
+            rent_office_expenses:           :cr
+        },
         direct_pay_power_office_expenses: {
             power_office_expenses:          :dr,
             cash:                           :cr
@@ -184,6 +188,10 @@ class JournalTransaction
         training_expenses_accrual: {
           sundry_expenses:                :dr,
           misc_payable:                   :cr
+        },
+        writeoff_from_sundry: {
+          capital:                          :dr,
+          sundry_expenses:                  :cr
         }
     }.merge(self.direct_expense_transactions)
   end

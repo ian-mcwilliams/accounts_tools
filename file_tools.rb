@@ -17,6 +17,7 @@ class FileTools
   def self.machine_keys
     {
         ian:  	%w[F3M3s-MacBook-Air.local f3m3s-air.home f3m3s-air F3M3sMA.local f3m3sma F3M3sMA.home],
+        ian_mbp: ['Ians-MacBook-Pro.local'],
         ian_w:  ['OE2021.local'],
         dad: 	  ['John'],
         john:   ['Johns-Mac-mini.home', 'Johns-Mac-mini.local']
@@ -29,10 +30,11 @@ class FileTools
 
   def self.get_rel_path
     {
-        ian: 	  '../../Dropbox/',
-        ian_w:  '../../../ian/accounts/',
-        dad: 	  '../../Users/John/Dropbox/',
-        john:   '../../Dropbox/'
+        ian: 	    '../../Dropbox/',
+        ian_w:    '../../../ian/accounts/',
+        ian_mbp:  '../../../Dropbox/',
+        dad: 	    '../../Users/John/Dropbox/',
+        john:     '../../Dropbox/'
     }[FileTools.get_machine_key]
   end
 

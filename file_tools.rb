@@ -69,6 +69,7 @@ class FileTools
         LiveCorp/6.1411-1510
         LiveCorp/7.1511-1610
         LiveCorp/8.1611-1710
+        LiveCorp/9.1711-1810
     ].each_with_index do |filepath, index|
       filepaths << "#{filepath}/#{accounts_filenames[index]}" if file == :accounts
       filepaths << "#{filepath}/Reports#{index + 1}.xlsx" if file == :reports
@@ -87,6 +88,7 @@ class FileTools
         Accounts6.xlsx
         Accounts7.xlsx
         Accounts8.xlsx
+        Accounts9.xlsx
 		]
   end
 

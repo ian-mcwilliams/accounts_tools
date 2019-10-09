@@ -1,6 +1,6 @@
 require 'simple_xlsx_reader'
-require 'axlsx'
 require 'socket'
+require 'rxl'
 
 class FileTools
 
@@ -49,15 +49,21 @@ class FileTools
   end
 
   def self.write_output_to_excel(file_name, output_sheets)
-    Axlsx::Package.new do |p|
-      output_sheets.each do |output_sheet|
-        p.workbook.add_worksheet(name: output_sheet[:sheet_name]) do |sheet|
-          forced_float_format = sheet.styles.add_style :format_code => '0.00'
-          output_sheet[:output].each { |row| sheet.add_row(row, :style => [nil, nil, nil, forced_float_format, forced_float_format, forced_float_format]) }
+    hash_workbook = output_sheets.each_with_object({}) do |item, h|
+      rows = item[:output][1..-1].map do |row|
+        index = 0
+        item[:output][0].each_with_object({}) do |label, hash|
+          value = row[index].is_a?(DateTime) ? row[index].strftime('%Y-%M-%D') : row[index]
+          hash[label.to_sym] = value.to_s
+          index += 1
         end
       end
-      p.serialize(file_name)
+      h[item[:sheet_name]] = {
+        columns: item[:output][0].map(&:to_sym),
+        rows: rows
+      }
     end
+    Rxl.write_file_as_tables(file_name, hash_workbook)
   end
 
   def get_filepaths(file)

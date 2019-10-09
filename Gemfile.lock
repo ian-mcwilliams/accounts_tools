@@ -28,7 +28,7 @@ GEM
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
     rubyzip (1.0.0)
-    rxl (0.5.1)
+    rxl (0.6.0)
     simple_xlsx_reader (1.0.2)
       nokogiri
       rubyzip
@@ -41,7 +41,7 @@ DEPENDENCIES
   axlsx
   colorize
   rspec
-  rxl (>= 0.5.1)
+  rxl (>= 0.6.0)
   simple_xlsx_reader
 
 BUNDLED WITH

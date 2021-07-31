@@ -1,6 +1,6 @@
 require 'simple_xlsx_reader'
-require 'axlsx'
 require 'socket'
+require 'rxl'
 
 class FileTools
 
@@ -17,6 +17,7 @@ class FileTools
   def self.machine_keys
     {
         ian:  	%w[F3M3s-MacBook-Air.local f3m3s-air.home f3m3s-air F3M3sMA.local f3m3sma F3M3sMA.home],
+        ian_mbp: ['Ians-MacBook-Pro.local'],
         ian_w:  ['OE2021.local'],
         dad: 	  ['John'],
         john:   ['Johns-Mac-mini.home', 'Johns-Mac-mini.local']
@@ -29,10 +30,11 @@ class FileTools
 
   def self.get_rel_path
     {
-        ian: 	  '../../Dropbox/',
-        ian_w:  '../../../ian/accounts/',
-        dad: 	  '../../Users/John/Dropbox/',
-        john:   '../../Dropbox/'
+        ian: 	    '../../Dropbox/',
+        ian_w:    '../../../ian/accounts/',
+        ian_mbp:  '../../../Dropbox/',
+        dad: 	    '../../Users/John/Dropbox/',
+        john:     '../../Dropbox/'
     }[FileTools.get_machine_key]
   end
 
@@ -47,15 +49,21 @@ class FileTools
   end
 
   def self.write_output_to_excel(file_name, output_sheets)
-    Axlsx::Package.new do |p|
-      output_sheets.each do |output_sheet|
-        p.workbook.add_worksheet(name: output_sheet[:sheet_name]) do |sheet|
-          forced_float_format = sheet.styles.add_style :format_code => '0.00'
-          output_sheet[:output].each { |row| sheet.add_row(row, :style => [nil, nil, nil, forced_float_format, forced_float_format, forced_float_format]) }
+    hash_workbook = output_sheets.each_with_object({}) do |item, h|
+      rows = item[:output][1..-1].map do |row|
+        index = 0
+        item[:output][0].each_with_object({}) do |label, hash|
+          value = row[index].is_a?(DateTime) ? row[index].strftime('%Y-%M-%D') : row[index]
+          hash[label.to_sym] = value.to_s
+          index += 1
         end
       end
-      p.serialize(file_name)
+      h[item[:sheet_name]] = {
+        columns: item[:output][0].map(&:to_sym),
+        rows: rows
+      }
     end
+    Rxl.write_file_as_tables(file_name, hash_workbook)
   end
 
   def get_filepaths(file)
@@ -69,6 +77,9 @@ class FileTools
         LiveCorp/6.1411-1510
         LiveCorp/7.1511-1610
         LiveCorp/8.1611-1710
+        LiveCorp/9.1711-1810
+	      LiveCorp/10.1811-1910
+	      LiveCorp/11.1911-2010
     ].each_with_index do |filepath, index|
       filepaths << "#{filepath}/#{accounts_filenames[index]}" if file == :accounts
       filepaths << "#{filepath}/Reports#{index + 1}.xlsx" if file == :reports
@@ -87,6 +98,9 @@ class FileTools
         Accounts6.xlsx
         Accounts7.xlsx
         Accounts8.xlsx
+        Accounts9.xlsx
+	      Accounts10.xlsx
+	      Accounts11.xlsx
 		]
   end
 

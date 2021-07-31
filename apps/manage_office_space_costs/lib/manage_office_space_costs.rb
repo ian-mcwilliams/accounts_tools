@@ -1,0 +1,3 @@
+module ManageOfficeSpaceCosts
+
+end

@@ -1,0 +1,40 @@
+default:
+  filenames:
+    bank_book: bank.xlsx
+    bank_extract: data.csv
+    bank_statement: E-Statement.pdf
+    contracts: contracts.xlsx
+    invoices: invoices.xlsx
+    timesheets: timesheets.xlsx
+  rel_paths:
+    bank_book_archive: archive/bank_book/
+    bank_statements: records/bank_statements/
+    data_csv_archive: archive/data_csv/
+    bookkeeping: bookkeeping/
+    dropbox:
+      ians_macbook_pro_local: ../../../Dropbox/
+      johns_mac_mini_local: ../../Dropbox/
+  codes:
+    bank_prefix: 08046
+prod:
+  rel_paths:
+    accounting_periods:
+      - 1.1009-1108/
+      - 2.1109-1110/
+      - 3.1111-1210/
+      - 4.1211-1310/
+      - 5.1311-1410/
+      - 6.1411-1510/
+      - 7.1511-1610/
+      - 8.1611-1710/
+      - 9.1711-1810/
+      - 10.1811-1910/
+    livecorp: F3Mmedia/Internal/ACcounts/LiveCorp/
+    save_files: run_results/
+    source_files: source_files/
+test:
+  rel_paths:
+    dropbox:
+    livecorp: spec/support/test_files/
+    save_files: spec/support/test_files/
+    source_files: spec/support/test_files/source_files/

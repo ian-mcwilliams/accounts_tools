@@ -69,7 +69,8 @@ module ConvertBankExtract
   end
 
   def self.build_write_hash(bank_book, hashes)
-    { 'bank' => bank_book + hashes, formats: formats_hash }
+    order = %w[id period statement date debit credit balance subcat description]
+    { 'bank' => { rows: bank_book + hashes, columns: order, formats: formats_hash } }
   end
 
   def self.load_file(file_key)
@@ -118,6 +119,7 @@ module ConvertBankExtract
   end
 
   def self.build_initial_hashes(arrays)
+    arrays.pop if arrays[-1].count == 1
     arrays.map do |array|
       {
         'date' => array[1],
@@ -156,8 +158,7 @@ module ConvertBankExtract
   end
 
   def self.create_excel_file(filepath, write_hash)
-    order = %w[id period statement date debit credit balance subcat description]
-    Rxl.write_file_as_tables(filepath, write_hash, order)
+    Rxl.write_file_as_tables(filepath, write_hash)
   end
 
   def self.archive_bank_statement(archive_filename)
